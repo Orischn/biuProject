@@ -8,7 +8,7 @@ async function getChat(chatId, userId) {
         const chats = db.collection('chats');
         const chat = await chats.findOne({ chatId: chatId, userId: userId});
         if (!chat) {
-            return 401;
+            return 404;
         }
         return chat;
     } catch (error) {
@@ -26,7 +26,7 @@ async function getChats(userId) {
         const chats = db.collection('chats');
         const res = await chats.find({userId});
         if (!res) {
-            return 401;
+            return 404;
         }
         return res;
     } catch (error) {
@@ -47,7 +47,7 @@ async function postChat(user) {
 
         const existingUser = await users.findOne(user.username);
         if (!existingUser) {
-            return 400;
+            return 404;
         }
 
         var today = new Date();
@@ -73,7 +73,7 @@ async function postChat(user) {
         existingUser.lastChat = chat;
 
 
-        return chat;
+        return 201;
     } catch (error) {
         return 500;
     } finally {
@@ -116,7 +116,9 @@ async function addMessage(userId, content, isBot) {
         const db = client.db('ChatBot');
         const chats = db.collection('chats');
         const user = await getUser(userId);
-
+        if (!user) {
+            return 404;
+        }
         await chats.updateOne(
             { chatId: user.lastChat.chatId, userId: userId },
             {
@@ -129,6 +131,7 @@ async function addMessage(userId, content, isBot) {
             }
 
         )
+        return 200;
     } catch (error) {
         return 500;
     } finally {
@@ -141,5 +144,6 @@ module.exports = {
     getChat,
     getChats,
     postChat,
-    deleteChat
+    deleteChat,
+    addMessage,
 }

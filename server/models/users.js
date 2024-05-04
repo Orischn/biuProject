@@ -10,10 +10,28 @@ async function getUser(username) {
 
     const user = await users.findOne({ username: username });
     if (!user) {
-      return 401;
+      return 404;
     }
-    return { username: user.username, displayName: user.displayName,
-         profilePic: user.profilePic, permissions: user.permissions};
+    return user;
+  } catch (error) {
+    return 500;
+  } finally {
+    await client.close();
+  }
+}
+
+async function getUsers(username) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
+  try {
+    await client.connect();
+    const db = client.db('ChatBot');
+    const users = db.collection('users');
+
+    const allUsers = await users.findMany({});
+    if (!allUsers) {
+      return 404;
+    }
+    return allUsers;
   } catch (error) {
     return 500;
   } finally {
@@ -40,7 +58,7 @@ async function postUser(user) {
       isbot: user.isbot,
       lastChat: null
     });
-    return 200;
+    return 201;
   } catch (error) {
     return 500;
   } finally {
@@ -53,11 +71,14 @@ async function deleteUser(user) {
         await client.connnect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
+        const existingUser = await users.findOne({ username: user.username });
+        if (!existingUser) {
+          return 404;
+        }
+        const chats = db.collection('chats');
+        await chats.deleteMany({userId: user.username});
         await users.deleteOne({username: user.username});
-        //const existingUser = await users.findOne({ username: user.username });
-        // if (!existingUser) { //user does not exist
-        //   return 409;
-        // }
+        return 200;
     }
     catch(error) {
         return 500;
@@ -69,5 +90,5 @@ async function deleteUser(user) {
 module.exports = {
   getUser,
   postUser,
-  deleteUser
+  deleteUser,
 }

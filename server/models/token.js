@@ -13,7 +13,7 @@ const checkToken = async (authorization) => {
             return 401;
         }
     } else {
-        return 403;
+        return 401;
     }
 }
 
@@ -24,7 +24,7 @@ const postToken = async (user) => {
         const db = client.db('Whatsapp');
         const users = db.collection('users');
         const existingUser = await getUser(user.username);
-        if (!existingUser || existingUser == 401) {
+        if (!existingUser || existingUser == 404) {
             return 404;
         }
 
