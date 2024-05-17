@@ -89,6 +89,7 @@ async function deleteUser(user) {
 
 module.exports = {
   getUser,
+  getUsers,
   postUser,
   deleteUser,
 }

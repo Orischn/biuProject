@@ -1,4 +1,4 @@
-const { getUser, postUser, deleteUser } = require('../models/users.js');
+const { getUser, getUsers, postUser, deleteUser } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
