@@ -4,7 +4,6 @@ const http = require('http')
 
 app.use(express.json());
 app.use(express.static('public'));
-app.use(require('./routes/token'))
 app.use(require('./routes/login'))
 app.use(require('./routes/chatbot'))
 app.use(require('./routes/adminpanel'))
