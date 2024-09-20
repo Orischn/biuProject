@@ -1,6 +1,6 @@
 const { checkToken, postToken } = require('../models/token');
 
-const checkToken = async (req, res, next) => {
+const validateUser = async (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const status = await checkToken(req.headers.authorization);
@@ -26,6 +26,6 @@ const login = async (req, res) => {
 }
 
 module.exports = {
-    checkToken,
+    validateUser,
     login,
 }

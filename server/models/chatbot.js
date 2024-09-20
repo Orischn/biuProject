@@ -146,4 +146,5 @@ module.exports = {
     postChat,
     deleteChat,
     addMessage,
+    getMessages,
 }
