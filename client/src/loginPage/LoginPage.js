@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import InfoInput from "../infoInput/InfoInput";
+import InputBox from "../inputBox/InputBox";
 
 function LoginPage({ setToken }) {
   const navigate = useNavigate();
@@ -14,7 +14,6 @@ function LoginPage({ setToken }) {
     {
       title: "userName",
       placeholder: 'Enter your username here',
-      value: username,
       setValue: setUsername,
       error: usernameError
     },
@@ -22,13 +21,12 @@ function LoginPage({ setToken }) {
     {
       title: "Password",
       placeholder: 'Enter your password here',
-      value: password,
       setValue: setPassword,
       error: passwordError
     }
   ]
   const infoInputList = neededInfo.map((data, key) => {
-    return <InfoInput {...data} key={key} />;
+    return <InputBox {...data} key={key} />;
   })
 
   const handleSubmit = async (e) => {
