@@ -8,7 +8,7 @@ function AddPractice({addPractice, counter}) {
 
         //let say everything is okay, maybe present a warning or confiramtion
 
-        addPractice
+        // addPractice
     };
 
 
@@ -20,3 +20,5 @@ function AddPractice({addPractice, counter}) {
         </>
     )
 }
+
+export default AddPractice;

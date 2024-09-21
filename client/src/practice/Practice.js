@@ -3,7 +3,7 @@
 function Practice({ practice, selectedPractice, setSelectedPractice }) {
     return (
         <li key={practice.id}
-            className={`list-group-item practice container ${selectedPractice && selectedPractice.numOfPractice === numOfPractice ? 'active' : ''}`}
+            className={`list-group-item practice container ${selectedPractice && selectedPractice.id === practice.id ? 'active' : ''}`}
             onClick={() => setSelectedPractice({ practice })}>
             <div className="row">
                 <div>
