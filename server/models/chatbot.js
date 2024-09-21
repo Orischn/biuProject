@@ -7,9 +7,6 @@ async function getPractice(chatId, userId) {
         const db = await client.db('ChatBot');
         const chats = db.collection('chats');
         const chat = await chats.findOne({ chatId: chatId, userId: userId});
-        if (!chat) {
-            return 404;
-        }
         return chat;
     } catch (error) {
         return 500;
@@ -25,9 +22,6 @@ async function getPractices(userId) {
         const db = client.db('ChatBot');
         const chats = db.collection('chats');
         const res = await chats.find({userId});
-        if (!res) {
-            return 404;
-        }
         return res;
     } catch (error) {
         return 500;
@@ -42,24 +36,14 @@ async function postPractice(user) {
     try {
         await client.connect();
         const db = await client.db('ChatBot');
-        const chats = db.collection('chats');
-        const users = db.collection('users');
-
-        const existingUser = await users.findOne(user.username);
-        if (!existingUser) {
-            return 404;
-        }
+        const chats = db.collection('practices');
 
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
 
-        let nextChat = db.collection.find({userId: user.username});
-        if(nextChat) {
-            nextChat.endDate = dateTime;
-        }
-
+        let nextChat = chats.find({userId: user.username});
         nextChat = nextChat ? nextChat.sort({chatId:-1}).limit(1).chatId : 1;
 
         const chat = {
@@ -73,7 +57,7 @@ async function postPractice(user) {
         existingUser.lastChat = chat;
 
 
-        return 201;
+        return chat;
     } catch (error) {
         return 500;
     } finally {
