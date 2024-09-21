@@ -12,14 +12,9 @@ function AddPractice({token, practiceList, setPracticeList, selectedPractice, se
             }
         });
 
-        if (res.status === 200) {
-            res.text().then((practice) => {
-                setPracticeList(...practiceList, 
-                <Practice practice={JSON.parse(practice)} selectedPractice={selectedPractice}
-                setSelectedPractice={setSelectedPractice} />)
-            });
+        if (res.status === 201) {
+            setSelectedPractice(res);
             // setSelectedPractice(practiceList[length(practiceList) - 1])
-            setSelectedPractice(practiceList[-1])
         }
     };
 
@@ -27,7 +22,7 @@ function AddPractice({token, practiceList, setPracticeList, selectedPractice, se
     return (
         <>
             <button type="button" onClick={add}>
-                <i id="addPractice" class="bi bi-plus-circle-fill"></i>
+                <i id="addPractice" className="bi bi-plus-circle-fill"></i>
             </button>
         </>
     )

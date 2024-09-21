@@ -59,7 +59,6 @@ function LoginPage({ setToken, setUsername }) {
       return;
     }
     res.text().then((token) => {
-      console.log(token);
       setToken(token);
     });
     setUsername(username)

@@ -7,7 +7,7 @@ const checkToken = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            await jwt.verify(token, key);
+            jwt.verify(token, key);
             return 200;
         } catch (err) {
             return 401;
@@ -45,7 +45,7 @@ const getData = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            const data = await jwt.verify(token, key);
+            const data = jwt.verify(token, key);
             return data;
         } catch (err) {
             return 401;

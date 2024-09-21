@@ -37,9 +37,9 @@ function ChatFeed({ token, botID }) {
 
     return (
         <>
-            <div id="chatFeed" class="col-9">
-                <div id="me" class="d-flex align-items-center w-100">
-                    <b class="ms-2 text-black-50">bot</b>
+            <div id="chatFeed" className="col-9">
+                <div id="me" className="d-flex align-items-center w-100">
+                    <b className="ms-2 text-black-50">bot</b>
                 </div>
                 {messages}     
             </div>

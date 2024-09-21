@@ -20,10 +20,11 @@ async function getPractices(userId) {
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('chats');
-        const res = await chats.find({userId});
-        return res;
+        const practices = db.collection('practices');
+        const res = await practices.find({userId: userId}).toArray();
+        return res.reverse();
     } catch (error) {
+        console.log(error);
         return 500;
     } finally {
         await client.close();
@@ -36,49 +37,46 @@ async function postPractice(userId) {
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('practices');
+        const practices = db.collection('practices');
 
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
 
-        let nextChat = chats.find({userId: userId});
-        nextChat = nextChat ? nextChat.sort({chatId:-1}).limit(1).chatId : 1;
-        
-        console.log(userId);
-        console.log(nextChat);
+        let nextChat = await practices.find({userId: userId}).toArray();
+        var chatId = nextChat.length + 1;
 
         const chat = {
             userId: userId,
-            chatId: nextChat,
+            chatId: chatId,
             messages: [],
             startDate: dateTime,
             endDate: null
         }
-        await chats.insertOne(chat);
-        existingUser.lastChat = chat;
+        await practices.insertOne(chat);
 
 
         return chat;
     } catch (error) {
+        console.log(error);
         return 500;
     } finally {
         await client.close();
     }
 }
 
-async function deletePractice(chatID, userId) {
+async function deletePractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('Whatsapp');
         const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatID: chatID, userId: userId});
+        const chat = await chats.findOne({ chatId: chatId, userId: userId});
         if (!chat) {
             return 404;
         }
-        await chats.deleteOne({ chatID: chatID, userId: userId});
+        await chats.deleteOne({ chatId: chatId, userId: userId});
         return 200;
     } catch (error) {
         return 500;
@@ -87,9 +85,9 @@ async function deletePractice(chatID, userId) {
     }
 }
 
-async function getMessages(chatID, userId) {
+async function getMessages(chatId, userId) {
     try {
-        const chat = await getChat(chatID, me);
+        const chat = await getChat(chatId, userId);
         return chat.messages;
     } catch (error) {
         return 500;
@@ -107,7 +105,7 @@ async function addMessage(userId, content, isBot) {
             return 404;
         }
         await chats.updateOne(
-            { chatID: user.lastChat.chatID, userId: userId },
+            { chatId: user.lastChat.chatId, userId: userId },
             {
                 $push: {
                     messages: {

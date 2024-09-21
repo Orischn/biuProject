@@ -2,12 +2,12 @@
 
 function Practice({ practice, selectedPractice, setSelectedPractice }) {
     return (
-        <li key={practice.chatID}
-            className={`list-group-item practice container ${selectedPractice && selectedPractice.chatID === practice.chatID ? 'active' : ''}`}
+        <li key={practice.chatId}
+            className={`list-group-item practice container ${selectedPractice && selectedPractice.chatId === practice.chatId ? 'active' : ''}`}
             onClick={() => setSelectedPractice({ practice })}>
             <div className="row">
                 <div>
-                    <b className="text-white w-100">Practice #{practice.chatID}</b>
+                    <b className="text-white w-100">Practice #{practice.chatId}</b>
                     <span className="badge date">{!practice.finished ? 'In Progress...' : 'Finished'}</span>
                     <br />
                 </div>

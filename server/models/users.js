@@ -56,7 +56,7 @@ async function postUser(user) {
     });
     return 201;
   } catch (error) {
-    console.log(error);
+    // console.log(error.message);
     return 500;
   } finally {
     await client.close();
@@ -78,7 +78,7 @@ async function deleteUser(user) {
     return 200;
   }
   catch(error) {
-    console.log(error);
+    // console.log(error);
     return 500;
   } finally {
     await client.close();
@@ -103,7 +103,7 @@ async function changeAdminPermissions(user, permissions) {
     )
   }
   catch(error) {
-    console.log(error);
+    // console.log(error);
     return 500;
   } finally {
     await client.close();
