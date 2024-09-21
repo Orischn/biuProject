@@ -1,14 +1,14 @@
 
 
-function Practice({ numOfPractice, active, messages, selectedPractice, setSelectedPractice }) {
+function Practice({ practice, selectedPractice, setSelectedPractice }) {
     return (
-        <li key={numOfPractice}
+        <li key={practice.id}
             className={`list-group-item practice container ${selectedPractice && selectedPractice.numOfPractice === numOfPractice ? 'active' : ''}`}
-            onClick={() => setSelectedPractice({ numOfPractice, messages })}>
+            onClick={() => setSelectedPractice({ practice })}>
             <div className="row">
                 <div>
-                    <b className="text-white w-100">bott</b>
-                    <span className="badge date">{active ? 'In Progress...' : 'Finished'}</span> {/* maybe in progress?*/}
+                    <b className="text-white w-100">Practice #{practice.id}</b>
+                    <span className="badge date">{!practice.finished ? 'In Progress...' : 'Finished'}</span>
                     <br />
                 </div>
             </div>

@@ -5,8 +5,6 @@ function BotMessage({content}) {
         <div dir="ltr">
             <div className="botMessage">
                 {content}
-                <br />
-                {/* <span id="textTime" className="badge text-opacity-50"></span> */}
             </div>
         </div>
     );

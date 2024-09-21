@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-async function getChat(chatId, userId) {
+async function getPractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -18,7 +18,7 @@ async function getChat(chatId, userId) {
     }
 }
 
-async function getChats(userId) {
+async function getPractices(userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -37,7 +37,7 @@ async function getChats(userId) {
 }
 
 
-async function postChat(user) {
+async function postPractice(user) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -81,7 +81,7 @@ async function postChat(user) {
     }
 }
 
-async function deleteChat(chatId, userId) {
+async function deletePractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -141,10 +141,10 @@ async function addMessage(userId, content, isBot) {
 }
 
 module.exports = {
-    getChat,
-    getChats,
-    postChat,
-    deleteChat,
+    getPractice,
+    getPractices,
+    postPractice,
+    deletePractice,
     addMessage,
     getMessages,
 }

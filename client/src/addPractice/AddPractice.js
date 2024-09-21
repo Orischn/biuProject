@@ -13,10 +13,10 @@ function AddPractice({addPractice, counter}) {
 
 
     return (
+        <>
             <button type="button" onClick={add}>
                 <i id="addPractice" class="bi bi-plus-circle-fill"></i>
             </button>
-
-
+        </>
     )
 }
