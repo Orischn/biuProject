@@ -7,7 +7,7 @@ import AddPractice from "../addPractice/AddPractice";
 
 function StudentFeed({ token, username }) {
     const [practiceList, setPracticeList] = useState([]);
-    const [selectedContact, setSelectedContact] = useState(null);
+    const [selectedPractice, setSelectedPractice] = useState(null);
 
     useEffect(() => {
         const fetchPractices = async () => {
@@ -21,7 +21,9 @@ function StudentFeed({ token, username }) {
             if (res.status === 200) {
                 res.text().then((practices) => {
                     setPracticeList(JSON.parse(practices).map((practice, key) => {
-                        return <Practice practice={practice} key={key} selectedContact={selectedContact} setSelectedContact={setSelectedContact} />
+                        return <Practice practice={practice} key={key}
+                            selectedPractice={selectedPractice} 
+                            setSelectedPractice={setSelectedPractice} />
                     }));
                 });
             }
@@ -36,7 +38,7 @@ function StudentFeed({ token, username }) {
                 <div id="practiceFeed" class="col-3">
                     <div id="me" class="d-flex align-items-center w-100">
                         <b class="ms-2 w-100 text-black-50">{username}</b>
-                        <AddPractice />
+                        <AddPractice token={token} practiceList={practiceList} setPracticeList={setPracticeList}/>
                     </div>
                     <div class="d-flex align-items-center">
                         <br />

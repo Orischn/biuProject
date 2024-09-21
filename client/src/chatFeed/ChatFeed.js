@@ -10,7 +10,7 @@ function ChatFeed({ token, botID }) {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const res = await fetch(`http://localhost:5000/api/practice/${botID}`, {
+            const res = await fetch(`http://localhost:5000/api/getPractice/${botID}`, {
                 'method': 'get',
                 'headers': {
                     'accept': 'application/json',

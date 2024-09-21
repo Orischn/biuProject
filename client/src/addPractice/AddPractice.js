@@ -1,14 +1,26 @@
 import { useRef, useState } from "react";
+import Practice from "../practice/Practice";
 
-function AddPractice({addPractice, counter}) {
-    const [addedPractices, setAddedPractices] = useState([]);
+function AddPractice({token, practiceList, setPracticeList, selectedPractice, setSelectedPractice}) {
 
-    const add = function (e) {
+    const add = async function (e) {
+        const res = await fetch(`http://localhost:5000/api/addPractice/`, {
+            'method': 'post',
+            'headers': {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
 
-
-        //let say everything is okay, maybe present a warning or confiramtion
-
-        // addPractice
+        if (res.status === 200) {
+            res.text().then((practice) => {
+                setPracticeList(...practiceList, 
+                <Practice practice={JSON.parse(practice)} selectedPractice={selectedPractice}
+                setSelectedPractice={setSelectedPractice} />)
+            });
+            // setSelectedPractice(practiceList[length(practiceList) - 1])
+            setSelectedPractice(practiceList[-1])
+        }
     };
 
 
