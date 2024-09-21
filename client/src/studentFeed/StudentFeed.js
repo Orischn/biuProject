@@ -10,73 +10,48 @@ function StudentFeed() {
                     <div id="me" class="d-flex align-items-center w-100">
                         <img class="ms-3 rounded-circle" src="student.jpeg" />
                         <b class="ms-2 w-100 text-black-50">Welcome student</b>
+                        <span class="badge">
+                            <i id="addPractice" class="bi bi-plus-circle-fill"></i>
+                    </span>
                     </div>
                     <div class="d-flex align-items-center">
-                        <span id="searchBar" class="input-group m-2">
-                            <span class="input-group-text"><i class="bi-search"></i></span>
-                            <input class="form-control inputText" placeholder="Search or start new practice" />
-                        </span>
-                        <i id="plus" class="bi-plus"></i>
+                        <br />
                     </div>
                     <div>
                         <ul class="list-group">
                             <li class="list-group-item practice container active">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <img class="rounded-circle" src="bot.jpg" />
-                                    </div>
-                                    <div class="col-10">
+                                    <div>
                                         <b class="text-black w-100">Practice #4</b>
                                         <span class="badge date">In progress...</span>
                                         <br />
-                                        <span class="text-opacity-50 text-black lastMessage">
-                                            Click to continue practice
-                                        </span>
                                     </div>
                                 </div>
                             </li>
                             <li class="list-group-item practice container">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <img class="rounded-circle" src="bot.jpg" />
-                                    </div>
-                                    <div class="col-10">
+                                    <div>
+                                        <div>
                                         <b class="text-black w-100">Practice #3</b>
                                         <span class="badge date text-black">Finished</span>
                                         <br />
-                                        <span class="text-opacity-50 text-black lastMessage">
-                                            Click to see feedback
-                                        </span>
                                     </div>
                                 </div>
                             </li>
                             <li class="list-group-item practice container">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <img class="rounded-circle" src="bot.jpg" />
-                                    </div>
-                                    <div class="col-10">
+                                    <div>
                                         <b class="text-black w-100">Practice #2</b>
                                         <span class="badge date text-black">Finished</span>
                                         <br />
-                                        <span class="text-opacity-50 text-black lastMessage">
-                                            Click to see feedback
-                                        </span>
                                     </div>
                                 </div>
                             </li>
                             <li class="list-group-item practice container">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <img class="rounded-circle" src="bot.jpg" />
-                                    </div>
-                                    <div class="col-10">
+                                    <div>
                                         <b class="text-black w-100">Practice #1</b>
                                         <span class="badge date text-black">Finished</span>
                                         <br />
-                                        <span class="text-opacity-50 text-black lastMessage">
-                                            Click to see feedback
-                                        </span>
                                     </div>
                                 </div>
                             </li>

@@ -4,7 +4,7 @@ function BotMessage({content}) {
     return (
         <div dir="ltr">
             <div className="botMessage">
-                {contebt}
+                {content}
                 <br />
                 {/* <span id="textTime" className="badge text-opacity-50"></span> */}
             </div>
