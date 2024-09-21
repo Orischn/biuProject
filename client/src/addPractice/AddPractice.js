@@ -14,7 +14,6 @@ function AddPractice({token, practiceList, setPracticeList, selectedPractice, se
 
         if (res.status === 201) {
             setSelectedPractice(res);
-            // setSelectedPractice(practiceList[length(practiceList) - 1])
         }
     };
 
