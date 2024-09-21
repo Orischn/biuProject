@@ -19,7 +19,7 @@ const receiveAllUsers = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(getUser(req.body.username));
+    const ret = await postUser(req.body.username);
     res.status(ret);
     if (ret == 409) {
         res.end('Creation of user failed (User already exists).');

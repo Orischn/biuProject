@@ -31,11 +31,11 @@ async function getPractices(userId) {
 }
 
 
-async function postPractice(user) {
+async function postPractice(userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = await client.db('ChatBot');
+        const db = client.db('ChatBot');
         const chats = db.collection('practices');
 
         var today = new Date();
@@ -43,11 +43,14 @@ async function postPractice(user) {
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
 
-        let nextChat = chats.find({userId: user.username});
+        let nextChat = chats.find({userId: userId});
         nextChat = nextChat ? nextChat.sort({chatId:-1}).limit(1).chatId : 1;
+        
+        console.log(userId);
+        console.log(nextChat);
 
         const chat = {
-            userId: user,
+            userId: userId,
             chatId: nextChat,
             messages: [],
             startDate: dateTime,
@@ -65,17 +68,17 @@ async function postPractice(user) {
     }
 }
 
-async function deletePractice(chatId, userId) {
+async function deletePractice(chatID, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('Whatsapp');
         const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatId: chatId, userId: userId});
+        const chat = await chats.findOne({ chatID: chatID, userId: userId});
         if (!chat) {
             return 404;
         }
-        await chats.deleteOne({ chatId: chatId, userId: userId});
+        await chats.deleteOne({ chatID: chatID, userId: userId});
         return 200;
     } catch (error) {
         return 500;
@@ -84,9 +87,9 @@ async function deletePractice(chatId, userId) {
     }
 }
 
-async function getMessages(chatId, userId) {
+async function getMessages(chatID, userId) {
     try {
-        const chat = await getChat(chatId, me);
+        const chat = await getChat(chatID, me);
         return chat.messages;
     } catch (error) {
         return 500;
@@ -104,7 +107,7 @@ async function addMessage(userId, content, isBot) {
             return 404;
         }
         await chats.updateOne(
-            { chatId: user.lastChat.chatId, userId: userId },
+            { chatID: user.lastChat.chatID, userId: userId },
             {
                 $push: {
                     messages: {
@@ -127,8 +130,8 @@ async function addMessage(userId, content, isBot) {
 module.exports = {
     getPractice,
     getPractices,
-    postPractice,
     deletePractice,
+    postPractice,
     addMessage,
     getMessages,
 }

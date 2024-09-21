@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
-const key = "Let S be an orthogonal transformation of gram schmidt";
+const key = "Sara shara shir sameihah shir sameihah shara Sara";
 const { getUser } = require('./users');
 
 const checkToken = async (authorization) => {

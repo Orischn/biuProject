@@ -10,6 +10,9 @@ function ChatFeed({ token, botID }) {
 
     useEffect(() => {
         const fetchMessages = async () => {
+            if (!botID) {
+                return;
+            }
             const res = await fetch(`http://localhost:5000/api/getPractice/${botID}`, {
                 'method': 'get',
                 'headers': {
