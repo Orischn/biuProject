@@ -1,8 +1,6 @@
 const { getUser, getUsers, postUser, deleteUser, changeAdminPermissions } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const user = await getUser(req.header.username);
     if (user === 401) {
         return res.status(401).end();
@@ -12,8 +10,6 @@ const receiveUser = async (req, res) => {
 }
 
 const receiveAllUsers = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const users = await getUsers();
     if (users === 401) {
         return res.status(401).end();
@@ -23,8 +19,6 @@ const receiveAllUsers = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const ret = await postUser(getUser(req.body.username));
     res.status(ret);
     if (ret == 409) {
@@ -36,8 +30,6 @@ const createUser = async (req, res) => {
 }
 
 const removeUser = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const user = getUser(req.body.username)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
@@ -51,8 +43,6 @@ const removeUser = async (req, res) => {
 }
 
 const changePermissions = async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     const user = getUser(req.body.username)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');

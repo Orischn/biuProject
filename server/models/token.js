@@ -21,9 +21,9 @@ const postToken = async (user) => {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = client.db('Whatsapp');
+        const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await getUser(user.username);
+        const existingUser = await users.findOne({username: user.username, password: user.password});
         if (!existingUser || existingUser == 404) {
             return 404;
         }

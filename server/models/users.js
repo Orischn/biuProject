@@ -52,11 +52,7 @@ async function postUser(user) {
     await users.insertOne({
       username: user.username,
       password: user.password,
-      displayName: user.displayName,
-      profilePic: user.profilePic,
       permissions: user.permissions,
-      isbot: user.isbot,
-      lastChat: null
     });
     return 201;
   } catch (error) {
@@ -105,6 +101,12 @@ async function changeAdminPermissions(user, permissions) {
         }
       }
     )
+  }
+  catch(error) {
+    console.log(error);
+    return 500;
+  } finally {
+    await client.close();
   }
 }
 
