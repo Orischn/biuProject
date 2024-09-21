@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import InputBox from "../inputBox/InputBox";
 
-function LoginPage({ setToken }) {
+function LoginPage({ setToken, setUsername }) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [username, setUsernameTry] = useState('');
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -13,7 +13,7 @@ function LoginPage({ setToken }) {
     {
       title: "Username:",
       placeholder: 'Enter your username here',
-      setValue: setUsername,
+      setValue: setUsernameTry,
       error: usernameError
     },
 
@@ -60,8 +60,9 @@ function LoginPage({ setToken }) {
     }
     res.text().then((token) => {
       setToken(token);
+      setUsername(username)
     });
-    navigate('/studentsFeed');
+    navigate('/studentFeed');
   }
   return (
     <>
