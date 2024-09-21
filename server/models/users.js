@@ -106,6 +106,12 @@ async function changeAdminPermissions(user, permissions) {
       }
     )
   }
+  catch(error) {
+    console.log(error);
+    return 500;
+  } finally {
+    await client.close();
+  }
 }
 
 module.exports = {

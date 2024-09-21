@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
 import InputBox from "../inputBox/InputBox";
 
 function LoginPage({ setToken }) {
@@ -12,14 +11,14 @@ function LoginPage({ setToken }) {
   const [error, setError] = useState('');
   const neededInfo = [
     {
-      title: "userName",
+      title: "Username:",
       placeholder: 'Enter your username here',
       setValue: setUsername,
       error: usernameError
     },
 
     {
-      title: "Password",
+      title: "Password:",
       placeholder: 'Enter your password here',
       setValue: setPassword,
       error: passwordError
@@ -43,7 +42,7 @@ function LoginPage({ setToken }) {
       setPasswordError('Password is required!');
       return;
     }
-    const res = await fetch('http://localhost:5000/api/Tokens', {
+    const res = await fetch('http://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
         'Content-Type': 'application/json',
@@ -66,7 +65,7 @@ function LoginPage({ setToken }) {
   }
   return (
     <>
-      <div className="rounded-pill halation"></div>
+      <div className="rounded-pill"></div>
       <br /><br /><br />
       <div className="card">
         <form noValidate className="container-fluid" onSubmit={handleSubmit}>
@@ -78,9 +77,6 @@ function LoginPage({ setToken }) {
                 <span className="alert alert-danger w-50" role="alert">
                 {error}
               </span>}
-            </div>
-            <div className="col-5 text-white">
-              Not registered? <Link to="/" className="card-link">Click here</Link> to register
             </div>
           </div>
         </form>
