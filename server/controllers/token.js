@@ -3,9 +3,9 @@ const { checkToken, postToken } = require('../models/token');
 const validateUser = async (req, res, next) => {
     const status = await checkToken(req.headers.authorization);
     if (status === 401) {
-        return res.status(401).send("Invalid Token").end();
+        return res.status(401).end("Invalid Token");
     } else if (status === 403) {
-        return res.status(403).send('Token required').end();
+        return res.status(403).end('Token required');
     } else {
         return next();
     }
