@@ -1,13 +1,15 @@
 
-const { postPractice, getPractice, getPractices } = require("../models/chatbot")
+const { postPractice, getPractice, getPractices, addMessage } = require("../models/chatbot")
 const { getData } = require("../models/token")
 
 const decipherQuestion = async (req, res, next) => {
-
+    const userData = await getData(req.headers.authorization)
+    addMessage(userData.username, req.body.chatId, req.body.msg)
+    next();
 }
 
 const answerQuestion = async (req, res) => {
-
+    return res.status(200).end(JSON.stringify({'content': 'I Am A Bot', isBot: true}))
 }
 
 const addPractice = async (req, res) => {

@@ -2,8 +2,6 @@ import BotMessage from "../botMessage/BotMessage";
 import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-const BOTMESSAGE = 0;
-const HUMANMESSAGE = 1;
 const { useState, useEffect } = require("react");
 
 function ChatFeed({ token, selectedPractice, finishPractice }) {
@@ -24,7 +22,7 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
             if (res.status === 200) {
                 res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.map((message, key) => {
-                        if (message.type == BOTMESSAGE) {
+                        if (message.isBot) {
                             return <BotMessage content={message.content} />
                         } else {
                             return <StudentMessage content={message.content} />

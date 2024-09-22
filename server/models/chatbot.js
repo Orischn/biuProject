@@ -5,9 +5,9 @@ async function getPractice(chatId, userId) {
     try {
         await client.connect();
         const db = await client.db('ChatBot');
-        const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatId: chatId, userId: userId});
-        return chat;
+        const practices = db.collection('practices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId});
+        return practice;
     } catch (error) {
         return 500;
     } finally {
@@ -47,17 +47,17 @@ async function postPractice(userId) {
         let nextChat = await practices.find({userId: userId}).toArray();
         var chatId = nextChat.length + 1;
 
-        const chat = {
+        const practice = {
             userId: userId,
             chatId: chatId,
             messages: [],
             startDate: dateTime,
             endDate: null
         }
-        await practices.insertOne(chat);
+        await practices.insertOne(practice);
 
 
-        return chat;
+        return practice;
     } catch (error) {
         console.log(error);
         return 500;
@@ -70,13 +70,13 @@ async function deletePractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = client.db('Whatsapp');
-        const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatId: chatId, userId: userId});
-        if (!chat) {
+        const db = client.db('ChatBot');
+        const practices = db.collection('pratices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId});
+        if (!practice) {
             return 404;
         }
-        await chats.deleteOne({ chatId: chatId, userId: userId});
+        await practices.deleteOne({ chatId: chatId, userId: userId});
         return 200;
     } catch (error) {
         return 500;
@@ -94,18 +94,18 @@ async function getMessages(chatId, userId) {
     }
 }
 
-async function addMessage(userId, content, isBot) {
+async function addMessage(userId, chatId, content, isBot) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('chats');
+        const chats = db.collection('practices');
         const user = await getUser(userId);
         if (!user) {
             return 404;
         }
         await chats.updateOne(
-            { chatId: user.lastChat.chatId, userId: userId },
+            { chatId: chatId, userId: userId },
             {
                 $push: {
                     messages: {
@@ -116,7 +116,7 @@ async function addMessage(userId, content, isBot) {
             }
 
         )
-        return 200;
+        return 200
     } catch (error) {
         return 500;
     } finally {
