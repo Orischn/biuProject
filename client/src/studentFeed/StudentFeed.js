@@ -20,6 +20,10 @@ function StudentFeed({ token, username }) {
         if (res.status === 200) {
             res.text().then((practices) => {
                 setPracticeList(JSON.parse(practices).map((practice, key) => {
+                    console.log(practice.chatId);
+                    if (selectedPractice) {
+                        console.log(selectedPractice.chatId);
+                    }
                     return <Practice practice={practice} key={key}
                         selectedPractice={selectedPractice} 
                         setSelectedPractice={setSelectedPractice} />
@@ -43,8 +47,7 @@ function StudentFeed({ token, username }) {
                 <div id="practiceFeed" className="col-3">
                     <div id="me" className="d-flex align-items-center w-100">
                         <b className="ms-2 w-100 text-black-50">{username}</b>
-                        <AddPractice token={token} practiceList={practiceList} setPracticeList={setPracticeList}
-                        selectedPractice={selectedPractice} setSelectedPractice={setSelectedPractice}/>
+                        <AddPractice token={token} setSelectedPractice={setSelectedPractice}/>
                     </div>
                     <div className="d-flex align-items-center">
                         <br />

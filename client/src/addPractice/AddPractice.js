@@ -1,7 +1,5 @@
-import { useRef, useState } from "react";
-import Practice from "../practice/Practice";
 
-function AddPractice({token, practiceList, setPracticeList, selectedPractice, setSelectedPractice}) {
+function AddPractice({token, setSelectedPractice}) {
 
     const add = async function (e) {
         const res = await fetch(`http://localhost:5000/api/addPractice/`, {
@@ -13,7 +11,9 @@ function AddPractice({token, practiceList, setPracticeList, selectedPractice, se
         });
 
         if (res.status === 201) {
-            setSelectedPractice(res);
+            res.text().then((practice) => {
+                setSelectedPractice(JSON.parse(practice));
+            });
         }
     };
 

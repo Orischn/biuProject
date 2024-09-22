@@ -42,7 +42,8 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
             <div id="me" className="d-flex align-items-center w-100">
                 <div className="d-flex justify-content-between align-items-center w-100">
                     <div className="d-flex align-items-center">
-                        <b className="ms-2 text-black-50">bot</b>
+                        <b className="ms-2 text-black-50">
+                            {selectedPractice ? selectedPractice.chatId : ''}</b>
                     </div>
                     <button className="btn btn-danger" onClick={finishPractice}>finish practice</button>
                 </div>
