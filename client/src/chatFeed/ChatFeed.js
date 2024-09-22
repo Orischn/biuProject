@@ -6,15 +6,15 @@ const BOTMESSAGE = 0;
 const HUMANMESSAGE = 1;
 const { useState, useEffect } = require("react");
 
-function ChatFeed({ token, botID, finishPractice }) {
+function ChatFeed({ token, selectedPractice, finishPractice }) {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         const fetchMessages = async () => {
-            if (!botID) {
+            if (!selectedPractice) {
                 return;
             }
-            const res = await fetch(`http://localhost:5000/api/getPractice/${botID}`, {
+            const res = await fetch(`http://localhost:5000/api/getPractice/${selectedPractice.chatId}`, {
                 'method': 'get',
                 'headers': {
                     'accept': 'application/json',
@@ -37,15 +37,6 @@ function ChatFeed({ token, botID, finishPractice }) {
     }, [])
 
     return (
-        // <>
-        //     <div id="chatFeed" className="col-9">
-        //         <div id="me" className="d-flex align-items-center w-100">
-        //             <b className="ms-2 text-black-50">bot</b>
-        //         </div>
-        //         {messages}     
-        //     </div>
-        // </>
-
         <>
         <div id="chatFeed" className="col-9">
             <div id="me" className="d-flex align-items-center w-100">
@@ -53,18 +44,16 @@ function ChatFeed({ token, botID, finishPractice }) {
                     <div className="d-flex align-items-center">
                         <b className="ms-2 text-black-50">bot</b>
                     </div>
-                    {/* finish practice is a function that supposed to be transfered here? */}
                     <button className="btn btn-danger" onClick={finishPractice}>finish practice</button>
                 </div>
             </div>
             <div id="practice" className="w-100">
                 {messages}
             </div>
-            <SendMessage setLatestMessage={setLatestMessage} token={token} contact={contact} />
+            <SendMessage token={token} selectedPractice={selectedPractice}
+            messages={messages} setMessages={setMessages} />
         </div>
         </>
-
-        
     )
 }
 

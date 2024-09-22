@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Practice from "../practice/Practice";
-import ChatFeed from "../chatFeed/ChatFeed";
 import AddPractice from "../addPractice/AddPractice";
+import ChatFeed from "../chatFeed/ChatFeed";
+import Practice from "../practice/Practice";
 
 
 
@@ -28,13 +28,13 @@ function StudentFeed({ token, username }) {
         }
     }
 
+    const finishPractice = async () => {
+        return
+    }
+
     useEffect(() => {
         fetchPractices();
     }, [selectedPractice])
-
-    function finishPractice() {
-        
-    }
 
     return (
     <>
@@ -51,8 +51,7 @@ function StudentFeed({ token, username }) {
                     </div>
                     {practiceList}
                 </div>
-                <ChatFeed token={token} botID={selectedPractice && selectedPractice.chatId}
-                finishPractice={finishPractice}/>
+                <ChatFeed token={token} selectedPractice={selectedPractice} finishPractice={finishPractice}/>
             </div>
         </div>
     </>
