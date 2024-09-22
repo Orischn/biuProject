@@ -4,7 +4,7 @@ async function getPractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = await client.db('ChatBot');
+        const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const practice = await practices.findOne({ chatId: chatId, userId: userId});
         return practice;
@@ -87,7 +87,7 @@ async function deletePractice(chatId, userId) {
 
 async function getMessages(chatId, userId) {
     try {
-        const chat = await getChat(chatId, userId);
+        const chat = await getPractice(chatId, userId);
         return chat.messages;
     } catch (error) {
         return 500;
@@ -99,12 +99,8 @@ async function addMessage(userId, chatId, content, isBot) {
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('practices');
-        const user = await getUser(userId);
-        if (!user) {
-            return 404;
-        }
-        await chats.updateOne(
+        const practices = db.collection('practices');
+        await practices.updateOne(
             { chatId: chatId, userId: userId },
             {
                 $push: {

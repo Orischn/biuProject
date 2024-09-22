@@ -1,10 +1,10 @@
 
 
-function StudentMessage({content}) {
+function StudentMessage({message}) {
     return (
-        <div dir="rtl">
+        <div key={message._id} dir="rtl">
             <div className="studentMessage">
-                {content}
+                {message.content}
                 <br />
                 {/* <span id="textTime" className="badge text-opacity-50"></span> */}
             </div>

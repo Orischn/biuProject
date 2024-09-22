@@ -1,15 +1,18 @@
 
-const { postPractice, getPractice, getPractices, addMessage } = require("../models/chatbot")
+const { postPractice, getPractice, getPractices, addMessage, getMessages } = require("../models/chatbot")
 const { getData } = require("../models/token")
 
 const decipherQuestion = async (req, res, next) => {
-    const userData = await getData(req.headers.authorization)
-    addMessage(userData.username, req.body.chatId, req.body.msg)
-    next();
+    const userData = await getData(req.headers.authorization);
+    await addMessage(userData.username, req.body.chatId, req.body.msg, false)
+    return next();
 }
 
 const answerQuestion = async (req, res) => {
-    return res.status(200).end(JSON.stringify({'content': 'I Am A Bot', isBot: true}))
+    const userData = await getData(req.headers.authorization);
+    let messages = await getMessages(req.body.chatId, userData.username);
+    console.log(messages);
+    return res.status(200).json(messages[0]);
 }
 
 const addPractice = async (req, res) => {
@@ -23,8 +26,8 @@ const addPractice = async (req, res) => {
 }
 
 const recvPractice = async (req, res) => {
-    const userData = await getData(req.headers.authorization)
-    const practice = await getPractice(req.header.practiceID, userData.username);
+    const userData = await getData(req.headers.authorization);
+    const practice = await getPractice(parseInt(req.params.practiceId), userData.username);
     if (practice === 500) {
         return res.status(practice).end('Internal Server Error.');
     } else if (!practice) {

@@ -11,8 +11,9 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         if (typeBar.current.value.trim() === '') {
             return;
         }
-        const message = typeBar.current.value.trim();
-        setMessages(messages => [...messages, <StudentMessage content={message} />]);
+        const content = typeBar.current.value.trim();
+        const message = {content: content}
+        setMessages(messages => [...messages, <StudentMessage message={message} />]);
         typeBar.current.value = '';
         const res = await fetch(`http://localhost:5000/api/sendMessage/`, {
             'method': 'post',
@@ -22,16 +23,16 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
             },
             'body': JSON.stringify({
                 'chatId': selectedPractice.chatId,
-                "msg": message,
+                "msg": content,
             })
         })
         if (res.status === 500) {
-            setMessages(messages.slice(0, -1)); // Check that this works.
+            setMessages(messages.slice(0, -1));
         }
-        console.log('1');
+
         if (res.status === 200) {
             res.text().then((message) => {
-                setMessages(messages => [...messages, <BotMessage content={message.content} />]);
+                setMessages(messages => [...messages, <BotMessage message={JSON.parse(message)} />]);
             })
         }
         

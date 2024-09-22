@@ -1,10 +1,10 @@
 
 
-function BotMessage({content}) {
+function BotMessage({message}) {
     return (
-        <div dir="ltr">
+        <div dir="ltr" key={message._id}>
             <div className="botMessage">
-                {content}
+                {message.content}
             </div>
         </div>
     );

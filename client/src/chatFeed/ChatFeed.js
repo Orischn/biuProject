@@ -21,18 +21,19 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
             });
             if (res.status === 200) {
                 res.text().then((practice) => {
-                    setMessages(JSON.parse(practice).messages.map((message, key) => {
+                    setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
+                        console.log(message);
                         if (message.isBot) {
-                            return <BotMessage content={message.content} />
+                            return <BotMessage message={message}/>
                         } else {
-                            return <StudentMessage content={message.content} />
+                            return <StudentMessage message={message}/>
                         }
                     }));
                 });
             }
         }
         fetchMessages();
-    }, [])
+    }, [selectedPractice])
 
     return (
         <>
