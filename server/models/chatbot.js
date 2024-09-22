@@ -51,6 +51,7 @@ async function postPractice(userId) {
             userId: userId,
             chatId: chatId,
             messages: [],
+            grade: 0,
             startDate: dateTime,
             endDate: null
         }
@@ -118,7 +119,28 @@ async function addMessage(userId, chatId, content, isBot) {
     } finally {
         await client.close();
     }
+}
 
+async function updateGrade(userId, chatId, newGrade) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        await practices.updateOne(
+            { chatId: chatId, userId: userId },
+            {
+                $set: {
+                    grade: newGrade,
+                },
+            },
+        )
+        return 200
+    } catch (error) {
+        return 500;
+    } finally {
+        await client.close();
+    }
 }
 
 module.exports = {
@@ -128,4 +150,5 @@ module.exports = {
     postPractice,
     addMessage,
     getMessages,
+    updateGrade,
 }

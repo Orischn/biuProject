@@ -1,5 +1,5 @@
 
-const { postPractice, getPractice, getPractices, addMessage, getMessages } = require("../models/chatbot")
+const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade } = require("../models/chatbot")
 const { getData } = require("../models/token")
 
 const decipherQuestion = async (req, res, next) => {
@@ -11,7 +11,6 @@ const decipherQuestion = async (req, res, next) => {
 const answerQuestion = async (req, res) => {
     const userData = await getData(req.headers.authorization);
     let messages = await getMessages(req.body.chatId, userData.username);
-    console.log(messages);
     return res.status(200).json(messages[0]);
 }
 
@@ -49,10 +48,20 @@ const recvPractices = async (req, res) => {
     }
 }
 
+const changeGrade = async (req, res) => {
+    const status = await updateGrade(req.body.userId, req.body.chatId, req.body.newGrade);
+    if (status === 500) {
+        return res.status(status).end('Internal Server Error.');
+    } else {
+        return res.status(200);
+    }
+}
+
 module.exports = {
     decipherQuestion,
     answerQuestion,
     addPractice,
     recvPractices,
     recvPractice,
+    changeGrade,
 }
