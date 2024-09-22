@@ -1,7 +1,7 @@
-const { getUser, getUsers, postUser, deleteUser, changeAdminPermissions } = require('../models/users.js');
+const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
-    const user = await getUser(req.header.username);
+    const user = await getUser(req.header.userId);
     if (user === 401) {
         return res.status(401).end();
     } else {
@@ -9,8 +9,8 @@ const receiveUser = async (req, res) => {
     }
 }
 
-const receiveAllUsers = async (req, res) => {
-    const users = await getUsers();
+const receiveAllStudents = async (req, res) => {
+    const users = await getStudents();
     if (users === 401) {
         return res.status(401).end();
     } else {
@@ -19,7 +19,7 @@ const receiveAllUsers = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(req.body.username);
+    const ret = await postUser(req.body.userId);
     res.status(ret);
     if (ret == 409) {
         res.end('Creation of user failed (User already exists).');
@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
 }
 
 const removeUser = async (req, res) => {
-    const user = getUser(req.body.username)
+    const user = getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }
@@ -43,7 +43,7 @@ const removeUser = async (req, res) => {
 }
 
 const changePermissions = async (req, res) => {
-    const user = getUser(req.body.username)
+    const user = getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }
@@ -58,7 +58,7 @@ const changePermissions = async (req, res) => {
 module.exports = {
     receiveUser,
     createUser,
-    receiveAllUsers,
+    receiveAllStudents,
     removeUser,
     changePermissions,
 }

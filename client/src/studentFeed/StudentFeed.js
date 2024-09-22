@@ -8,33 +8,31 @@ import Practice from "../practice/Practice";
 function StudentFeed({ token, username }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
-
-    const fetchPractices = async () => {
-        const res = await fetch('http://localhost:5000/api/getPractices', {
-            method: 'get',
-            headers: {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-        if (res.status === 200) {
-            res.text().then((practices) => {
-                setPracticeList(JSON.parse(practices).map((practice, key) => {
-                    return <Practice practice={practice} key={key}
-                        selectedPractice={selectedPractice} 
-                        setSelectedPractice={setSelectedPractice} />
-                }));
-            });
-        }
-    }
-
     const finishPractice = async () => {
         return
     }
 
     useEffect(() => {
+        const fetchPractices = async () => {
+            const res = await fetch('http://localhost:5000/api/getPractices', {
+                method: 'get',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            if (res.status === 200) {
+                res.text().then((practices) => {
+                    setPracticeList(JSON.parse(practices).map((practice, key) => {
+                        return <Practice practice={practice} key={key}
+                            selectedPractice={selectedPractice} 
+                            setSelectedPractice={setSelectedPractice} />
+                    }));
+                });
+            }
+        }
         fetchPractices();
-    }, [selectedPractice])
+    }, [selectedPractice, token])
 
     return (
     <>

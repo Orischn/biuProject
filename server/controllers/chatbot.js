@@ -42,7 +42,18 @@ const recvPractices = async (req, res) => {
     if (practices === 500) {
         return res.status(practices).end('Internal Server Error.');
     } else if (!practices) {
-        return res.status(404).end(JSON.stringify(practices));
+        return res.status(204).end(JSON.stringify(practices));
+    } else {
+        return res.status(200).end(JSON.stringify(practices));
+    }
+}
+
+const getStudentPractices = async (req, res) => {
+    const practices = await getPractices(req.params.userId);
+    if (practices === 500) {
+        return res.status(practices).end('Internal Server Error.');
+    } else if (!practices) {
+        return res.status(204).end(JSON.stringify(practices));
     } else {
         return res.status(200).end(JSON.stringify(practices));
     }
@@ -64,4 +75,5 @@ module.exports = {
     recvPractices,
     recvPractice,
     changeGrade,
+    getStudentPractices,
 }

@@ -1,14 +1,14 @@
 const { MongoClient } = require('mongodb');
 
 
-async function getUser(username) {
+async function getUser(userId) {
   const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
 
-    const user = await users.findOne({ username: username });
+    const user = await users.findOne({ userId: userId });
     if (!user) {
       return 404;
     }
@@ -20,18 +20,18 @@ async function getUser(username) {
   }
 }
 
-async function getUsers() {
+async function getStudents() {
   const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
 
-    const allUsers = await users.findMany({});
-    if (!allUsers) {
+    const allStudents = await users.findMany({permissions: 'student'});
+    if (!allStudents) {
       return 404;
     }
-    return allUsers;
+    return allStudents;
   } catch (error) {
     return 500;
   } finally {
@@ -45,12 +45,14 @@ async function postUser(user) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ username: user.username });
+    const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
       return 409;
     }
     await users.insertOne({
-      username: user.username,
+      userId: user.userId,
+      firstname: user.firstname,
+      lastname: user.lastName,
       password: user.password,
       permissions: user.permissions,
     });
@@ -68,13 +70,13 @@ async function deleteUser(user) {
     await client.connnect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ username: user.username });
+    const existingUser = await users.findOne({ userId: user.userId });
     if (!existingUser) {
       return 404;
     }
     const chats = db.collection('chats');
-    await chats.deleteMany({userId: user.username});
-    await users.deleteOne({username: user.username});
+    await chats.deleteMany({userId: user.userId});
+    await users.deleteOne({userId: user.userId});
     return 200;
   }
   catch(error) {
@@ -90,7 +92,7 @@ async function changeAdminPermissions(user, permissions) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ username: user.username });
+    const existingUser = await users.findOne({ userId: user.userId });
     if (!existingUser) {
       return 404;
     }
@@ -112,7 +114,7 @@ async function changeAdminPermissions(user, permissions) {
 
 module.exports = {
   getUser,
-  getUsers,
+  getStudents,
   postUser,
   deleteUser,
   changeAdminPermissions,
