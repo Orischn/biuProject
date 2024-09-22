@@ -20,10 +20,6 @@ function StudentFeed({ token, username }) {
         if (res.status === 200) {
             res.text().then((practices) => {
                 setPracticeList(JSON.parse(practices).map((practice, key) => {
-                    console.log(practice.chatId);
-                    if (selectedPractice) {
-                        console.log(selectedPractice.chatId);
-                    }
                     return <Practice practice={practice} key={key}
                         selectedPractice={selectedPractice} 
                         setSelectedPractice={setSelectedPractice} />
