@@ -62,7 +62,7 @@ function LoginPage({ setToken, setUsername }) {
       setToken(token);
     });
     setUsername(username)
-    navigate('/studentFeed');
+    navigate('/adminFeed');
   }
   return (
     <>
