@@ -10,3 +10,5 @@ function SendMessage() {
         </>
     )
 }
+
+export default SendMessage;

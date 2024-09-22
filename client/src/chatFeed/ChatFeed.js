@@ -1,11 +1,12 @@
 import BotMessage from "../botMessage/BotMessage";
+import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
 const BOTMESSAGE = 0;
 const HUMANMESSAGE = 1;
 const { useState, useEffect } = require("react");
 
-function ChatFeed({ token, botID }) {
+function ChatFeed({ token, botID, finishPractice }) {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
@@ -36,14 +37,34 @@ function ChatFeed({ token, botID }) {
     }, [])
 
     return (
+        // <>
+        //     <div id="chatFeed" className="col-9">
+        //         <div id="me" className="d-flex align-items-center w-100">
+        //             <b className="ms-2 text-black-50">bot</b>
+        //         </div>
+        //         {messages}     
+        //     </div>
+        // </>
+
         <>
-            <div id="chatFeed" className="col-9">
-                <div id="me" className="d-flex align-items-center w-100">
-                    <b className="ms-2 text-black-50">bot</b>
+        <div id="chatFeed" className="col-9">
+            <div id="me" className="d-flex align-items-center w-100">
+                <div className="d-flex justify-content-between align-items-center w-100">
+                    <div className="d-flex align-items-center">
+                        <b className="ms-2 text-black-50">bot</b>
+                    </div>
+                    {/* finish practice is a function that supposed to be transfered here? */}
+                    <button className="btn btn-danger" onClick={finishPractice}>finish practice</button>
                 </div>
-                {messages}     
             </div>
+            <div id="practice" className="w-100">
+                {messages}
+            </div>
+            <SendMessage setLatestMessage={setLatestMessage} token={token} contact={contact} />
+        </div>
         </>
+
+        
     )
 }
 

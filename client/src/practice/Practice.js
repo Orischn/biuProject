@@ -8,7 +8,7 @@ function Practice({ practice, selectedPractice, setSelectedPractice }) {
             <div className="row">
                 <div>
                     <b className="text-black w-100">Practice #{practice.chatId}</b>
-                    <span className="text-white' badge date">{!practice.finished ? 'In Progress...' : 'Finished'}</span>
+                    <span className="text-black badge date">{!practice.finished ? 'In Progress...' : 'Finished'}</span>
                     <br />
                 </div>
             </div>
