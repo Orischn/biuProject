@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
-const key = "Let S be an orthogonal transformation of gram schmidt";
+const key = "Sara shara shir sameihah shir sameihah shara Sara";
 const { getUser } = require('./users');
 
 const checkToken = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            await jwt.verify(token, key);
+            jwt.verify(token, key);
             return 200;
         } catch (err) {
             return 401;
@@ -21,9 +21,9 @@ const postToken = async (user) => {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = client.db('Whatsapp');
+        const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await getUser(user.username);
+        const existingUser = await users.findOne({username: user.username, password: user.password});
         if (!existingUser || existingUser == 404) {
             return 404;
         }
@@ -45,7 +45,7 @@ const getData = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            const data = await jwt.verify(token, key);
+            const data = jwt.verify(token, key);
             return data;
         } catch (err) {
             return 401;
