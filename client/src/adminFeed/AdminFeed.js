@@ -65,8 +65,8 @@ function AdminFeed({ token, userId }) {
                 <div id="gradesChatBlock" class="col-9">
                     {selectedStudent ?
                         <>
-                            <StudentStats selectedStudent={selectedStudent}/>
-                            <ChatsHistory />
+                            <StudentStats token={token} selectedStudent={selectedStudent}/>
+                            <ChatsHistory token={token}/>
                         </> :
                         <>
                             PlaceHolder.

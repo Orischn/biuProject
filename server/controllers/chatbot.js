@@ -60,11 +60,12 @@ const getStudentPractices = async (req, res) => {
 }
 
 const changeGrade = async (req, res) => {
-    const status = await updateGrade(req.body.userId, req.body.chatId, req.body.newGrade);
+    console.log(req.body);
+    const status = await updateGrade(req.body.userId, req.body.chatId, parseInt(req.body.newGrade));
     if (status === 500) {
         return res.status(status).end('Internal Server Error.');
     } else {
-        return res.status(200);
+        return res.status(200).end();
     }
 }
 

@@ -123,6 +123,7 @@ async function addMessage(userId, chatId, content, isBot) {
 
 async function updateGrade(userId, chatId, newGrade) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
+    console.log(userId, chatId, newGrade);
     try {
         await client.connect();
         const db = client.db('ChatBot');
@@ -135,7 +136,7 @@ async function updateGrade(userId, chatId, newGrade) {
                 },
             },
         )
-        return 200
+        return 200;
     } catch (error) {
         return 500;
     } finally {

@@ -11,6 +11,6 @@ router.get('/api/getStudents/', validateUser, checkAdmin, receiveAllStudents);
 router.get('/api/studentPractices/:userId', validateUser, checkAdmin, getStudentPractices)
 router.post('/api/createUser/',validateUser, checkAdmin, createUser);
 router.post('/api/deleteUser/', validateUser, checkAdmin, removeUser);
-router.post('/api/updateGrade', validateUser, checkAdmin, changeGrade)
+router.post('/api/updateGrade/', validateUser, checkAdmin, changeGrade)
 router.post('/api/changePermissions/', validateUser, checkAdmin, changePermissions)
 module.exports = router;

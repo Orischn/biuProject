@@ -25,7 +25,7 @@ function StudentFeed({ token, userId }) {
                 res.text().then((practices) => {
                     setPracticeList(JSON.parse(practices).map((practice, key) => {
                         return <Practice practice={practice} key={key}
-                            selectedPractice={selectedPractice} 
+                            selectedPractice={selectedPractice}
                             setSelectedPractice={setSelectedPractice} />
                     }));
                 });
@@ -35,23 +35,28 @@ function StudentFeed({ token, userId }) {
     }, [selectedPractice, token])
 
     return (
-    <>
-        <div id="window" className="container">
-            <div className="row">
-                <div id="practiceFeed" className="col-3">
-                    <div id="me" className="d-flex align-items-center w-100">
-                        <b className="ms-2 w-100 text-black-50">{userId}</b>
-                        <AddPractice token={token} setSelectedPractice={setSelectedPractice}/>
+        <>
+            <div id="window" className="container">
+                <div className="row">
+                    <div id="practiceFeed" className="col-3">
+                        <div id="me" className="d-flex align-items-center w-100">
+                            <b className="ms-2 w-100 text-black-50">{userId}</b>
+                            <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <br />
+                        </div>
+                        {practiceList}
                     </div>
-                    <div className="d-flex align-items-center">
-                        <br />
-                    </div>
-                    {practiceList}
+                    {selectedPractice ?
+                        <ChatFeed token={token} selectedPractice={selectedPractice} 
+                        finishPractice={finishPractice} /> :
+                        <div>place holder</div>
+                }
+
                 </div>
-                <ChatFeed token={token} selectedPractice={selectedPractice} finishPractice={finishPractice}/>
             </div>
-        </div>
-    </>
+        </>
 
     );
 }

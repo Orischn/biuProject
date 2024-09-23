@@ -28,6 +28,25 @@ function LoginPage({ setToken, setUserId }) {
     return <InputBox {...data} key={key} />;
   })
 
+  const navigateTo = async (token) => {
+    const res = await fetch('http://localhost:5000/api/student/', {
+      method: 'get',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    if (res.status === 200) {
+      res.text().then((user) => {
+        if (JSON.parse(user).permissions) {
+          navigate('/adminFeed');
+        } else {
+          navigate('/studentFeed');
+        }
+      });
+    }
+  }
+
   const handleSubmit = async (e) => {
     setUserIdError('');
     setPasswordError('');
@@ -60,9 +79,9 @@ function LoginPage({ setToken, setUserId }) {
     }
     res.text().then((token) => {
       setToken(token);
+      setUserId(userId)
+      navigateTo(token);
     });
-    setUserId(userId)
-    navigate('/adminFeed');
   }
   return (
     <>
@@ -76,8 +95,8 @@ function LoginPage({ setToken, setUserId }) {
               <input type="submit" className="btn btn-primary submit" value="Login" />
               {error &&
                 <span className="alert alert-danger w-50" role="alert">
-                {error}
-              </span>}
+                  {error}
+                </span>}
             </div>
           </div>
         </form>

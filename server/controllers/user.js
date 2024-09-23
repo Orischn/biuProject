@@ -1,18 +1,29 @@
+const { getData } = require('../models/token.js');
 const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
     const user = await getUser(req.params.userId);
-    if (user === 401) {
-        return res.status(401).end();
+    if (user === 404) {
+        return res.status(404).end();
     } else {
         return res.status(200).end(JSON.stringify(user));
     }
 }
 
+const getMe = async (req, res) => {
+    const userData = await getData(req.headers.authorization);
+    const me = await getUser(userData.userId)
+    if (me === 404) {
+        return res.status(404).end();
+    } else {
+        return res.status(200).end(JSON.stringify(me));
+    }
+}
+
 const receiveAllStudents = async (req, res) => {
     const users = await getStudents();
-    if (users === 401) {
-        return res.status(401).end();
+    if (users === 404) {
+        return res.status(404).end();
     } else if (users === 500) {
         return res.status(500).end("Internal server error");
     } else {
@@ -59,6 +70,7 @@ const changePermissions = async (req, res) => {
 
 module.exports = {
     receiveUser,
+    getMe,
     createUser,
     receiveAllStudents,
     removeUser,
