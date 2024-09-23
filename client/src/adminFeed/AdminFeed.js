@@ -5,9 +5,11 @@ import ChatsHistory from "../chatsHistory/ChatsHistory";
 
 
 
-function AdminFeed({ token, username }) {
+function AdminFeed({ token, userId }) {
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [fullName, setFullName] = useState("");
+
     useEffect(() => {
         const fetchStudents = async () => {
             const res = await fetch('http://localhost:5000/api/getStudents', {
@@ -27,6 +29,22 @@ function AdminFeed({ token, username }) {
                 });
             }
         }
+        const fetchName = async () => {
+            const res = await fetch(`http://localhost:5000/api/getStudent/${userId}`, {
+                method: 'get',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            if (res.status === 200) {
+                res.text().then((user) => {
+                    setFullName(JSON.parse(user).firstName + " " + JSON.parse(user).lastName);
+                });
+            }
+        }
+
+        fetchName()
         fetchStudents();
     }, [selectedStudent, token])
 
@@ -36,7 +54,7 @@ function AdminFeed({ token, username }) {
             <div className="row">
                 <div id="adminFeed" className="col-3">
                     <div id="me" className="d-flex align-items-center w-100">
-                        <b className="ms-2 w-100 text-black-50">{username}</b>
+                        <b className="ms-2 w-100 text-black-50">{fullName}</b>
                         
                     </div>
                     <div className="d-flex align-items-center">

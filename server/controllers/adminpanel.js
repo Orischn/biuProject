@@ -6,8 +6,9 @@ const uploadTree = async (req, res) => {
 }
 
 const checkAdmin = async (req, res, next) => {
-    const userData = getData(req.header.authorization)
-    const user = getUser(userData.username)
+    const userData = await getData(req.headers.authorization)
+
+    const user = await getUser(userData.userId)
     if (user.permissions) {
         return next();
     } else {

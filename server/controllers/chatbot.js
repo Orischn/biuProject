@@ -4,19 +4,19 @@ const { getData } = require("../models/token")
 
 const decipherQuestion = async (req, res, next) => {
     const userData = await getData(req.headers.authorization);
-    await addMessage(userData.username, req.body.chatId, req.body.msg, false)
+    await addMessage(userData.userId, req.body.chatId, req.body.msg, false)
     return next();
 }
 
 const answerQuestion = async (req, res) => {
     const userData = await getData(req.headers.authorization);
-    let messages = await getMessages(req.body.chatId, userData.username);
+    let messages = await getMessages(req.body.chatId, userData.userId);
     return res.status(200).json(messages[0]);
 }
 
 const addPractice = async (req, res) => {
     const userData = await getData(req.headers.authorization)
-    const practice = await postPractice(userData.username);
+    const practice = await postPractice(userData.userId);
     if (practice === 500) {
         return res.status(practice).end('Internal Server Error');
     } else {
@@ -26,7 +26,7 @@ const addPractice = async (req, res) => {
 
 const recvPractice = async (req, res) => {
     const userData = await getData(req.headers.authorization);
-    const practice = await getPractice(parseInt(req.params.practiceId), userData.username);
+    const practice = await getPractice(parseInt(req.params.practiceId), userData.userId);
     if (practice === 500) {
         return res.status(practice).end('Internal Server Error.');
     } else if (!practice) {
@@ -38,7 +38,7 @@ const recvPractice = async (req, res) => {
 
 const recvPractices = async (req, res) => {
     const userData = await getData(req.headers.authorization)
-    const practices = await getPractices(userData.username);
+    const practices = await getPractices(userData.userId);
     if (practices === 500) {
         return res.status(practices).end('Internal Server Error.');
     } else if (!practices) {

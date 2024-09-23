@@ -2,19 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import InputBox from "../inputBox/InputBox";
 
-function LoginPage({ setToken, setUsername }) {
+function LoginPage({ setToken, setUserId }) {
   const navigate = useNavigate();
-  const [username, setUsernameTry] = useState('');
+  const [userId, setUserIdTry] = useState('');
   const [password, setPassword] = useState('');
-  const [usernameError, setUsernameError] = useState('');
+  const [userIdError, setUserIdError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const neededInfo = [
     {
-      title: "Username:",
-      placeholder: 'Enter your username here',
-      setValue: setUsernameTry,
-      error: usernameError
+      title: "userId:",
+      placeholder: 'Enter your userId here',
+      setValue: setUserIdTry,
+      error: userIdError
     },
 
     {
@@ -29,12 +29,12 @@ function LoginPage({ setToken, setUsername }) {
   })
 
   const handleSubmit = async (e) => {
-    setUsernameError('');
+    setUserIdError('');
     setPasswordError('');
     setError('');
     e.preventDefault();
-    if (username.trim() === '') {
-      setUsernameError('Username is required!');
+    if (userId.trim() === '') {
+      setUserIdError('userId is required!');
       return;
     }
 
@@ -48,7 +48,7 @@ function LoginPage({ setToken, setUsername }) {
         'Content-Type': 'application/json',
       },
       'body': JSON.stringify({
-        "username": username,
+        "userId": userId,
         "password": password,
       })
     })
@@ -61,7 +61,7 @@ function LoginPage({ setToken, setUsername }) {
     res.text().then((token) => {
       setToken(token);
     });
-    setUsername(username)
+    setUserId(userId)
     navigate('/adminFeed');
   }
   return (

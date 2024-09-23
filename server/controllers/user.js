@@ -1,7 +1,7 @@
 const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
-    const user = await getUser(req.header.userId);
+    const user = await getUser(req.params.userId);
     if (user === 401) {
         return res.status(401).end();
     } else {
@@ -13,6 +13,8 @@ const receiveAllStudents = async (req, res) => {
     const users = await getStudents();
     if (users === 401) {
         return res.status(401).end();
+    } else if (users === 500) {
+        return res.status(500).end("Internal server error");
     } else {
         return res.status(200).end(JSON.stringify(users));
     }

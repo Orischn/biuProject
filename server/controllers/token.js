@@ -14,7 +14,7 @@ const validateUser = async (req, res, next) => {
 const login = async (req, res) => {
     const token = await postToken(req.body);
     if (token === 404) {
-        return res.status(token).end('Incorrect username and/or password');
+        return res.status(token).end('Incorrect id and/or password');
     } else if (token === 500) {
         return res.status(500).end();
     }

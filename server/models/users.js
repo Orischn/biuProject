@@ -7,7 +7,6 @@ async function getUser(userId) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-
     const user = await users.findOne({ userId: userId });
     if (!user) {
       return 404;
@@ -27,12 +26,13 @@ async function getStudents() {
     const db = client.db('ChatBot');
     const users = db.collection('users');
 
-    const allStudents = await users.findMany({permissions: 'student'});
+    const allStudents = await users.find({permissions: false}).toArray();
     if (!allStudents) {
       return 404;
     }
     return allStudents;
   } catch (error) {
+    console.log(error)
     return 500;
   } finally {
     await client.close();
@@ -58,7 +58,7 @@ async function postUser(user) {
     });
     return 201;
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return 500;
   } finally {
     await client.close();

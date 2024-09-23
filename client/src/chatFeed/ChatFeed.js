@@ -22,7 +22,6 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
             if (res.status === 200) {
                 res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
-                        console.log(message);
                         if (message.isBot) {
                             return <BotMessage message={message}/>
                         } else {

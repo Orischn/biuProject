@@ -5,7 +5,7 @@ import Practice from "../practice/Practice";
 
 
 
-function StudentFeed({ token, username }) {
+function StudentFeed({ token, userId }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
     const finishPractice = async () => {
@@ -40,7 +40,7 @@ function StudentFeed({ token, username }) {
             <div className="row">
                 <div id="practiceFeed" className="col-3">
                     <div id="me" className="d-flex align-items-center w-100">
-                        <b className="ms-2 w-100 text-black-50">{username}</b>
+                        <b className="ms-2 w-100 text-black-50">{userId}</b>
                         <AddPractice token={token} setSelectedPractice={setSelectedPractice}/>
                     </div>
                     <div className="d-flex align-items-center">
