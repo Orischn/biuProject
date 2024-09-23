@@ -1,20 +1,24 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
     var input = useRef(null);
 
+    useEffect(() => {
+        input.current.value = grade;
+    }, grade);
+
     const changeGrade = async () => {
-        const res = fetch('http://localhost:5000/api/updateGrade', {
-            method: 'post',
-            headers: {
-                'accept': 'application/json',
+        const res = await fetch('http://localhost:5000/api/updateGrade/', {
+            'method': 'post',
+            'headers': {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: {
-                userId: selectedStudent.userId,
-                chatId: chatId,
-                newGrade: input.current.value
-            }
+            'body': JSON.stringify({
+                "userId": selectedStudent.userId,
+                "chatId": chatId,
+                "newGrade": input.current.value
+            })
         })
         if (res === 500) {
             console.log('Something Went To Shit');
@@ -24,7 +28,7 @@ function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
     }
     return (
         <>
-            <b>Practice #{chatId}</b> <input ref={input} onClick={changeGrade}>{grade}</input>
+            <b>Practice #{chatId}</b> <input type="number" ref={input} onChange={changeGrade} />
         </>
     )
 }

@@ -3,7 +3,7 @@ import Practice from "../practice/Practice";
 import Grade from "../grade/Grade";
 
 
-function StudentStats({token, selectedStudent}) {
+function StudentStats({ token, selectedStudent }) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
 
@@ -18,13 +18,19 @@ function StudentStats({token, selectedStudent}) {
                     }
                 }
             )
-            res.text().then((practices) => {
-                setGrades(practices.map((practice, key) => {
-                    return <Grade token={token} selectedStudent={selectedStudent}
-                    chatId={practice.chatId} grade={practice.grade}
-                    key={key} setGrades={setGrades} setNewGrade={setNewGrade} />
-                }))
-            })
+            if (res.status === 200) {
+                res.text().then((practices) => {
+                    setGrades(JSON.parse(practices).map((practice, key) => {
+                        return <Grade token={token} selectedStudent={selectedStudent}
+                            chatId={practice.chatId} grade={practice.grade}
+                            key={key} setGrades={setGrades} setNewGrade={setNewGrade} />
+                    }))
+                })
+            } else {
+                res.text().then((error) => {
+                    console.log(error);
+                })
+            }
         }
         fetchGrades()
     }, [selectedStudent, token, newGrade])
