@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Student from "../student/Student";
 import StudentStats from "../studentStats/StudentStats";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
+import SettingsPage from "../settingsPage/SettingsPage";
 
 
 
@@ -9,6 +10,9 @@ function AdminFeed({ token, userId }) {
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const handleShowModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -23,7 +27,7 @@ function AdminFeed({ token, userId }) {
                 res.text().then((students) => {
                     setStudentList(JSON.parse(students).map((student, key) => {
                         return <Student student={student} key={key}
-                            selectedStudent={selectedStudent} 
+                            selectedStudent={selectedStudent}
                             setSelectedStudent={setSelectedStudent} />
                     }));
                 });
@@ -49,33 +53,34 @@ function AdminFeed({ token, userId }) {
     }, [selectedStudent, token])
 
     return (
-    <>
-        <div id="window" className="container">
-            <div className="row">
-                <div id="adminFeed" className="col-3">
-                    <div id="me" className="d-flex align-items-center w-100">
-                        <b className="ms-2 w-100 text-black-50">{fullName}</b>
-                        
+        <>
+            <div id="window" className="container">
+                {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />}
+                <div className="row">
+                    <div id="adminFeed" className="col-3">
+                        <div id="me" className="d-flex align-items-center w-100">
+                            <b className="ms-2 w-100 text-black-50">{fullName}</b>
+                            <button onClick={handleShowModal} value="Settings" />
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <br />
+                        </div>
+                        {studentList}
                     </div>
-                    <div className="d-flex align-items-center">
-                        <br />
+                    <div id="gradesChatBlock" class="col-9">
+                        {selectedStudent ?
+                            <>
+                                <StudentStats token={token} selectedStudent={selectedStudent} />
+                                <ChatsHistory token={token} />
+                            </> :
+                            <>
+                                PlaceHolder.
+                            </>
+                        }
                     </div>
-                    {studentList}
                 </div>
-                <div id="gradesChatBlock" class="col-9">
-                    {selectedStudent ?
-                        <>
-                            <StudentStats token={token} selectedStudent={selectedStudent}/>
-                            <ChatsHistory token={token}/>
-                        </> :
-                        <>
-                            PlaceHolder.
-                        </>
-                    }
-            </div>  
             </div>
-        </div>
-    </>
+        </>
 
     );
 }
