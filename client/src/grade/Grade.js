@@ -21,7 +21,7 @@ function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
             })
         })
         if (res === 500) {
-            console.log('Something Went To Shit');
+            res.text().then((error) => alert(error));
             return;
         } 
         setNewGrade(input.current.value)
