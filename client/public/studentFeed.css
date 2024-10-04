@@ -14,20 +14,20 @@ img {
     cursor: pointer;
 }
 
-.inputText{
+.input{
     color: black;
 }
 
-.inputText:focus {
+.input:focus {
     color: black;
     box-shadow: none;
 }
 
-.inputText::placeholder {
+.input::placeholder {
     color: black;
 }
 
-.inputText:focus::placeholder {
+.input:focus::placeholder {
     color: transparent;
 }
 
