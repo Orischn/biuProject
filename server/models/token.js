@@ -23,7 +23,7 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({username: user.username, password: user.password});
+        const existingUser = await users.findOne({userId: user.userId, password: user.password});
         if (!existingUser || existingUser == 404) {
             return 404;
         }
@@ -32,7 +32,7 @@ const postToken = async (user) => {
             return 500;
         }
         
-        const token = await jwt.sign(user, key);
+        const token = jwt.sign(user, key);
         return token;
     } catch (error) {
         return 500;

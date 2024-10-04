@@ -1,25 +1,38 @@
-const { getUser, getUsers, postUser, deleteUser, changeAdminPermissions } = require('../models/users.js');
+const { getData } = require('../models/token.js');
+const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
-    const user = await getUser(req.header.username);
-    if (user === 401) {
-        return res.status(401).end();
+    const user = await getUser(req.params.userId);
+    if (user === 404) {
+        return res.status(404).end();
     } else {
         return res.status(200).end(JSON.stringify(user));
     }
 }
 
-const receiveAllUsers = async (req, res) => {
-    const users = await getUsers();
-    if (users === 401) {
-        return res.status(401).end();
+const getMe = async (req, res) => {
+    const userData = await getData(req.headers.authorization);
+    const me = await getUser(userData.userId)
+    if (me === 404) {
+        return res.status(404).end();
+    } else {
+        return res.status(200).end(JSON.stringify(me));
+    }
+}
+
+const receiveAllStudents = async (req, res) => {
+    const users = await getStudents();
+    if (users === 404) {
+        return res.status(404).end();
+    } else if (users === 500) {
+        return res.status(500).end("Internal server error");
     } else {
         return res.status(200).end(JSON.stringify(users));
     }
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(req.body.username);
+    const ret = await postUser(req.body.userId);
     res.status(ret);
     if (ret == 409) {
         res.end('Creation of user failed (User already exists).');
@@ -30,7 +43,7 @@ const createUser = async (req, res) => {
 }
 
 const removeUser = async (req, res) => {
-    const user = getUser(req.body.username)
+    const user = getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }
@@ -43,7 +56,7 @@ const removeUser = async (req, res) => {
 }
 
 const changePermissions = async (req, res) => {
-    const user = getUser(req.body.username)
+    const user = getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }
@@ -57,8 +70,9 @@ const changePermissions = async (req, res) => {
 
 module.exports = {
     receiveUser,
+    getMe,
     createUser,
-    receiveAllUsers,
+    receiveAllStudents,
     removeUser,
     changePermissions,
 }

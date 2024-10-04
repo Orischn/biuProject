@@ -2,19 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import InputBox from "../inputBox/InputBox";
 
-function LoginPage({ setToken, setUsername }) {
+function LoginPage({ setToken, setUserId }) {
   const navigate = useNavigate();
-  const [username, setUsernameTry] = useState('');
+  const [userId, setUserIdTry] = useState('');
   const [password, setPassword] = useState('');
-  const [usernameError, setUsernameError] = useState('');
+  const [userIdError, setUserIdError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [error, setError] = useState('');
   const neededInfo = [
     {
-      title: "Username:",
-      placeholder: 'Enter your username here',
-      setValue: setUsernameTry,
-      error: usernameError
+      title: "userId:",
+      placeholder: 'Enter your userId here',
+      setValue: setUserIdTry,
+      error: userIdError
     },
 
     {
@@ -28,13 +28,32 @@ function LoginPage({ setToken, setUsername }) {
     return <InputBox {...data} key={key} />;
   })
 
+  const navigateTo = async (token) => {
+    const res = await fetch('http://localhost:5000/api/student/', {
+      method: 'get',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      }
+    });
+    if (res.status === 200) {
+      res.text().then((user) => {
+        if (JSON.parse(user).permissions) {
+          navigate('/adminFeed');
+        } else {
+          navigate('/studentFeed');
+        }
+      });
+    }
+  }
+
   const handleSubmit = async (e) => {
-    setUsernameError('');
+    setUserIdError('');
     setPasswordError('');
     setError('');
     e.preventDefault();
-    if (username.trim() === '') {
-      setUsernameError('Username is required!');
+    if (userId.trim() === '') {
+      setUserIdError('userId is required!');
       return;
     }
 
@@ -48,7 +67,7 @@ function LoginPage({ setToken, setUsername }) {
         'Content-Type': 'application/json',
       },
       'body': JSON.stringify({
-        "username": username,
+        "userId": userId,
         "password": password,
       })
     })
@@ -60,9 +79,9 @@ function LoginPage({ setToken, setUsername }) {
     }
     res.text().then((token) => {
       setToken(token);
+      setUserId(userId)
+      navigateTo(token);
     });
-    setUsername(username)
-    navigate('/studentFeed');
   }
   return (
     <>
@@ -76,8 +95,8 @@ function LoginPage({ setToken, setUsername }) {
               <input type="submit" className="btn btn-primary submit" value="Login" />
               {error &&
                 <span className="alert alert-danger w-50" role="alert">
-                {error}
-              </span>}
+                  {error}
+                </span>}
             </div>
           </div>
         </form>
