@@ -1,4 +1,3 @@
-
 const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade } = require("../models/chatbot")
 const { getData } = require("../models/token")
 
