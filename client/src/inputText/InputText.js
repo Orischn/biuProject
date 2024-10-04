@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-function InputBox({ title, placeholder, setValue, error }) {
+function InputText({ title, placeholder, setValue, error }) {
     var input = useRef('');
 
     function handleChange(e) {
@@ -13,7 +13,7 @@ function InputBox({ title, placeholder, setValue, error }) {
                     {title}
                 </div>
                 <div className="col-4">
-                    <input ref={input} type="text" className="form-control inputText" placeholder={placeholder} id={title} onChange={(e) => handleChange(e)} required />
+                    <input ref={input} type="text" className="form-control input" placeholder={placeholder} id={title} onChange={(e) => handleChange(e)} required />
                 </div>
                 <div className='col-4 mt-1'>
                     {error &&
@@ -27,4 +27,4 @@ function InputBox({ title, placeholder, setValue, error }) {
     );
 }
 
-export default InputBox;
+export default InputText;
