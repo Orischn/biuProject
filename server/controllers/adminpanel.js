@@ -3,14 +3,15 @@ const {getData} = require('../models/token');
 const {getUser} = require('../models/users')
 
 const uploadCSVTree = async (req, res) => {
-    const result = uploadFile(req.body.fileName, req.body.CSVtree);
-    res.status(result)
+    const result = await uploadFile(req.body.fileName, req.body.CSVTree);
     if (result === 500) {
-        return res.end("Internal Server Error");
+        return res.status(500).end("Internal Server Error");
     } else if (result === 400) {
-        return res.end(`The server only accepts .csv files and ${req.body.fileName} does not end in .csv`);
+        return res.status(400).end(`The server only accepts .csv files and ${req.body.fileName} does not end in .csv`);
+    } else if (result) {
+        return res.status(500).end(result);
     }
-    return res.end();
+    return res.status(200).end();
 }
 
 const checkAdmin = async (req, res, next) => {
