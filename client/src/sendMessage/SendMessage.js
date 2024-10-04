@@ -43,7 +43,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         <div className="d-flex">
             <span id="messageBar" className="input-group">
                 <form onSubmit={send} className="input-group">
-                    <input ref={typeBar} className="form-control inputText" placeholder="Type a message" />
+                    <input ref={typeBar} className="form-control input" placeholder="Type a message" />
                     <button id="sendButton" type="submit" className="btn">
                         <i className="bi bi-send" />
                     </button>
