@@ -7,7 +7,7 @@ function SettingsPage({ token, closeModal }) {
     const [fileContent, setFileContent] = useState('');
     const [error, setError] = useState('')
 
-    const save = async () => {
+    const save = async (e) => {
         const updateCSV = async () => {
             const res = await fetch(`http://localhost:5000/api/uploadDecisionTree/`, {
                 'method': 'post',
@@ -26,7 +26,9 @@ function SettingsPage({ token, closeModal }) {
                 res.text.then((errorText) => setError(errorText))
             }
         }
+        e.preventDefault();
         updateCSV()
+        closeModal();
     }
 
     return (
