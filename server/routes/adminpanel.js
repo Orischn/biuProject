@@ -1,11 +1,11 @@
 const express = require('express');
-const { uploadTree, checkAdmin } = require('../controllers/adminpanel.js');
+const { checkAdmin, uploadCSVTree } = require('../controllers/adminpanel.js');
 const { validateUser } = require("../controllers/token.js");
 const { removeUser, createUser, receiveUser, receiveAllStudents, changePermissions } = require('../controllers/user.js');
 const { changeGrade, getStudentPractices } = require('../controllers/chatbot.js');
 const router = express.Router();
 
-router.post('/api/uploadDecisionTree/', validateUser, checkAdmin, uploadTree);
+router.post('/api/uploadDecisionTree/', validateUser, checkAdmin, uploadCSVTree);
 router.get('/api/getStudent/:userId', validateUser, checkAdmin, receiveUser);
 router.get('/api/getStudents/', validateUser, checkAdmin, receiveAllStudents);
 router.get('/api/studentPractices/:userId', validateUser, checkAdmin, getStudentPractices)
