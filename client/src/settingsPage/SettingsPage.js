@@ -55,29 +55,29 @@ function SettingsPage({ token, closeModal }) {
                         <div className="row">
                             <div className="col-6">
                                 {/* trying something */}
-                                <ul class="list-group mt-3">
-                                    <li class="list-group-item">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Load CSV files
+                                <ul className="list-group mt-3">
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-file-earmark-arrow-up"></i> Load CSV files
                                     </li>
-                                    <li class="list-group-item">
-                                        <i class="bi bi-people"></i> See List of Students
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-people"></i> See List of Students
                                     </li>
-                                    <li class="list-group-item">
-                                        <i class="bi bi-bar-chart"></i> See Statistics
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-bar-chart"></i> See Statistics
                                     </li>
-                                    <li class="list-group-item">
-                                        <i class="bi bi-list-task"></i> Load List of Students to Course
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-list-task"></i> Load List of Students to Course
                                     </li>
-                                    <li class="list-group-item">
-                                        <i class="bi bi-person-plus"></i> Add Student Manually
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-person-plus"></i> Add Student Manually
                                     </li>
-                                    <li class="list-group-item">
-                                        <i class="bi bi-person-x"></i> Remove Student Manually
+                                    <li className="list-group-item settingType">
+                                        <i className="bi bi-person-x"></i> Remove Student Manually
                                     </li>
                                 </ul>
                             </div>
                             <div className="col-6">
-                                placeholder
+                                {/* placeholder */}
                             </div>
 
                         </div>
