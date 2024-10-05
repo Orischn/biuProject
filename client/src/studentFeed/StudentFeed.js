@@ -51,7 +51,7 @@ function StudentFeed({ token, userId }) {
                     {selectedPractice ?
                         <ChatFeed token={token} selectedPractice={selectedPractice} 
                         finishPractice={finishPractice} /> :
-                        <div>place holder</div>
+                        <>placeholder</>
                 }
 
                 </div>
