@@ -60,7 +60,10 @@ function AdminFeed({ token, userId }) {
                     <div id="adminFeed" className="col-3">
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
-                            <button onClick={handleShowModal} value="Settings" />
+                            <button onClick={handleShowModal} 
+                            style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
+                            <i id="openSettings" className="bi bi-gear"></i>
+                            </button>
                         </div>
                         <div className="d-flex align-items-center">
                             <br />

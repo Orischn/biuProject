@@ -152,3 +152,8 @@ img {
 .row {
     height: 100%;
 }
+
+.custom-modal-width {
+    width: 70% !important;
+    max-width: 70% !important;
+}

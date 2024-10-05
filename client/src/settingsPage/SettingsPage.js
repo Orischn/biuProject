@@ -39,7 +39,7 @@ function SettingsPage({ token, closeModal }) {
                 role="dialog"
                 style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
             >
-                <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-dialog modal-dialog-centered custom-modal-width" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Settings</h5>
@@ -50,10 +50,41 @@ function SettingsPage({ token, closeModal }) {
                                 onClick={closeModal}
                             ></button>
                         </div>
-                        <form noValidate className="container-fluid modal-body" onSubmit={save} >
-                            <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />;
+
+                        {/* end of title, now need rows and cols */}
+                        <div className="row">
+                            <div className="col-6">
+                                {/* trying something */}
+                                <ul class="list-group mt-3">
+                                    <li class="list-group-item">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Load CSV files
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-people"></i> See List of Students
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-bar-chart"></i> See Statistics
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-list-task"></i> Load List of Students to Course
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-person-plus"></i> Add Student Manually
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="bi bi-person-x"></i> Remove Student Manually
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="col-6">
+                                placeholder
+                            </div>
+
+                        </div>
+                        {/* <form noValidate className="container-fluid modal-body" onSubmit={save} >
+                            <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
                             <input type="submit" className="btn btn-primary submit" value="Save" />
-                        </form>
+                        </form> */}
                     </div>
                 </div>
             </div>

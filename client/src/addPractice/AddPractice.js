@@ -20,8 +20,9 @@ function AddPractice({token, setSelectedPractice}) {
 
     return (
         <>
-            <button type="button" onClick={add}>
-                <i id="addPractice" className="bi bi-plus-circle-fill"></i>
+            <button type="button" onClick={add}
+            style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
+                <i id="addPractice" className="bi bi-plus-circle"></i>
             </button>
         </>
     )
