@@ -9,6 +9,7 @@ async function getPractice(chatId, userId) {
         const practice = await practices.findOne({ chatId: chatId, userId: userId});
         return practice;
     } catch (error) {
+        console.log(error)
         return 500;
     } finally {
         await client.close();
@@ -56,8 +57,6 @@ async function postPractice(userId) {
             endDate: null
         }
         await practices.insertOne(practice);
-
-
         return practice;
     } catch (error) {
         console.log(error);
@@ -80,6 +79,7 @@ async function deletePractice(chatId, userId) {
         await practices.deleteOne({ chatId: chatId, userId: userId});
         return 200;
     } catch (error) {
+        console.log(error)
         return 500;
     } finally {
         await client.close();
@@ -91,6 +91,7 @@ async function getMessages(chatId, userId) {
         const chat = await getPractice(chatId, userId);
         return chat.messages;
     } catch (error) {
+        console.log(error)
         return 500;
     }
 }
@@ -115,6 +116,7 @@ async function addMessage(userId, chatId, content, isBot) {
         )
         return 200
     } catch (error) {
+        console.log(error)
         return 500;
     } finally {
         await client.close();
@@ -137,6 +139,7 @@ async function updateGrade(userId, chatId, newGrade) {
         )
         return 200;
     } catch (error) {
+        console.log(error)
         return 500;
     } finally {
         await client.close();

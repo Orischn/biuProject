@@ -13,6 +13,7 @@ async function getUser(userId) {
     }
     return user;
   } catch (error) {
+    console.log(error)
     return 500;
   } finally {
     await client.close();

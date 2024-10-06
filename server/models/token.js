@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
 const key = "Sara shara shir sameihah shir sameihah shara Sara";
-const { getUser } = require('./users');
 
 const checkToken = async (authorization) => {
     if (authorization) {
@@ -24,17 +23,13 @@ const postToken = async (user) => {
         const db = client.db('ChatBot');
         const users = db.collection('users');
         const existingUser = await users.findOne({userId: user.userId, password: user.password});
-        if (!existingUser || existingUser == 404) {
+        if (!existingUser) {
             return 404;
         }
-
-        if (existingUser == 500) {
-            return 500;
-        }
-        
         const token = jwt.sign(user, key);
         return token;
     } catch (error) {
+        console.log(error)
         return 500;
     } finally {
         await client.close();

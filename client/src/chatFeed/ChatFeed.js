@@ -32,7 +32,7 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
             }
         }
         fetchMessages();
-    }, [selectedPractice])
+    }, [selectedPractice, token])
 
     return (
         <>

@@ -50,7 +50,7 @@ function AdminFeed({ token, userId }) {
 
         fetchName()
         fetchStudents();
-    }, [selectedStudent, token])
+    }, [selectedStudent, token, userId])
 
     return (
         <>

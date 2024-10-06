@@ -5,7 +5,7 @@ function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
 
     useEffect(() => {
         input.current.value = grade;
-    }, grade);
+    }, [grade]);
 
     const changeGrade = async () => {
         const res = await fetch('http://localhost:5000/api/updateGrade/', {
