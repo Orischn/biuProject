@@ -58,6 +58,18 @@ const getStudentPractices = async (req, res) => {
     }
 }
 
+const finishPractice = async (req, res) => {
+    const userData = await getData(req.headers.authorization)
+    const result = await endPractice(userData.userId, req.body.chatId)
+    if (practice === 500) {
+        return res.status(practice).end('Internal Server Error.');
+    } else if (!practice) {
+        return res.status(404).end(JSON.stringify(practice));
+    } else {
+        return res.status(200).end(JSON.stringify(practice));
+    }
+}
+
 const changeGrade = async (req, res) => {
     console.log(req.body);
     const status = await updateGrade(req.body.userId, req.body.chatId, parseInt(req.body.newGrade));
@@ -76,4 +88,5 @@ module.exports = {
     recvPractice,
     changeGrade,
     getStudentPractices,
+    finishPractice,
 }

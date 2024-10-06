@@ -9,7 +9,16 @@ function StudentFeed({ token, userId }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
     const finishPractice = async () => {
-        return
+        const res = await fetch('http://localhost:5000/api/finishPractice', {
+            method: 'post',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: {
+                'chatId': selectedPractice.chatId,
+            },
+        });
     }
 
     useEffect(() => {
