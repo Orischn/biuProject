@@ -1,36 +1,10 @@
-import { useEffect, useState } from "react"
-import InputFile from "../inputFile/InputFile";
-
+import { useState } from "react"
+import BotSettingsPage from "../botSettingsPage/BotSettingsPage"
+import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 
 function SettingsPage({ token, closeModal }) {
-    const [fileName, setFileName] = useState('');
-    const [fileContent, setFileContent] = useState('');
-    const [error, setError] = useState('')
-
-    const save = async (e) => {
-        const updateCSV = async () => {
-            const res = await fetch(`http://localhost:5000/api/uploadDecisionTree/`, {
-                'method': 'post',
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                'body': JSON.stringify({
-                    'fileName': fileName,
-                    "CSVTree": fileContent,
-                })
-            })
-            if (res === 500) {
-                res.text().then((errorText) => alert(errorText))
-            } else if (res === 400) {
-                res.text.then((errorText) => setError(errorText))
-            }
-        }
-        e.preventDefault();
-        updateCSV()
-        closeModal();
-    }
-
+    const [selectedSettings, setSelectedSettings] = useState(0)
+    const settingsOptions = [<GeneralSettings token={token} />, <BotSettingsPage token={token} />, <StudentSettingsPage token={token} />];
     return (
         <>
             <div
@@ -57,27 +31,18 @@ function SettingsPage({ token, closeModal }) {
                                 {/* trying something */}
                                 <ul className="list-group mt-3">
                                     <li className="list-group-item settingType">
-                                        <i className="bi bi-file-earmark-arrow-up"></i> Load CSV files
+                                        <button className="bi bi-file-earmark-arrow-up" onClick={setSelectedSettings(0)}></button> General
                                     </li>
                                     <li className="list-group-item settingType">
-                                        <i className="bi bi-people"></i> See List of Students
+                                        <button className="bi bi-file-earmark-arrow-up" onClick={setSelectedSettings(1)}></button> Manage Bot
                                     </li>
                                     <li className="list-group-item settingType">
-                                        <i className="bi bi-bar-chart"></i> See Statistics
-                                    </li>
-                                    <li className="list-group-item settingType">
-                                        <i className="bi bi-list-task"></i> Load List of Students to Course
-                                    </li>
-                                    <li className="list-group-item settingType">
-                                        <i className="bi bi-person-plus"></i> Add Student Manually
-                                    </li>
-                                    <li className="list-group-item settingType">
-                                        <i className="bi bi-person-x"></i> Remove Student Manually
+                                        <button className="bi bi-people" onClick={setSelectedSettings(2)}></button> Manage Students
                                     </li>
                                 </ul>
                             </div>
                             <div className="col-6">
-                                {/* placeholder */}
+                                {settingsOptions[selectedSettings]}
                             </div>
 
                         </div>
