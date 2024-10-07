@@ -60,9 +60,7 @@ const getStudentPractices = async (req, res) => {
 
 const finishPractice = async (req, res) => {
     const userData = await getData(req.headers.authorization)
-    console.log(req.body.chatId)
     const result = await endPractice(userData.userId, req.body.chatId)
-    console.log(result);
     if (result === 500) {
         return res.status(result).end('Internal Server Error.');
     } else if (!result) {
@@ -73,7 +71,6 @@ const finishPractice = async (req, res) => {
 }
 
 const changeGrade = async (req, res) => {
-    console.log(req.body);
     const status = await updateGrade(req.body.userId, req.body.chatId, parseInt(req.body.newGrade));
     if (status === 500) {
         return res.status(status).end('Internal Server Error.');
