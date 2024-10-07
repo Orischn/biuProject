@@ -31,30 +31,30 @@ function GeneralSettingsPage({ token }) {
     }
 
     return (
-
-        <div class="settings-container">
+        <>
             <h2 class="settings-title">General Settings</h2>
-            <div class="setting-item">
-                <label for="theme">Theme</label>
-                <select id="theme">
-                    <option value="white-mode">White Mode</option>
-                    <option value="dark-mode">Dark Mode</option>
-                </select>
-            </div>
+            <div class="settings-container">
+                <div class="setting-item">
+                    <label for="theme">Theme</label>
+                    <select id="theme">
+                        <option value="white-mode">Light Mode</option>
+                        <option value="dark-mode">Dark Mode</option>
+                    </select>
+                </div>
 
-            <div class="setting-item">
-                <label for="files">Upload CSV Files</label>
-                <form noValidate onSubmit={save} >
-                    <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
-                    <input type="submit" className="btn btn-primary submit" value="Save" />
-                </form>
-            </div>
-            {/* <div class="setting-item">
+                <div class="setting-item">
+                    <label for="files">Upload CSV Files</label>
+                    <form noValidate onSubmit={save} >
+                        <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
+                        <input type="submit" className="btn btn-primary submit" value="Save" />
+                    </form>
+                </div>
+                {/* <div class="setting-item">
                 <button class="save-button">Save Changes</button>
             </div> */}
-        </div>
+            </div>
 
-
+        </>
     )
 }
 

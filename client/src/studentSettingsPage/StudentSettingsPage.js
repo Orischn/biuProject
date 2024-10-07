@@ -1,13 +1,44 @@
+import StudentDetails from "../studentDetails/StudentDetails"
+
 function StudentSettingsPage({ token }) {
-    const save = async (e) => {
-        e.preventDefault();
-    }
+
 
     return (
         <>
-            <form noValidate onSubmit={save} >
-                <input type="submit" className="btn btn-primary submit" value="Save" />
-            </form>
+            <h2 class="settings-title">Manage Students</h2>
+            <div className="settings-container">
+
+                {/* <span>add student</span> */}
+                <ul>
+                    <StudentDetails fullName={'Israel Israeli'} userId={123456789}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Israel Israeli'} userId={123456789}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Israel Israeli'} userId={123456789}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Avatar Aang'} userId={987654321}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Avatar Aang'} userId={987654321}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Avatar Aang'} userId={987654321}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Avatar Aang'} userId={987654321}/>
+                </ul>
+                <ul>
+                    <StudentDetails fullName={'Israel Israeli'} userId={123456789}/>
+                </ul>
+
+
+
+
+            </div>
+
         </>
     )
 }

@@ -8,6 +8,7 @@ import Practice from "../practice/Practice";
 function StudentFeed({ token, userId }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
+    const [fullName, setFullName] = useState("");
 
     const finishPractice = async () => {
         const res = await fetch('http://localhost:5000/api/finishPractice/', {
@@ -42,8 +43,27 @@ function StudentFeed({ token, userId }) {
                 });
             }
         }
+
+        const fetchMyName = async () => {
+            const res = await fetch(`http://localhost:5000/api/student`, {
+                method: 'get',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            if (res.status === 200) {
+                res.text().then((user) => {
+                    setFullName(JSON.parse(user).firstName + " " + JSON.parse(user).lastName);
+                });
+            }
+        }
+
+        fetchMyName();
         fetchPractices();
-    }, [selectedPractice, token])
+    }, [selectedPractice, token, userId])
+
+    
 
     return (
         <>
@@ -51,7 +71,7 @@ function StudentFeed({ token, userId }) {
                 <div className="row">
                     <div id="practiceFeed" className="col-3">
                         <div id="me" className="d-flex align-items-center w-100">
-                            <b className="ms-2 w-100 text-black-50">{userId}</b>
+                            <b className="ms-2 w-100 text-black-50">{fullName}</b>
                             <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
                         </div>
                         <div className="d-flex align-items-center">
