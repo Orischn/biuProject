@@ -20,18 +20,19 @@ function InputFile({ title, setFileName, setFileContent, error }) {
 
     return (
         <>
-            <div className="row row-cols-2 justify-content-md-center">
-                <div className="col-2 text-white">
+            <div className="justify-content-md-center">
+                {/* <div className="col-2 text-black">
                     {title}
-                </div>
-                <div className="col-4">
-                    <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} required />
-                </div>
-                <div className='col-4 mt-1'>
+                </div> */}
+                
+                {/* <div className='mt-1'>
                     {error &&
                         <span className="alert alert-danger w-50" role="alert">
                             {error}
                         </span>}
+                </div> */}
+                <div className="">
+                    <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} required />
                 </div>
             </div>
             <br />

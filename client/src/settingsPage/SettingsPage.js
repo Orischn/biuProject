@@ -8,7 +8,7 @@ function SettingsPage({ token }) {
     const settingsOptions = [<GeneralSettingsPage token={token} />, <BotSettingsPage token={token} />, <StudentSettingsPage token={token} />];
 
     return (
-        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal fade custom-modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -20,14 +20,17 @@ function SettingsPage({ token }) {
                             <div className="col-3">
                                 {/* trying something */}
                                 <ul className="list-group mt-3">
-                                    <li className="list-group-item settingType" onClick={() => setSelectedSettings(0)}>
-                                        <i className="bi bi-gear"></i> General
+                                    <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(0)}>
+                                        <i className="bi bi-gear"></i> &nbsp; General
                                     </li>
-                                    <li className="list-group-item settingType" onClick={() => setSelectedSettings(1)}>
-                                        <i className="bi bi-robot"></i> Manage Bot
+                                    <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(1)}>
+                                        <i className="bi bi-robot"></i> &nbsp; Bot
                                     </li>
-                                    <li className="list-group-item settingType" onClick={() => setSelectedSettings(2)}>
-                                        <i className="bi bi-people"></i> Manage Students
+                                    <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(2)}>
+                                        <i className="bi bi-people"></i> &nbsp; Students
                                     </li>
                                 </ul>
                             </div>
@@ -36,9 +39,12 @@ function SettingsPage({ token }) {
                             </div>
                         </div>
                     </div>
-                    <div className="modal-footer">
-                        close / save / whatever
-                    </div> 
+                    <div className="modal-footer" dir="rtl">
+                        <b>
+                            Think carefully before making any changes.
+                            Remember, with great power comes great responsibility
+                        </b>
+                    </div>
                 </div>
             </div>
         </div >

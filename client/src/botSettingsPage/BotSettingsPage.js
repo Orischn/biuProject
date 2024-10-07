@@ -1,3 +1,6 @@
+import { useState } from "react";
+import InputFile from "../inputFile/InputFile";
+
 function BotSettingsPage({ token }) {
     const [fileName, setFileName] = useState('');
     const [fileContent, setFileContent] = useState('');
@@ -28,10 +31,10 @@ function BotSettingsPage({ token }) {
 
     return (
         <>
-            <form noValidate onSubmit={save} >
+            {/* <form noValidate onSubmit={save} >
                 <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
                 <input type="submit" className="btn btn-primary submit" value="Save" />
-            </form>
+            </form> */}
         </>
     )
 }
