@@ -43,10 +43,12 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
                         <b className="ms-2 text-black-50">
                             {selectedPractice ? selectedPractice.chatId : ''}</b>
                     </div>
-                    <button className="btn btn-danger" onClick={finishPractice}>finish practice</button>
+                    <button className={`btn btn-danger ${!selectedPractice.active ? 'custom-disabled' : ''}`}
+                    disabled={!selectedPractice.active}
+                    onClick={finishPractice}>finish practice</button>
                 </div>
             </div>
-            <div id="practice" className="w-100">
+            <div id="chat" className="w-100">  {/*the id is chat, there is no mistake*/}
                 {messages}
             </div>
             <SendMessage token={token} selectedPractice={selectedPractice}
