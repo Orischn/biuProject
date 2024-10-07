@@ -55,7 +55,7 @@ async function postPractice(userId) {
             grade: 0,
             startDate: dateTime,
             endDate: null,
-            alive: true
+            active: true
         }
         await practices.insertOne(practice);
         return practice;
@@ -97,11 +97,12 @@ async function endPractice(userId, chatId) {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
+        console.log(typeof(chatId), typeof(userId));
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: false },
+            { chatId: chatId, userId: userId, active: true },
             {
                 $set: {
-                    alive: true,
+                    active: false,
                     endDate: dateTime,
                 },
             },
@@ -132,7 +133,7 @@ async function addMessage(userId, chatId, content, isBot) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: true },
+            { chatId: chatId, userId: userId, active: true },
             {
                 $push: {
                     messages: {
@@ -158,7 +159,7 @@ async function updateGrade(userId, chatId, newGrade) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: false },
+            { chatId: chatId, userId: userId, active: false },
             {
                 $set: {
                     grade: newGrade,

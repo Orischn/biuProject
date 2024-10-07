@@ -1,4 +1,4 @@
-const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade } = require("../models/chatbot")
+const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade, endPractice } = require("../models/chatbot")
 const { getData } = require("../models/token")
 
 const decipherQuestion = async (req, res, next) => {
@@ -60,13 +60,15 @@ const getStudentPractices = async (req, res) => {
 
 const finishPractice = async (req, res) => {
     const userData = await getData(req.headers.authorization)
+    console.log(req.body.chatId)
     const result = await endPractice(userData.userId, req.body.chatId)
-    if (practice === 500) {
-        return res.status(practice).end('Internal Server Error.');
-    } else if (!practice) {
-        return res.status(404).end(JSON.stringify(practice));
+    console.log(result);
+    if (result === 500) {
+        return res.status(result).end('Internal Server Error.');
+    } else if (!result) {
+        return res.status(404).end(JSON.stringify(result));
     } else {
-        return res.status(200).end(JSON.stringify(practice));
+        return res.status(200).end(JSON.stringify(result));
     }
 }
 

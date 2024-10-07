@@ -8,16 +8,18 @@ import Practice from "../practice/Practice";
 function StudentFeed({ token, userId }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
+
     const finishPractice = async () => {
-        const res = await fetch('http://localhost:5000/api/finishPractice', {
-            method: 'post',
-            headers: {
+        const res = await fetch('http://localhost:5000/api/finishPractice/', {
+            'method': 'post',
+            'headers': {
                 'accept': 'application/json',
                 'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
-            body: {
+            'body': JSON.stringify({
                 'chatId': selectedPractice.chatId,
-            },
+            }),
         });
     }
 
