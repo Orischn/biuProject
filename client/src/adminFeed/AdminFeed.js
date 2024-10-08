@@ -75,7 +75,7 @@ function AdminFeed({ token, userId }) {
                         </div>
                         {studentList}
                     </div>
-                    <div id="gradesChatBlock" class="col-9">
+                    <div id="gradesChatBlock" className="col-9">
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent} />

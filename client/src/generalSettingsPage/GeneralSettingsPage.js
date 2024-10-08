@@ -32,9 +32,9 @@ function GeneralSettingsPage({ token }) {
 
     return (
         <>
-            <h2 class="settings-title">General Settings</h2>
-            <div class="settings-container">
-                <div class="setting-item">
+            <h2 className="settings-title">General Settings</h2>
+            <div className="settings-container">
+                <div className="setting-item">
                     <label for="theme">Theme</label>
                     <select id="theme">
                         <option value="white-mode">Light Mode</option>
@@ -42,7 +42,7 @@ function GeneralSettingsPage({ token }) {
                     </select>
                 </div>
 
-                <div class="setting-item">
+                <div className="setting-item">
                     <label for="files">Upload CSV Files</label>
                     <form noValidate onSubmit={save} >
                         <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />

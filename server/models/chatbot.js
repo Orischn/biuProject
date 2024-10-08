@@ -97,7 +97,6 @@ async function endPractice(userId, chatId) {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-        console.log(typeof(chatId), typeof(userId));
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {

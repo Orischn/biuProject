@@ -36,13 +36,13 @@ function StudentStats({ token, selectedStudent }) {
     }, [selectedStudent, token, newGrade])
     return (
         <>
-            <div id="studentDetails" class="d-flex align-items-center w-100">
-                <b class="ms-2 text-black-50">{selectedStudent.firstName} {selectedStudent.lastName}</b>
+            <div id="studentDetails" className="d-flex align-items-center w-100">
+                <b className="ms-2 text-black-50">{selectedStudent.firstName} {selectedStudent.lastName}</b>
             </div>
 
-            <div id="grades" class="w-100 mt-3">
+            <div id="grades" className="w-100 mt-3">
                 <h5>Grades</h5>
-                <ul class="list-group">
+                <ul className="list-group">
                     {grades}
                 </ul>
             </div>
