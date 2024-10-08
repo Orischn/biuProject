@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
+function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade}) {
     var input = useRef(null);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ function Grade({token, selectedStudent, chatId, grade, setNewGrade}) {
     }
     return (
         <>
-            <b>Practice #{chatId}</b> <input type="number" ref={input} onChange={changeGrade} />
+            <b onClick={() => setSelectedGradeId(chatId)}>Practice #{chatId}</b> <input type="number" ref={input} onChange={changeGrade} />
         </>
     )
 }

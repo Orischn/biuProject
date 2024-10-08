@@ -312,6 +312,8 @@ img {
 
 }
 
+
+
 #chat::-webkit-scrollbar {
     display: none;
 }
@@ -324,6 +326,12 @@ img {
 #practiceFeed {
     background-color: rgb(240, 240, 240);
     border-radius: 12px; 
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+#practiceFeed::-webkit-scrollbar {
+    display: none;
 }
 
 #window {
@@ -368,6 +376,22 @@ img {
     opacity: 0.6; /* Make it look faded */
 }
 
+#grades {
+    height: 40vh;
+    overflow-y: auto;
+}
+
+#grades::-webkit-scrollbar {
+    display: none;
+}
+
+#chatHistory {
+    overflow-y: auto;
+}
+
+#chatHistory::-webkit-scrollbar {
+    display: none;
+}
 /* ------------------------------------------------------------ */
 
 
@@ -471,4 +495,5 @@ select {
 .save-button:hover {
     background-color: #1976D2;
 }
+
 

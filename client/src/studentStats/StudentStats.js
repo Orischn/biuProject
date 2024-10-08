@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Practice from "../practice/Practice";
 import Grade from "../grade/Grade";
+import ChatsHistory from "../chatsHistory/ChatsHistory";
 
 
 function StudentStats({ token, selectedStudent }) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
+    const [selectedGradeId, setSelectedGradeId] = useState(null);
 
     useEffect(() => {
         const fetchGrades = async () => {
@@ -21,7 +23,9 @@ function StudentStats({ token, selectedStudent }) {
             if (res.status === 200) {
                 res.text().then((practices) => {
                     setGrades(JSON.parse(practices).map((practice, key) => {
-                        return <Grade token={token} selectedStudent={selectedStudent}
+                        return <Grade selectedGradeId={selectedGradeId}
+                            setSelectedGradeId={setSelectedGradeId}
+                            token={token} selectedStudent={selectedStudent}
                             chatId={practice.chatId} grade={practice.grade}
                             key={key} setGrades={setGrades} setNewGrade={setNewGrade} />
                     }))
@@ -45,6 +49,9 @@ function StudentStats({ token, selectedStudent }) {
                 <ul className="list-group">
                     {grades}
                 </ul>
+            </div>
+            <div id="chatHistory" className="w-100 mt-3">
+                <ChatsHistory token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
             </div>
         </>
     );

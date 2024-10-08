@@ -69,7 +69,7 @@ function StudentFeed({ token, userId }) {
         <>
             <div id="window" className="container">
                 <div className="row">
-                    <div id="practiceFeed" className="col-3">
+                    <div id="practiceFeed" className="col-3" style={{overflowY: "auto"}}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
                             <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
@@ -77,7 +77,9 @@ function StudentFeed({ token, userId }) {
                         <div className="d-flex align-items-center">
                             <br />
                         </div>
-                        {practiceList}
+                        <div >
+                            {practiceList}
+                        </div>
                     </div>
                     {selectedPractice ?
                         <ChatFeed token={token} selectedPractice={selectedPractice} 

@@ -79,7 +79,7 @@ function AdminFeed({ token, userId }) {
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent} />
-                                <ChatsHistory token={token} />
+                                {/* <ChatsHistory token={token} /> */}
                             </> :
                             <>
                                 PlaceHolder.
