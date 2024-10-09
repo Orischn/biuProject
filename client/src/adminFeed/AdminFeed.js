@@ -3,6 +3,7 @@ import Student from "../student/Student";
 import StudentStats from "../studentStats/StudentStats";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 import SettingsPage from "../settingsPage/SettingsPage";
+import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 
 
 
@@ -66,9 +67,10 @@ function AdminFeed({ token, userId }) {
                             <i id="openSettings" className="bi bi-gear"></i>
                             </button> */}
 
-                            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
                             </button>
+
                         </div>
                         <div className="d-flex align-items-center">
                             <br />
@@ -79,10 +81,10 @@ function AdminFeed({ token, userId }) {
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent} />
-                                {/* <ChatsHistory token={token} /> */}
                             </> :
                             <>
-                                PlaceHolder.
+                                {/* PlaceHolder. */}
+                                <AdminAddStudent token={token} />
                             </>
                         }
                     </div>

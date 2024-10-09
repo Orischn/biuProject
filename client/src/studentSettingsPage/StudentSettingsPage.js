@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import StudentDetails from "../studentDetails/StudentDetails"
+import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 
 function StudentSettingsPage({ token }) {
 
@@ -38,7 +39,7 @@ function StudentSettingsPage({ token }) {
                         <input className="form-control inputText"
                             placeholder="Search student by id or name" />
                     </span>
-                       <button> <i className="bi bi-person-add md"></i></button>
+                       <AdminAddStudent token={token} />
                 </ul>
 
                 {studentList}

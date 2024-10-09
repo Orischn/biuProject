@@ -12,7 +12,6 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             if (!selectedGradeId) {
                 return;
             }
-            console.log(selectedGradeId);
             // const res = await fetch(`http://localhost:5000/api/getPractice/${selectedGradeId}`, {
             //     'method': 'get',
             //     'headers': {
@@ -61,12 +60,17 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             }
         }
         fetchMessages();
-    }, [selectedGradeId, token])
+    }, [selectedGradeId, token, selectedStudent])
 
     return (
         <>
-            <h5>Chat History</h5>
-            {messages}
+            {selectedGradeId ?
+                <>
+                    <h5>Chat History - practice {selectedGradeId}</h5>
+                    {messages}
+                </> :
+                <></>}
+
         </>
     )
 }

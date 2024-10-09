@@ -32,18 +32,18 @@ const receiveAllStudents = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(req.body.userId);
-    res.status(ret);
-    if (ret == 409) {
-        res.end('Creation of user failed (User already exists).');
-    } else if (ret == 500) {
-        res.end('Creation of user failed (Internal server error). Please contact the server administrator.');
+    const user = await postUser(req.body.user);
+    // res.status(ret);
+    if (user == 409) {
+        return res.status(409).end('Creation of user failed (User already exists).');
+    } else if (user == 500) {
+        return res.status(500).end('Creation of user failed (Internal server error). Please contact the server administrator.');
     }
-    return res;
+    return res.status(200).end('Creation was successful');
 }
 
 const removeUser = async (req, res) => {
-    const user = getUser(req.body.userId)
+    const user = await getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }
@@ -56,7 +56,7 @@ const removeUser = async (req, res) => {
 }
 
 const changePermissions = async (req, res) => {
-    const user = getUser(req.body.userId)
+    const user = await getUser(req.body.userId)
     if (user == 404) {
         res.end('Deletion of user failed (User doesn\'t exists).');
     }

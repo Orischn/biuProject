@@ -52,8 +52,8 @@ async function postUser(user) {
     }
     await users.insertOne({
       userId: user.userId,
-      firstname: user.firstname,
-      lastname: user.lastName,
+      firstName: user.firstName,
+      lastName: user.lastName,
       password: user.password,
       permissions: user.permissions,
     });
