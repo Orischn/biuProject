@@ -77,7 +77,9 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="button" className="btn btn-danger" data-bs-dismiss="modal"
-                                onClick={() => finishPractice()}>Yes, Finish and Send</button>
+                                onClick={() => finishPractice()}>
+                                Yes, Finish and Send
+                            </button>
                         </div>
                     </div>
                 </div>
