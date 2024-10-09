@@ -399,11 +399,41 @@ img {
 #grades {
     height: 40vh;
     overflow-y: auto;
-}
-
-#grades::-webkit-scrollbar {
+  }
+  
+  #grades::-webkit-scrollbar {
     display: none;
-}
+  }
+  
+  .grades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .grade-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grade-title {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .grade-input {
+    width: 60px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+  }
+  
 
 #chatHistory {
     overflow-y: auto;
@@ -520,4 +550,38 @@ select {
     background-color: #1976D2;
 }
 
+/* ------------------------------------------------- */
+.grade-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .grade-title {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .grade-title:hover {
+    text-decoration: underline;
+  }
+  
+  .grade-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grade-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.3);
+  }
+  
 
