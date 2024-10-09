@@ -56,6 +56,7 @@ async function postUser(user) {
       lastName: user.lastName,
       password: user.password,
       permissions: user.permissions,
+      year: parseInt(user.year)
     });
     return 201;
   } catch (error) {

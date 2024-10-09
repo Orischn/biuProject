@@ -33,7 +33,6 @@ const receiveAllStudents = async (req, res) => {
 
 const createUser = async (req, res) => {
     const user = await postUser(req.body.user);
-    // res.status(ret);
     if (user == 409) {
         return res.status(409).end('Creation of user failed (User already exists).');
     } else if (user == 500) {

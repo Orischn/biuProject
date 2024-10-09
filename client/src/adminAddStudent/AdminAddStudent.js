@@ -6,7 +6,7 @@ function AdminAddStudent({ token }) {
     const userIdBar = useRef(null);
     const firstNameBar = useRef(null);
     const lastNameBar = useRef(null);
-    const passwordBar = useRef(null);
+    const yearBar = useRef(null);
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -17,7 +17,7 @@ function AdminAddStudent({ token }) {
         const userId = userIdBar.current.value.trim();
         const firstName = firstNameBar.current.value.trim();
         const lastName = lastNameBar.current.value.trim();
-        const password = passwordBar.current.value.trim();
+        const year = yearBar.current.value.trim();
 
         // console.log(userId, firstName, lastName, password)
 
@@ -29,11 +29,12 @@ function AdminAddStudent({ token }) {
             },
             'body': JSON.stringify({
                 "user": {
-                    "password": password,
+                    "password": 'need to be random',
                     "permissions": false,
                     "firstName": firstName,
                     "lastName": lastName,
-                    "userId": userId
+                    "userId": userId,
+                    "year": year
                 }
             })
 
@@ -57,7 +58,7 @@ function AdminAddStudent({ token }) {
             userIdBar.current.value = "";
             firstNameBar.current.value = "";
             lastNameBar.current.value = "";
-            passwordBar.current.value = "";
+            yearBar.current.value = "";
         }
     }
 
@@ -80,7 +81,8 @@ function AdminAddStudent({ token }) {
                                 <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
                                 <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
                                 <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
-                                <input type="text" ref={passwordBar} className="form-control" placeholder="Student's password" />
+                                <input type="text" ref={yearBar} className="form-control" placeholder="year" />
+
                             </div>
                             <div className="modal-footer">
                                 {error &&
@@ -91,7 +93,7 @@ function AdminAddStudent({ token }) {
                                     userIdBar.current.value = '';
                                     firstNameBar.current.value = '';
                                     lastNameBar.current.value = '';
-                                    passwordBar.current.value = '';
+                                    yearBar.current.value = '';
                                     setError('');
                                 }}
                                     className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
