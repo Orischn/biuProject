@@ -1,12 +1,12 @@
 import { useState } from "react"
-import BotSettingsPage from "../botSettingsPage/BotSettingsPage"
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
+import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
 function SettingsPage({ token }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const settingsOptions = [<GeneralSettingsPage token={token} />,
-    <BotSettingsPage token={token} />,
+    <AssignmentsSettingsPage token={token} />,
     <StudentSettingsPage token={token} />];
 
     return (
@@ -29,7 +29,7 @@ function SettingsPage({ token }) {
                                     </li>
                                     <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
                                         onClick={() => setSelectedSettings(1)}>
-                                        <i className="bi bi-robot"></i> &nbsp; Bot
+                                        <i className="bi bi-ui-checks"></i> &nbsp; Assignments
                                     </li>
                                     <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
                                         onClick={() => setSelectedSettings(2)}>
