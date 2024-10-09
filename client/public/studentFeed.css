@@ -204,18 +204,38 @@ img {
     color: transparent;
 }
 
-.botMessage, .studentMessage {
+/* .botMessage, .studentMessage {
     border-radius: 15px; 
     padding: 15px; 
     margin: 5px; 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
-}
+} */
 
 .botMessage {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    border-radius: 10px;
+    background-color: rgb(210, 210, 210);
+    color: black;
+    width: fit-content;
+    max-width: 300px;
+    padding: 10px;
+    margin: 1px;
     background-color: rgb(210, 210, 210);
 }
 
 .studentMessage {
+    position: relative;
+    top: 20px;
+    right: 20px;
+    border-radius: 10px;
+    background-color: rgb(143, 163, 244);
+    color: black;
+    width: fit-content;
+    max-width: 300px;
+    padding: 10px;
+    margin: 1px;
     background-color: rgb(143, 163, 244);
 }
 
@@ -387,6 +407,7 @@ img {
 
 #chatHistory {
     overflow-y: auto;
+    height: 40vh;
 }
 
 #chatHistory::-webkit-scrollbar {
@@ -394,6 +415,9 @@ img {
 }
 /* ------------------------------------------------------------ */
 
+#addStudent {
+    color: gray;
+}
 
 .settings-container {
     background: white;
