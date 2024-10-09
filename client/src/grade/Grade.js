@@ -1,13 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade }) {
+
     var input = useRef(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
-        input.current.value = grade;
+        if (input.current) {
+            input.current.value = grade;
+        }
     }, [grade]);
 
     const changeGrade = async () => {
+
         const res = await fetch('http://localhost:5000/api/updateGrade/', {
             'method': 'post',
             'headers': {
@@ -25,11 +30,17 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             return;
         }
         setNewGrade(input.current.value)
+        setIsEditing(false);
     }
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+
     return (
         <>
-            {/* <b onClick={() => setSelectedGradeId(chatId)}>Practice #{chatId}</b> <input type="number" ref={input} onChange={changeGrade} /> */}
-            <div className="grade-container">
+            {/* <div className="grade-container">
                 <button className="grade-title" onClick={() => setSelectedGradeId(chatId)}>
                     Practice #{chatId}
                 </button>
@@ -40,9 +51,29 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                     onChange={changeGrade}
                     placeholder="Enter grade"
                 />
+            </div> */}
+            <div className="grade-container">
+                {!isEditing ? (
+                    <>
+                        <span className="grade-display">{grade}</span>
+                        <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
+                    </>
+                ) : (
+                    <>
+                        <input
+                            className="grade-input"
+                            type="number"
+                            min="0"
+                            max="100"
+                            ref={input} />
+                        <button className="save-btn" onClick={changeGrade}>
+                            Save
+                        </button>
+                    </>
+                )}
             </div>
-
         </>
+
     )
 }
 
