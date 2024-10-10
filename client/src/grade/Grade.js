@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade }) {
+function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade, isActive }) {
 
     var input = useRef(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -12,6 +12,10 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
     }, [grade]);
 
     const changeGrade = async () => {
+
+        if (input.current.value === null) {
+            return;
+        }
 
         const res = await fetch('http://localhost:5000/api/updateGrade/', {
             'method': 'post',
@@ -53,19 +57,29 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                 />
             </div> */}
             <div className="grade-container">
+
                 {!isEditing ? (
-                    <>
-                        <span className="grade-display">{grade}</span>
-                        <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
-                    </>
+                    isActive ? (
+                            <span>Still in progress can't give grade yet</span>
+                    ) : (
+
+                        <>
+                            <span className="grade-title" onClick={() => setSelectedGradeId(chatId)}>
+                                Click to see Practice #{chatId}
+                            </span>
+                            <span className="grade-display">{grade}</span>
+                            <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
+                        </>
+                    )
                 ) : (
                     <>
                         <input
                             className="grade-input"
-                            type="number"
+                            type="text"
                             min="0"
                             max="100"
-                            ref={input} />
+                            ref={input}
+                            placeholder={`${grade}`} />
                         <button className="save-btn" onClick={changeGrade}>
                             Save
                         </button>

@@ -46,7 +46,7 @@ function StudentSettingsPage({ token }) {
 
                 <ul className="setting-item">
                     <SearchStudent filter={filter} setFilter={setFilter} />
-                    {/* <AdminAddStudent token={token} /> */}
+                    <AdminAddStudent token={token} />
                 </ul>
 
                 {studentList}

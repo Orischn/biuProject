@@ -40,8 +40,6 @@ function AdminAddStudent({ token }) {
 
         })
 
-        console.log(res.status);
-
         if (res.status !== 200) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);

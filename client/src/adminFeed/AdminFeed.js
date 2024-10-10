@@ -67,6 +67,12 @@ function AdminFeed({ token, userId }) {
                             style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
                             <i id="openSettings" className="bi bi-gear"></i>
                             </button> */}
+                            <select id="year">
+                                <option value="white-mode">2024</option>
+                                <option value="dark-mode">2023</option>
+                                <option value="dark-mode">2022</option>
+                                <option value="dark-mode">2021</option>
+                            </select>
 
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
