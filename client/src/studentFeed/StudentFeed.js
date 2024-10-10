@@ -3,7 +3,7 @@ import AddPractice from "../addPractice/AddPractice";
 import ChatFeed from "../chatFeed/ChatFeed";
 import Practice from "../practice/Practice";
 import ChangePassword from "../changePassword/ChangePassword";
-
+import biulogo3 from "./biulogo3.png"
 
 
 function StudentFeed({ token, userId }) {
@@ -66,16 +66,16 @@ function StudentFeed({ token, userId }) {
         fetchPractices();
     }, [selectedPractice, token, userId])
 
-    
+
 
     return (
         <>
             <div id="window" className="container">
                 <div className="row">
-                    <div id="practiceFeed" className="col-3" style={{overflowY: "auto"}}>
+                    <div id="practiceFeed" className="col-3" style={{ overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
-                            <ChangePassword token={token} userId={userId}/>
+                            <ChangePassword token={token} userId={userId} />
                             <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
                         </div>
                         <div className="d-flex align-items-center">
@@ -86,11 +86,14 @@ function StudentFeed({ token, userId }) {
                         </div>
                     </div>
                     {selectedPractice ?
-                        <ChatFeed token={token} selectedPractice={selectedPractice} 
-                        finishPractice={finishPractice} latestMessage={latestMessage}
-                        setLatestMessage={setLatestMessage} /> :
-                        <>placeholder</>
-                }
+                        <ChatFeed token={token} selectedPractice={selectedPractice}
+                            finishPractice={finishPractice} latestMessage={latestMessage}
+                            setLatestMessage={setLatestMessage} /> :
+                        <>
+                            placeholder
+                            {/* <img src={biulogo3} style={{width: "30%", height: "50vh"}}/> */}
+                        </>
+                    }
 
                 </div>
             </div>

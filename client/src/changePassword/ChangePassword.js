@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 
-function ChangePassword({token, userId}) {
+function ChangePassword({ token, userId }) {
 
     const currentPassBar = useRef(null);
     const newPassBar = useRef(null);
@@ -68,7 +68,13 @@ function ChangePassword({token, userId}) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="changePassModalLabel">Change your Password</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                onClick={() => {
+                                    currentPassBar.current.value = '';
+                                    newPassBar.current.value = '';
+                                    newPassBarCon.current.value = '';
+                                    setError('');
+                                }}></button>
                         </div>
                         {/* ----------------------------------------------------------------- */}
 

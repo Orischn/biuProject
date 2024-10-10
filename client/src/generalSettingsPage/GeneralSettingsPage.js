@@ -34,13 +34,14 @@ function GeneralSettingsPage({ token }) {
         <>
             <h2 className="settings-title">General Settings</h2>
             <div className="settings-container">
-                <div className="setting-item">
+                {/* need theme??? */}
+                {/* <div className="setting-item">
                     <label htmlFor="theme">Theme</label>
                     <select id="theme">
                         <option value="white-mode">Light Mode</option>
                         <option value="dark-mode">Dark Mode</option>
                     </select>
-                </div>
+                </div> */} 
 
                 <div className="setting-item">
                     <label htmlFor="files">Upload CSV Files</label>
