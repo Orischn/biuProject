@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AddPractice from "../addPractice/AddPractice";
 import ChatFeed from "../chatFeed/ChatFeed";
 import Practice from "../practice/Practice";
+import ChangePassword from "../changePassword/ChangePassword";
 
 
 
@@ -74,6 +75,7 @@ function StudentFeed({ token, userId }) {
                     <div id="practiceFeed" className="col-3" style={{overflowY: "auto"}}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
+                            <ChangePassword />
                             <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
                         </div>
                         <div className="d-flex align-items-center">
