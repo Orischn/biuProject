@@ -27,7 +27,8 @@ function StudentStats({ token, selectedStudent }) {
                             setSelectedGradeId={setSelectedGradeId}
                             token={token} selectedStudent={selectedStudent}
                             chatId={practice.chatId} grade={practice.grade}
-                            key={key} setGrades={setGrades} setNewGrade={setNewGrade} />
+                            key={key} setGrades={setGrades} setNewGrade={setNewGrade}
+                            isActive={practice.active} />
                     }))
                 })
             } else {

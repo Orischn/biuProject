@@ -29,7 +29,7 @@ function StudentSettingsPage({ token }) {
                         }
                         return true;
                     }).map((user, key) => {
-                        return <StudentDetails key={key}
+                        return <StudentDetails key={key} token={token}
                             fullName={user.firstName + ' ' + user.lastName}
                             userId={user.userId} />
                     }));

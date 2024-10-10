@@ -27,7 +27,7 @@ async function getStudents() {
     const db = client.db('ChatBot');
     const users = db.collection('users');
 
-    const allStudents = await users.find({permissions: false}).toArray();
+    const allStudents = await users.find({ permissions: false }).toArray();
     if (!allStudents) {
       return 404;
     }
@@ -68,8 +68,9 @@ async function postUser(user) {
 }
 
 async function deleteUser(user) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
-    await client.connnect();
+    await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const existingUser = await users.findOne({ userId: user.userId });
@@ -77,11 +78,11 @@ async function deleteUser(user) {
       return 404;
     }
     const chats = db.collection('chats');
-    await chats.deleteMany({userId: user.userId});
-    await users.deleteOne({userId: user.userId});
+    await chats.deleteMany({ userId: user.userId });
+    await users.deleteOne({ userId: user.userId });
     return 200;
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
     return 500;
   } finally {
@@ -98,15 +99,15 @@ async function changeAdminPermissions(user, permissions) {
     if (!existingUser) {
       return 404;
     }
-    await users.updateOne({existingUser},
+    await users.updateOne({ existingUser },
       {
         $update: {
-          permissions : permissions
+          permissions: permissions
         }
       }
     )
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
     return 500;
   } finally {

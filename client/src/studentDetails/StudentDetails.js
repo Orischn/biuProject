@@ -1,6 +1,8 @@
+import AdminDeleteStudent from "../adminDeleteStudent/AdminDeleteStudent";
 
 
-function StudentDetails({ fullName, userId }) {
+function StudentDetails({ token, fullName, userId }) {
+
     return (
         <ul>
             <div className="row">
@@ -14,7 +16,7 @@ function StudentDetails({ fullName, userId }) {
                     {userId}
                 </div>
                 <div className="col-2">
-                    <i className="bi bi-person-x"></i>
+                    <AdminDeleteStudent token={token} userId={userId} fullName={fullName} />
                 </div>
             </div>
         </ul>
