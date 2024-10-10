@@ -23,6 +23,7 @@ function StudentFeed({ token, userId }) {
                 'chatId': selectedPractice.chatId,
             }),
         });
+        setSelectedPractice(null);
     }
 
     useEffect(() => {
