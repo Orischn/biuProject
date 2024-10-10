@@ -2,10 +2,16 @@ import BotMessage from "../botMessage/BotMessage";
 import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-const { useState, useEffect } = require("react");
+const { useState, useEffect, useRef } = require("react");
 
-function ChatFeed({ token, selectedPractice, finishPractice }) {
+function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage }) {
     const [messages, setMessages] = useState([]);
+    const chat = useRef(null);
+
+    useEffect(() => {
+        chat.current.scrollTop = chat.current.scrollHeight;
+        setLatestMessage(null);
+    }, [selectedPractice, latestMessage])
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -52,7 +58,7 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
                         </button>
                     </div>
                 </div>
-                <div id="chat" className="w-100"> {/*the id is chat, there is no mistake*/}
+                <div id="chat" ref={chat} className="w-100"> {/*the id is chat, there is no mistake*/}
                     {messages}
                 </div>
                 <SendMessage
@@ -60,6 +66,7 @@ function ChatFeed({ token, selectedPractice, finishPractice }) {
                     selectedPractice={selectedPractice}
                     messages={messages}
                     setMessages={setMessages}
+                    setLatestMessage={setLatestMessage}
                 />
             </div>
 

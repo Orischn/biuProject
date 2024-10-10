@@ -2,7 +2,7 @@ import { useRef } from "react";
 import BotMessage from "../botMessage/BotMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
+function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage }) {
 
     const typeBar = useRef(null);
     const send = async (e) => {
@@ -35,6 +35,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
                 setMessages(messages => [...messages, <BotMessage message={JSON.parse(message)} />]);
             })
         }
+        setLatestMessage(message);
         
     }
     

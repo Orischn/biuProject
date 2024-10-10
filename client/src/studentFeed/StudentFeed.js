@@ -9,6 +9,7 @@ function StudentFeed({ token, userId }) {
     const [practiceList, setPracticeList] = useState([]);
     const [selectedPractice, setSelectedPractice] = useState(null);
     const [fullName, setFullName] = useState("");
+    const [latestMessage, setLatestMessage] = useState(null);
 
     const finishPractice = async () => {
         const res = await fetch('http://localhost:5000/api/finishPractice/', {
@@ -83,7 +84,8 @@ function StudentFeed({ token, userId }) {
                     </div>
                     {selectedPractice ?
                         <ChatFeed token={token} selectedPractice={selectedPractice} 
-                        finishPractice={finishPractice} /> :
+                        finishPractice={finishPractice} latestMessage={latestMessage}
+                        setLatestMessage={setLatestMessage} /> :
                         <>placeholder</>
                 }
 
