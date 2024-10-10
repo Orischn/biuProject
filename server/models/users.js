@@ -91,6 +91,7 @@ async function deleteUser(user) {
 }
 
 async function changeAdminPermissions(user, permissions) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
     const db = client.db('ChatBot');
@@ -106,6 +107,35 @@ async function changeAdminPermissions(user, permissions) {
         }
       }
     )
+    
+    return 200;
+  }
+  catch (error) {
+    console.log(error);
+    return 500;
+  } finally {
+    await client.close();
+  }
+}
+
+async function changeUserPassword(user, password) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
+  try {
+    await client.connect();
+    const db = client.db('ChatBot');
+    const users = db.collection('users');
+    const existingUser = await users.findOne({ userId: user.userId });
+    if (!existingUser) {
+      return 404;
+    }
+    await users.updateOne({ userId : user.userId },
+      {
+        $set: {
+          password: password
+        }
+      }
+    )
+    return 200;
   }
   catch (error) {
     console.log(error);
@@ -121,4 +151,5 @@ module.exports = {
   postUser,
   deleteUser,
   changeAdminPermissions,
+  changeUserPassword
 }

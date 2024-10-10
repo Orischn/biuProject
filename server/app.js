@@ -14,6 +14,7 @@ app.use(express.static('public'));
 app.use(require('./routes/login'));
 app.use(require('./routes/chatbot'));
 app.use(require('./routes/adminpanel'));
+app.use(require('./routes/user'));
 
 const server = http.createServer(app);
 
