@@ -7,11 +7,11 @@ async function getUser(userId) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const user = await users.findOne({ userId: userId }).toArray();
+    const user = await users.findOne({ userId: userId });
     if (!user) {
       return { status: 404, user: "User doesn't exist in the database." };
     }
-    return { status: 200, user: user[0] };
+    return { status: 200, user: user };
   } catch (error) {
     return { status: 500, user: error };
   } finally {

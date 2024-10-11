@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { getStudents } = require('./users');
+const { MongoClient } = require('mongodb');
 
 async function uploadFile(fileName, fileContent) {
     let error = null;
@@ -15,8 +15,7 @@ async function uploadFile(fileName, fileContent) {
     }
 }
 
-async function makeTask(taskName, startingDate, endingDate) {
-    const users = getStudents()
+async function makeTask(taskName, startingDate, endingDate, users) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -24,8 +23,8 @@ async function makeTask(taskName, startingDate, endingDate) {
         const tasks = db.collection('tasks');
         submitList = [];
         users.map((user) => {
-            submitList.append({ userId: user.id, firstName: user.firstName, lastName: user.lastName, didSubmit: false });
-        })
+            submitList.push({ userId: user.id, firstName: user.firstName, lastName: user.lastName, didSubmit: false });
+        });
         await tasks.insertOne(
             {
                 taskName: taskName,
@@ -36,7 +35,8 @@ async function makeTask(taskName, startingDate, endingDate) {
         );
         return { status: 200, error: "" };
     } catch (error) {
-        return { status: 500, error: error };
+        console.log(error.message)
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }

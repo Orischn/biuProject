@@ -69,7 +69,7 @@ async function deletePractice(chatId, userId) {
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const practices = db.collection('pratices');
+        const practices = db.collection('practices');
         const practice = await practices.findOne({ chatId: chatId, userId: userId });
         if (!practice) {
             return { status: 404, error: "Can not delete practice since the practice doesn't exist." };

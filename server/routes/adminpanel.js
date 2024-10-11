@@ -12,6 +12,6 @@ router.post('/api/createUser/',validateUser, checkAdmin, createUser);
 router.post('/api/deleteUser/', validateUser, checkAdmin, removeUser);
 router.post('/api/updateGrade/', validateUser, checkAdmin, changeGrade)
 router.post('/api/changePermissions/', validateUser, checkAdmin, changePermissions);
-router.post('/api/createTask', validateUser, checkAdmin, createTask);
+router.post('/api/createTask/', validateUser, checkAdmin, createTask);
 router.post('/api/getSubmissionStatus/:taskName', validateUser, checkAdmin, viewSubmissionStatus);
 module.exports = router;

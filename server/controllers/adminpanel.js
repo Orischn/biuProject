@@ -1,7 +1,7 @@
 const { uploadFile, makeTask, getSubmissionStatus } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const {getData} = require('../models/token');
-const {getUser} = require('../models/users');
+const {getUser, getStudents} = require('../models/users');
 
 const uploadCSVTree = async (req, res) => {
     const result = await uploadFile(req.body.fileName, req.body.CSVTree);
@@ -9,14 +9,16 @@ const uploadCSVTree = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    const task = await makeTask(req.body.taskName, req.body.startDate, req.body.endDate);
+    const users = await getStudents()
+    const result = await makeTask(req.body.taskName, req.body.startDate, req.body.endDate, users.students);
     return res.status(result.status).end(result.error);
 }
 
 const checkAdmin = async (req, res, next) => {
     const userData = await getData(req.headers.authorization);
-    const user = await getUser(userData.userId);
-    if (user.permissions) {
+    const result = await getUser(userData.userId);
+    // console.log(result.user.permissions)
+    if (result.user.permissions) {
         return next();
     } else {
         return res.status(403).end("Only admins can perform such operation");
