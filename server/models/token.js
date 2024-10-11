@@ -6,13 +6,13 @@ const checkToken = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            jwt.verify(token, key);
-            return 200;
+            await jwt.verify(token, key);
+            return { status: 200, error: "" };
         } catch (err) {
-            return 401;
+            return { status: 401, error: err };
         }
     } else {
-        return 401;
+        return { status: 401, error: "No authorization token provided." };
     }
 }
 
@@ -22,31 +22,26 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({userId: user.userId, password: user.password});
+        const existingUser = await users.findOne({userId: user.userId, password: user.password}).toArray();
         if (!existingUser) {
-            return 404;
+            return { status: 404, token: "User doesn't exist." };
         }
-        const token = jwt.sign(user, key);
-        return token;
+        const token = jwt.sign(user.userId, key);
+        return { status: 200, token: token };
     } catch (error) {
-        console.log(error)
-        return 500;
+        return { status: 500, token: error };
     } finally {
         await client.close();
     }
 }
 
 const getData = async (authorization) => {
-    if (authorization) {
+    try {
         const token = authorization.split(" ")[1];
-        try {
-            const data = jwt.verify(token, key);
-            return data;
-        } catch (err) {
-            return 401;
-        }
-    } else {
-        return 403;
+        const data = await jwt.verify(token, key);
+        return data;
+    } catch (err) {
+        return null;
     }
 }
 
@@ -54,4 +49,4 @@ module.exports = {
     postToken,
     checkToken,
     getData,
-}
+};

@@ -1,31 +1,48 @@
-const { uploadFile } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus } = require('../models/adminPanel');
+const { getPractices, updateGrade } = require('../models/chatbot');
 const {getData} = require('../models/token');
-const {getUser} = require('../models/users')
+const {getUser} = require('../models/users');
 
 const uploadCSVTree = async (req, res) => {
     const result = await uploadFile(req.body.fileName, req.body.CSVTree);
-    if (result === 500) {
-        return res.status(500).end("Internal Server Error");
-    } else if (result === 400) {
-        return res.status(400).end(`The server only accepts .csv files and ${req.body.fileName} does not end in .csv`);
-    } else if (result) {
-        return res.status(500).end(result);
-    }
-    return res.status(200).end();
+    return res.status(result.status).end(result.error);
+}
+
+const createTask = async (req, res) => {
+    const task = await makeTask(req.body.taskName, req.body.startDate, req.body.endDate);
+    return res.status(result.status).end(result.error);
 }
 
 const checkAdmin = async (req, res, next) => {
-    const userData = await getData(req.headers.authorization)
-
-    const user = await getUser(userData.userId)
+    const userData = await getData(req.headers.authorization);
+    const user = await getUser(userData.userId);
     if (user.permissions) {
         return next();
     } else {
-        return res.status(403).end("Only admins can perform such operation")
+        return res.status(403).end("Only admins can perform such operation");
     }
+}
+
+const viewSubmissionStatus = async (req, res) => {
+    const result = await getSubmissionStatus(req.params.taskName);
+    return res.status(result.status).end(result.submissionStatus);
+}
+
+const getStudentPractices = async (req, res) => {
+    const result = await getPractices(req.params.userId);
+    return res.status(result.status).end(result.practices);
+}
+
+const changeGrade = async (req, res) => {
+    const result = await updateGrade(req.body.userId, req.body.chatId, parseInt(req.body.newGrade));
+    return res.status(result.status).end(result.error);
 }
 
 module.exports = {
     uploadCSVTree,
     checkAdmin,
-}
+    createTask,
+    viewSubmissionStatus,
+    getStudentPractices,
+    changeGrade,
+};

@@ -4,5 +4,5 @@ const { getMe } = require('../controllers/user.js');
 const router = express.Router();
 
 router.post('/api/login/', login);
-router.get('/api/student/', validateUser, getMe)
+router.get('/api/student/', validateUser, getMe);
 module.exports = router;
