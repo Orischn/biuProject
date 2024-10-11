@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 
-function AdminDeleteStudent({ token, userId, fullName }) {
+function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
 
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
-    console.log(fullName)
 
 
     const deleteStudent = async function (e) {
@@ -31,8 +30,9 @@ function AdminDeleteStudent({ token, userId, fullName }) {
         }
 
         else {
-            setError("Deleted Successfully");
+            // setError("Deleted Successfully");
             setIsSuccessful(true);
+            setIsChanged(userId);
         }
     }
 
@@ -65,7 +65,7 @@ function AdminDeleteStudent({ token, userId, fullName }) {
                                 </span>}
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"
                                 onClick={() => setError('')}>No, cancel</button>
-                            <button type="button" className="btn btn-primary"
+                            <button type="button" className="btn btn-primary" 
                                 onClick={() => deleteStudent()}>Yes, delete {fullName}</button>
                         </div>
                     </div>

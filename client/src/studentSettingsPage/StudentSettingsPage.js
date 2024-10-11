@@ -3,7 +3,7 @@ import StudentDetails from "../studentDetails/StudentDetails"
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import SearchStudent from "../searchStudent/SearchStudent";
 
-function StudentSettingsPage({ token }) {
+function StudentSettingsPage({ token, isChanged, setIsChanged }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
@@ -21,8 +21,6 @@ function StudentSettingsPage({ token }) {
                 res.text().then((students) => {
                     setStudentList(JSON.parse(students).filter((student) => {
                         if (filter !== '') {
-                            console.log(typeof(filter));
-                            console.log(filter)
                             return (student.firstName + ' ' + student.lastName).toLowerCase().
                                 includes(filter.toLowerCase()) ||
                                 student.userId.includes(filter);
@@ -31,13 +29,13 @@ function StudentSettingsPage({ token }) {
                     }).map((user, key) => {
                         return <StudentDetails key={key} token={token}
                             fullName={user.firstName + ' ' + user.lastName}
-                            userId={user.userId} year={user.year} />
+                            userId={user.userId} year={user.year} setIsChanged={setIsChanged} />
                     }));
                 });
             }
         }
         fetchStudents(filter);
-    }, [token, filter])
+    }, [token, filter, isChanged])
 
     return (
         <>
@@ -47,10 +45,17 @@ function StudentSettingsPage({ token }) {
                 <ul className="setting-item">
                     <SearchStudent filter={filter} setFilter={setFilter} />
                     Add Student
-                    <AdminAddStudent token={token} />
+                    <AdminAddStudent token={token} studentList={studentList}
+                        setStudentList={setStudentList} setIsChanged={setIsChanged} />
                 </ul>
+                {studentList.length > 0 ? (
+                     studentList 
+                ) : (
+                    <>
+                        no student matching was found, try searching again
+                    </>
+                )}
 
-                {studentList}
 
             </div>
         </>

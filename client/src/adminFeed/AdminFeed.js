@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Student from "../student/Student";
 import StudentStats from "../studentStats/StudentStats";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 import SettingsPage from "../settingsPage/SettingsPage";
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage";
+import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
 
 
@@ -12,12 +13,17 @@ function AdminFeed({ token, userId }) {
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
+    const [isChanged, setIsChanged] = useState(null);
+    const yearOption = useRef(null);
     // const [showModal, setShowModal] = useState(false);
     // const handleShowModal = () => setShowModal(true);
     // const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         const fetchStudents = async () => {
+
+            const year = parseInt(yearOption.current.value);
+
             const res = await fetch('http://localhost:5000/api/getStudents', {
                 method: 'get',
                 headers: {
@@ -28,9 +34,11 @@ function AdminFeed({ token, userId }) {
             if (res.status === 200) {
                 res.text().then((students) => {
                     setStudentList(JSON.parse(students).map((student, key) => {
-                        return <Student student={student} key={key}
-                            selectedStudent={selectedStudent}
-                            setSelectedStudent={setSelectedStudent} />
+                        if (year === student.year) {
+                            return <Student student={student} key={key}
+                                selectedStudent={selectedStudent}
+                                setSelectedStudent={setSelectedStudent} />
+                        }
                     }));
                 });
             }
@@ -52,7 +60,7 @@ function AdminFeed({ token, userId }) {
 
         fetchName()
         fetchStudents();
-    }, [selectedStudent, token, userId])
+    }, [selectedStudent, token, userId, isChanged])
 
     return (
         <>
@@ -67,11 +75,11 @@ function AdminFeed({ token, userId }) {
                             style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
                             <i id="openSettings" className="bi bi-gear"></i>
                             </button> */}
-                            <select id="year">
-                                <option value="white-mode">2024</option>
-                                <option value="dark-mode">2023</option>
-                                <option value="dark-mode">2022</option>
-                                <option value="dark-mode">2021</option>
+                            <select id="year" ref={yearOption} onChange={(e) => setIsChanged(e.target.value)}>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
                             </select>
 
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
@@ -92,7 +100,8 @@ function AdminFeed({ token, userId }) {
                             <>
                                 {/* PlaceHolder. */}
                                 {/* <AdminAddStudent token={token} /> */}
-                                <StudentSettingsPage token={token} />
+                                <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} />
+                                {/* <AssignmentsSettingsPage token={token} /> */}
                             </>
                         }
                     </div>
