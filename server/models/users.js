@@ -97,7 +97,7 @@ async function changeAdminPermissions(user, permissions) {
     }
     await users.updateOne({ existingUser },
       {
-        $update: {
+        $set: {
           permissions: permissions
         }
       }
@@ -111,10 +111,36 @@ async function changeAdminPermissions(user, permissions) {
   }
 }
 
+async function changeUserPassword(user, oldPassword, newPassword) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
+  try {
+    await client.connect();
+    const db = client.db('ChatBot');
+    const users = db.collection('users');
+    if (oldPassword !== user.password) {
+      return { status: 403, error: "Old password isn't correct." };
+    }
+    await users.updateOne({ userId : user.userId },
+      {
+        $set: {
+          password: password
+        }
+      }
+    );
+    return { status: 200, error: "" };
+  }
+  catch (error) {
+    return { status: 500, error: error };
+  } finally {
+    await client.close();
+  }
+}
+
 module.exports = {
   getUser,
   getStudents,
   postUser,
   deleteUser,
   changeAdminPermissions,
+  changeUserPassword,
 };

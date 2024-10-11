@@ -18,32 +18,28 @@ const receiveAllStudents = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(req.body.userId);
+    const result = await postUser(req.body.userId);
     return res.status(result.status).end(result.error);
 }
 
 const removeUser = async (req, res) => {
-    const ret = await deleteUser(user);
+    const result = await deleteUser(user);
     return res.status(result.status).end(result.error);
 }
 
 const changePermissions = async (req, res) => {
-    const ret = await changeAdminPermissions(user, req.body.permissions);
+    const result = await changeAdminPermissions(user, req.body.permissions);
     return res.status(result.status).end(result.error);
 }
 
 const changePassword = async (req, res) => {
-    const user = await getUser(req.body.userId);
-    const oldPassword = req.body.oldPassword;
-    if (oldPassword !== user.password) {
-        return res.status(500).end('Changing password failed, wrong password')
+    const userData = await getData(req.headers.authorization);
+    const result = await getUser(userData.userId);
+    if (res !== 200) {
+        return res.status(result.status).end(result.user);
     }
-
-    const newPassword = req.body.newPassword;
-    const ret = await changeUserPassword(user, newPassword)
-    if (ret === 200) {
-        return res.status(200).end('Successfully changed password');
-    }
+    const changeResult = await changeUserPassword(result.user, req.body.oldPassword, req.body.newPassword)
+    return res.status(changeResult.status).end(changeResult.user);
 
 }
 
@@ -54,4 +50,5 @@ module.exports = {
     receiveAllStudents,
     removeUser,
     changePermissions,
+    changePassword,
 };
