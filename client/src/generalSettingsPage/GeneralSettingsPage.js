@@ -1,7 +1,8 @@
 import { useState } from "react";
 import InputFile from "../inputFile/InputFile";
+import ChangePassword from "../changePassword/ChangePassword";
 
-function GeneralSettingsPage({ token }) {
+function GeneralSettingsPage({ token, userId }) {
 
     const [fileName, setFileName] = useState('');
     const [fileContent, setFileContent] = useState('');
@@ -41,7 +42,7 @@ function GeneralSettingsPage({ token }) {
                         <option value="white-mode">Light Mode</option>
                         <option value="dark-mode">Dark Mode</option>
                     </select>
-                </div> */} 
+                </div> */}
 
                 <div className="setting-item">
                     <label htmlFor="files">Upload CSV Files</label>
@@ -50,6 +51,12 @@ function GeneralSettingsPage({ token }) {
                         <input type="submit" className="btn btn-primary submit" value="Save" />
                     </form>
                 </div>
+
+                <div className="setting-item">
+                    <label htmlFor="changePassword">Change your password</label>
+                    <ChangePassword token={token} userId={userId} />
+                </div>
+
                 {/* <div class="setting-item">
                 <button class="save-button">Save Changes</button>
             </div> */}

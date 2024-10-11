@@ -7,11 +7,11 @@ function SearchStudent({ filter, setFilter }) {
                     setFilter(e.target.value);
                 }} className="form-control inputText" placeholder="Search student by id or name"
                 />
+                {/* <i className="input-group-text bi bi-search" /> */}
+
             </span>
             <span className="input-group-text" style={{ border: 'none', background: 'none' }}>
-                <i className="bi-search" />
             </span>
-            {/* <i id="filter" className="bi-filter mt-2" /> */}
         </>
     );
 }

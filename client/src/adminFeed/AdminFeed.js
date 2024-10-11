@@ -58,7 +58,7 @@ function AdminFeed({ token, userId }) {
         <>
             <div id="window" className="container">
                 {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
-                <SettingsPage token={token} />
+                <SettingsPage token={token} userId />
                 <div className="row">
                     <div id="adminFeed" className="col-3">
                         <div id="me" className="d-flex align-items-center w-100">

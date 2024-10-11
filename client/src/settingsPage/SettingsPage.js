@@ -3,9 +3,9 @@ import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token }) {
+function SettingsPage({ token, userId }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
-    const settingsOptions = [<GeneralSettingsPage token={token} />,
+    const settingsOptions = [<GeneralSettingsPage token={token} userId={userId} />,
     <AssignmentsSettingsPage token={token} />,
     <StudentSettingsPage token={token} />];
 

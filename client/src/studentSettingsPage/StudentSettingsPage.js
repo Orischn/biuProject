@@ -31,7 +31,7 @@ function StudentSettingsPage({ token }) {
                     }).map((user, key) => {
                         return <StudentDetails key={key} token={token}
                             fullName={user.firstName + ' ' + user.lastName}
-                            userId={user.userId} />
+                            userId={user.userId} year={user.year} />
                     }));
                 });
             }
@@ -46,6 +46,7 @@ function StudentSettingsPage({ token }) {
 
                 <ul className="setting-item">
                     <SearchStudent filter={filter} setFilter={setFilter} />
+                    Add Student
                     <AdminAddStudent token={token} />
                 </ul>
 
