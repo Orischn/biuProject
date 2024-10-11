@@ -75,6 +75,7 @@ function StudentFeed({ token, userId }) {
                     <div id="practiceFeed" className="col-3" style={{ overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
+                            
                             <ChangePassword token={token} userId={userId} />
                             <AddPractice token={token} setSelectedPractice={setSelectedPractice} />
                         </div>
@@ -90,7 +91,8 @@ function StudentFeed({ token, userId }) {
                             finishPractice={finishPractice} latestMessage={latestMessage}
                             setLatestMessage={setLatestMessage} /> :
                         <>
-                            placeholder
+                            {/* placeholder */}
+                            
                             {/* <img src={biulogo3} style={{width: "30%", height: "50vh"}}/> */}
                         </>
                     }

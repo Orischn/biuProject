@@ -443,7 +443,7 @@ img {
 
 #chatHistory {
     overflow-y: auto;
-    height: 60vh;
+    height: 40vh;
 }
 
 #chatHistory::-webkit-scrollbar {

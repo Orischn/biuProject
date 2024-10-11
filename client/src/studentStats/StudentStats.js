@@ -41,9 +41,9 @@ function StudentStats({ token, selectedStudent }) {
     }, [selectedStudent, token, newGrade])
     return (
         <>
-            <div id="studentDetails" className="d-flex align-items-center w-100">
+            {/* <div id="studentDetails" className="d-flex align-items-center w-100">
                 <b className="ms-2 text-black-50">{selectedStudent.firstName} {selectedStudent.lastName}</b>
-            </div>
+            </div> */}
 
             <div id="grades" className="w-100 mt-3">
                 <h5>Grades</h5>
@@ -54,6 +54,15 @@ function StudentStats({ token, selectedStudent }) {
 
             <div id="chatHistory" className="w-100 mt-3">
                 <ChatsHistory token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
+            </div>
+
+            <div id="feedback" className="w-100 mt-3">
+                <h5>Feedback</h5>
+                <textarea
+                    placeholder="Enter feedback"
+                    className="form-control feedback-textarea"
+                    rows={3} // You can adjust this for height
+                />
             </div>
         </>
     );

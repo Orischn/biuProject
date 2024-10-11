@@ -15,6 +15,7 @@ function AdminFeed({ token, userId }) {
     const [fullName, setFullName] = useState("");
     const [isChanged, setIsChanged] = useState(null);
     const yearOption = useRef(null);
+    
     // const [showModal, setShowModal] = useState(false);
     // const handleShowModal = () => setShowModal(true);
     // const handleCloseModal = () => setShowModal(false);
@@ -23,6 +24,7 @@ function AdminFeed({ token, userId }) {
         const fetchStudents = async () => {
 
             const year = parseInt(yearOption.current.value);
+            // const year = 2024;
 
             const res = await fetch('http://localhost:5000/api/getStudents', {
                 method: 'get',
@@ -66,7 +68,7 @@ function AdminFeed({ token, userId }) {
         <>
             <div id="window" className="container">
                 {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
-                <SettingsPage token={token} userId />
+                <SettingsPage token={token} userId={userId} yearOption={yearOption} />
                 <div className="row">
                     <div id="adminFeed" className="col-3">
                         <div id="me" className="d-flex align-items-center w-100">
@@ -100,8 +102,8 @@ function AdminFeed({ token, userId }) {
                             <>
                                 {/* PlaceHolder. */}
                                 {/* <AdminAddStudent token={token} /> */}
-                                <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} />
-                                {/* <AssignmentsSettingsPage token={token} /> */}
+                                {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}
+                                <AssignmentsSettingsPage token={token} />
                             </>
                         }
                     </div>

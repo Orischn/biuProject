@@ -3,11 +3,11 @@ import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, userId }) {
+function SettingsPage({ token, userId, yearOption }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const settingsOptions = [<GeneralSettingsPage token={token} userId={userId} />,
     <AssignmentsSettingsPage token={token} />,
-    <StudentSettingsPage token={token} />];
+    <StudentSettingsPage token={token} yearOption={yearOption} />];
 
     return (
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
