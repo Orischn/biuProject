@@ -22,7 +22,7 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({userId: user.userId, password: user.password}).toArray();
+        const existingUser = await users.findOne({ userId: user.userId, password: user.password }).toArray();
         if (!existingUser) {
             return { status: 404, token: "User doesn't exist." };
         }
