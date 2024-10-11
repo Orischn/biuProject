@@ -9,7 +9,7 @@ const receiveUser = async (req, res) => {
 const getMe = async (req, res) => {
     const userId = await getId(req.headers.authorization);
     const result = await getUser(userId);
-    return res.status(result.status).end(result.user);
+    return res.status(result.status).end(JSON.stringify(result.user));
 }
 
 const receiveAllStudents = async (req, res) => {

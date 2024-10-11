@@ -35,7 +35,6 @@ async function makeTask(taskName, startingDate, endingDate, users) {
         );
         return { status: 200, error: "" };
     } catch (error) {
-        console.log(error.message)
         return { status: 500, error: error.message };
     } finally {
         await client.close();

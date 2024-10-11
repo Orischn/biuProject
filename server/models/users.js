@@ -78,7 +78,7 @@ async function deleteUser(user) {
     await users.deleteOne({ userId: user.userId });
     return { status: 200, error: "" };
   }
-  catch(error) {
+  catch (error) {
     return { status: 500, error: error.message };
   } finally {
     await client.close();
@@ -104,7 +104,7 @@ async function changeAdminPermissions(user, permissions) {
     );
     return { status: 200, error: "" };
   }
-  catch(error) {
+  catch (error) {
     return { status: 500, error: error.message };
   } finally {
     await client.close();
@@ -120,7 +120,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     if (oldPassword !== user.password) {
       return { status: 403, error: "Old password isn't correct." };
     }
-    await users.updateOne({ userId : user.userId },
+    await users.updateOne({ userId: user.userId },
       {
         $set: {
           password: password
