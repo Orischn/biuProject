@@ -1,15 +1,49 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 
 function AddAssignment({ token }) {
 
+    const [error, setError] = useState('');
+    
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
     const endDateBar = useRef(null);
-    const durationBar = useRef(null);
+    // const durationBar = useRef(null);
 
-    const add = async function () {
-        // console.log(startDateBar.current.value.trim(), typeof(startDateBar.current.value.trim()))
+    const add = async function (e) {
+        console.log(startDateBar.current.value.trim(), typeof (startDateBar.current.value.trim()))
+
+        e.preventDefault();
+        setError('');
+        const name = nameBar.current.value.trim();
+        const startDate = startDateBar.current.value.trim();
+        const endDate = endDateBar.current.value.trim();
+
+        const res = await fetch('http://localhost:5000/api/createTask', {
+            'method': 'post',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            'body': JSON.stringify({
+                "taskName": name,
+                "startDate": new Date(startDate).getTime(),
+                "endDate": new Date(endDate).getTime()
+            })
+
+        })
+
+        if (res.status !== 200) { //error
+            await res.text().then((errorMessage) => {
+                setError(errorMessage);
+            })
+            return;
+        } else {
+            setError("Added Successfully");
+            nameBar.current.value = "";
+            startDateBar.current.value = "";
+            endDateBar.current.value = "";
+        }
 
     }
 
@@ -33,7 +67,7 @@ function AddAssignment({ token }) {
                                 <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" />
                                 <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" />
                                 <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" />
-                                <input type="text" ref={durationBar} className="form-control" placeholder="How much time? (should be calculated)" />
+                                {/* <input type="text" ref={durationBar} className="form-control" placeholder="How much time? (should be calculated)" /> */}
 
                             </div>
                             <div className="modal-footer">
@@ -45,7 +79,7 @@ function AddAssignment({ token }) {
                                     nameBar.current.value = '';
                                     startDateBar.current.value = '';
                                     endDateBar.current.value = '';
-                                    durationBar.current.value = '';
+                                    // durationBar.current.value = '';
                                     // setError('');
                                 }}
                                     className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
