@@ -27,7 +27,6 @@ async function getStudents() {
     const users = db.collection('users');
 
     const allStudents = await users.find({ permissions: false }).toArray();
-    const allStudents = await users.find({ permissions: false }).toArray();
     if (!allStudents) {
       return { status: 404, students: "No students were found in the database." };
     }
@@ -75,8 +74,8 @@ async function deleteUser(user) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
     const chats = db.collection('chats');
-    await chats.deleteMany({userId: user.userId});
-    await users.deleteOne({userId: user.userId});
+    await chats.deleteMany({ userId: user.userId });
+    await users.deleteOne({ userId: user.userId });
     return { status: 200, error: "" };
   }
   catch(error) {
