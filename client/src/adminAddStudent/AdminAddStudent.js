@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import StudentDetails from "../studentDetails/StudentDetails";
 
 
-function AdminAddStudent({ token }) {
+function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
 
     const userIdBar = useRef(null);
     const firstNameBar = useRef(null);
@@ -9,6 +10,16 @@ function AdminAddStudent({ token }) {
     const yearBar = useRef(null);
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
+
+    const generateRandomPassword = () => {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*+~";
+        let password = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+            password += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return password;
+    };
 
 
     const add = async function (e) {
@@ -18,6 +29,7 @@ function AdminAddStudent({ token }) {
         const firstName = firstNameBar.current.value.trim();
         const lastName = lastNameBar.current.value.trim();
         const year = yearBar.current.value.trim();
+        const password = generateRandomPassword();
 
         // console.log(userId, firstName, lastName, password)
 
@@ -29,7 +41,7 @@ function AdminAddStudent({ token }) {
             },
             'body': JSON.stringify({
                 "user": {
-                    "password": 'need to be random',
+                    "password": password,
                     "permissions": false,
                     "firstName": firstName,
                     "lastName": lastName,
@@ -57,6 +69,13 @@ function AdminAddStudent({ token }) {
             firstNameBar.current.value = "";
             lastNameBar.current.value = "";
             yearBar.current.value = "";
+
+            // setStudentList([...studentList, <StudentDetails token={token}
+            //     fullName={firstName + ' ' + lastName}
+            //     userId={userId} year={year} /> ])
+
+            setIsChanged(userId + firstName);
+            
         }
     }
 
