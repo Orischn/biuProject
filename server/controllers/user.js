@@ -1,4 +1,4 @@
-const { getData } = require('../models/token.js');
+const { getId } = require('../models/token.js');
 const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents, changeUserPassword } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
@@ -7,8 +7,8 @@ const receiveUser = async (req, res) => {
 }
 
 const getMe = async (req, res) => {
-    const userData = await getData(req.headers.authorization);
-    const result = await getUser(userData.userId);
+    const userId = await getId(req.headers.authorization);
+    const result = await getUser(userId);
     return res.status(result.status).end(result.user);
 }
 
@@ -33,8 +33,8 @@ const changePermissions = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const userData = await getData(req.headers.authorization);
-    const result = await getUser(userData.userId);
+    const userId = await getId(req.headers.authorization);
+    const result = await getUser(userId);
     if (res !== 200) {
         return res.status(result.status).end(result.user);
     }

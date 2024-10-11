@@ -1,6 +1,6 @@
 const { uploadFile, makeTask, getSubmissionStatus } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
-const {getData} = require('../models/token');
+const {getId} = require('../models/token');
 const {getUser, getStudents} = require('../models/users');
 
 const uploadCSVTree = async (req, res) => {
@@ -15,8 +15,8 @@ const createTask = async (req, res) => {
 }
 
 const checkAdmin = async (req, res, next) => {
-    const userData = await getData(req.headers.authorization);
-    const result = await getUser(userData.userId);
+    const userId = await getId(req.headers.authorization);
+    const result = await getUser(userId);
     // console.log(result.user.permissions)
     if (result.user.permissions) {
         return next();

@@ -36,6 +36,7 @@ function LoginPage({ setToken, setUserId }) {
         'Authorization': `Bearer ${token}`,
       }
     });
+    console.log(res.status)
     if (res.status === 200) {
       res.text().then((user) => {
         if (JSON.parse(user).permissions) {
@@ -78,6 +79,7 @@ function LoginPage({ setToken, setUserId }) {
       return;
     }
     res.text().then((token) => {
+      console.log(userId)
       setToken(token);
       setUserId(userId)
       navigateTo(token);

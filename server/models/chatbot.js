@@ -9,7 +9,7 @@ async function getPractice(chatId, userId) {
         const practice = await practices.findOne({ chatId: chatId, userId: userId });
         return { status: 200, practice: practice };
     } catch (error) {
-        return { status: 500, practice: error };
+        return { status: 500, practice: error.message };
     } finally {
         await client.close();
     }
@@ -24,7 +24,7 @@ async function getPractices(userId) {
         const res = await practices.find({ userId: userId }).toArray();
         return { status: 200, practices: res.reverse() };
     } catch (error) {
-        return { status: 500, practices: error };
+        return { status: 500, practices: error.message };
     } finally {
         await client.close();
     }
@@ -38,7 +38,7 @@ async function postPractice(userId, chatId) {
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-        if (!tasks.findOne({ taskName: chatId }).toArray()) {
+        if (!tasks.findOne({ taskName: chatId })) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
         var today = new Date();
@@ -58,7 +58,7 @@ async function postPractice(userId, chatId) {
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
     } catch (error) {
-        return { status: 500, practice: error };
+        return { status: 500, practice: error.message };
     } finally {
         await client.close();
     }
@@ -77,7 +77,7 @@ async function deletePractice(chatId, userId) {
         await practices.deleteOne({ chatId: chatId, userId: userId });
         return { status: 200, error: "" };
     } catch (error) {
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }
@@ -90,7 +90,7 @@ async function submitPractice(userId, chatId) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ taskName: chatId }).toArray();
+        const task = await tasks.findOne({ taskName: chatId });
         if (!task) {
             return { status: 404, error: "Can not submit practice since the practice doesn't exist." };
         }
@@ -120,7 +120,7 @@ async function submitPractice(userId, chatId) {
         );
         return { status: 200, error: "" };
     } catch (error) {
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }
@@ -131,7 +131,7 @@ async function getMessages(chatId, userId) {
         const chat = await getPractice(chatId, userId);
         return { status: 200, messages: chat.messages };
     } catch (error) {
-        return { status: 500, messages: error };
+        return { status: 500, messages: error.message };
     }
 }
 
@@ -154,7 +154,7 @@ async function addMessage(userId, chatId, content, isBot) {
         );
         return { status: 200, error: "" };
     } catch (error) {
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }
@@ -176,7 +176,7 @@ async function updateGrade(userId, chatId, newGrade) {
         );
         return { status: 200, error: "" };
     } catch (error) {
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }

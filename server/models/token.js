@@ -22,20 +22,20 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({ userId: user.userId, password: user.password }).toArray();
+        const existingUser = await users.findOne({ userId: user.userId, password: user.password });
         if (!existingUser) {
             return { status: 404, token: "User doesn't exist." };
         }
         const token = jwt.sign(user.userId, key);
         return { status: 200, token: token };
     } catch (error) {
-        return { status: 500, token: error };
+        return { status: 500, token: error.message };
     } finally {
         await client.close();
     }
 }
 
-const getData = async (authorization) => {
+const getId = async (authorization) => {
     try {
         const token = authorization.split(" ")[1];
         const data = await jwt.verify(token, key);
@@ -48,5 +48,5 @@ const getData = async (authorization) => {
 module.exports = {
     postToken,
     checkToken,
-    getData,
+    getId,
 };

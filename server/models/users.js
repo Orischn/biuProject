@@ -13,7 +13,7 @@ async function getUser(userId) {
     }
     return { status: 200, user: user };
   } catch (error) {
-    return { status: 500, user: error };
+    return { status: 500, user: error.message };
   } finally {
     await client.close();
   }
@@ -32,7 +32,7 @@ async function getStudents() {
     }
     return { status: 200, students: allStudents };
   } catch (error) {
-    return { status: 500, students: error };
+    return { status: 500, students: error.message };
   } finally {
     await client.close();
   }
@@ -57,7 +57,7 @@ async function postUser(userId) {
     });
     return { status: 201, error: "" };
   } catch (error) {
-    return { status: 500, error: error };
+    return { status: 500, error: error.message };
   } finally {
     await client.close();
   }
@@ -79,7 +79,7 @@ async function deleteUser(user) {
     return { status: 200, error: "" };
   }
   catch(error) {
-    return { status: 500, error: error };
+    return { status: 500, error: error.message };
   } finally {
     await client.close();
   }
@@ -105,7 +105,7 @@ async function changeAdminPermissions(user, permissions) {
     return { status: 200, error: "" };
   }
   catch(error) {
-    return { status: 500, error: error };
+    return { status: 500, error: error.message };
   } finally {
     await client.close();
   }
@@ -130,7 +130,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     return { status: 200, error: "" };
   }
   catch (error) {
-    return { status: 500, error: error };
+    return { status: 500, error: error.message };
   } finally {
     await client.close();
   }

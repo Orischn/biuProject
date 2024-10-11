@@ -9,9 +9,9 @@ async function uploadFile(fileName, fileContent) {
                 error = err;
             }
         });
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     } catch (error) {
-        return { status: 500, error: error };
+        return { status: 500, error: error.message };
     }
 }
 
@@ -51,7 +51,7 @@ async function getTasks() {
         const taskList = await tasks.find({}, { projection: { submitList: 0 } }).toArray();
         return { status : 200, tasks: taskList };
     } catch (error) {
-        return { status: 500, tasks: error };
+        return { status: 500, tasks: error.message };
     } finally {
         await client.close();
     }
@@ -63,13 +63,13 @@ async function getSubmissionStatus(taskName) {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ taskName: taskName }).toArray();
+        const task = await tasks.findOne({ taskName: taskName });
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }
-        return { status: 200, submissionStatus: task[0].submitList };
+        return { status: 200, submissionStatus: task.submitList };
     } catch (error) {
-        return { status: 500, submissionStatus: error };
+        return { status: 500, submissionStatus: error.message };
     } finally {
         await client.close();
     }
