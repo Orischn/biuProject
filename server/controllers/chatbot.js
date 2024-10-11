@@ -32,7 +32,7 @@ const recvPractice = async (req, res) => {
 const recvPractices = async (req, res) => {
     const userId = await getId(req.headers.authorization);
     const result = await getPractices(userId);
-    return res.status(result.status).end(result.practices);
+    return res.status(result.status).end(JSON.stringify(result.practices));
 }
 
 const finishPractice = async (req, res) => {

@@ -3,7 +3,7 @@ const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents, chan
 
 const receiveUser = async (req, res) => {
     const result = await getUser(req.params.userId);
-    return res.status(result.status).end(result.user);
+    return res.status(result.status).end(JSON.stringify(result.user));
 }
 
 const getMe = async (req, res) => {
@@ -14,7 +14,7 @@ const getMe = async (req, res) => {
 
 const receiveAllStudents = async (req, res) => {
     const result = await getStudents();
-    return res.status(result.status).end(result.students);
+    return res.status(result.status).end(JSON.stringify(result.students));
 }
 
 const createUser = async (req, res) => {

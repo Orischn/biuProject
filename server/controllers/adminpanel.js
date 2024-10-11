@@ -32,7 +32,7 @@ const viewSubmissionStatus = async (req, res) => {
 
 const getStudentPractices = async (req, res) => {
     const result = await getPractices(req.params.userId);
-    return res.status(result.status).end(result.practices);
+    return res.status(result.status).end(JSON.stringify(result.practices));
 }
 
 const changeGrade = async (req, res) => {
