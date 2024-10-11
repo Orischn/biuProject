@@ -2,7 +2,7 @@ import { useRef } from "react";
 import BotMessage from "../botMessage/BotMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
+function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage }) {
 
     const typeBar = useRef(null);
     const send = async (e) => {
@@ -35,6 +35,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
                 setMessages(messages => [...messages, <BotMessage message={JSON.parse(message)} />]);
             })
         }
+        setLatestMessage(message);
         
     }
     
@@ -43,8 +44,13 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         <div className="d-flex">
             <span id="messageBar" className="input-group">
                 <form onSubmit={send} className="input-group">
-                    <input ref={typeBar} className="form-control input" placeholder="Type a message" />
-                    <button id="sendButton" type="submit" className="btn">
+                    <input ref={typeBar} 
+                    className={`form-control input ${!selectedPractice.active ? 'custom-disabled' : ''}`}
+                    placeholder="Type a message"
+                    disabled={!selectedPractice.active}/>
+                    <button id="sendButton" type="submit" 
+                    className={`btn ${!selectedPractice.active ? 'custom-disabled' : ''}`}
+                    disabled={!selectedPractice.active}>
                         <i className="bi bi-send" />
                     </button>
                 </form>

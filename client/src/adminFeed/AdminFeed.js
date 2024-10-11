@@ -3,6 +3,8 @@ import Student from "../student/Student";
 import StudentStats from "../studentStats/StudentStats";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 import SettingsPage from "../settingsPage/SettingsPage";
+import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
+import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage";
 
 
 
@@ -10,9 +12,9 @@ function AdminFeed({ token, userId }) {
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
-    const [showModal, setShowModal] = useState(false);
-    const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
+    // const [showModal, setShowModal] = useState(false);
+    // const handleShowModal = () => setShowModal(true);
+    // const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -55,29 +57,42 @@ function AdminFeed({ token, userId }) {
     return (
         <>
             <div id="window" className="container">
-                {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />}
+                {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
+                <SettingsPage token={token} userId />
                 <div className="row">
                     <div id="adminFeed" className="col-3">
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100 text-black-50">{fullName}</b>
-                            <button onClick={handleShowModal} 
+                            {/* <button onClick={handleShowModal} 
                             style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
                             <i id="openSettings" className="bi bi-gear"></i>
+                            </button> */}
+                            <select id="year">
+                                <option value="white-mode">2024</option>
+                                <option value="dark-mode">2023</option>
+                                <option value="dark-mode">2022</option>
+                                <option value="dark-mode">2021</option>
+                            </select>
+
+                            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                <i id="openSettings" className="bi bi-gear" />
                             </button>
+
                         </div>
                         <div className="d-flex align-items-center">
                             <br />
                         </div>
                         {studentList}
                     </div>
-                    <div id="gradesChatBlock" class="col-9">
+                    <div id="gradesChatBlock" className="col-9">
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent} />
-                                <ChatsHistory token={token} />
                             </> :
                             <>
-                                PlaceHolder.
+                                {/* PlaceHolder. */}
+                                {/* <AdminAddStudent token={token} /> */}
+                                <StudentSettingsPage token={token} />
                             </>
                         }
                     </div>

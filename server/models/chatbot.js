@@ -142,7 +142,7 @@ async function addMessage(userId, chatId, content, isBot) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: true },
+            { chatId: chatId, userId: userId, active: true },
             {
                 $push: {
                     messages: {
@@ -167,7 +167,7 @@ async function updateGrade(userId, chatId, newGrade) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: false },
+            { chatId: chatId, userId: userId, active: false },
             {
                 $set: {
                     grade: newGrade,

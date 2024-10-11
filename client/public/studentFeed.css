@@ -1,4 +1,4 @@
-/* img {
+ /* img {
     height: 45px;
     width: 45px;
 }
@@ -161,22 +161,22 @@
 .settingType:hover {
     background-color: lightblue;
     cursor: pointer;
-} */
+}  */
 
 
 img {
     height: 45px;
     width: 45px;
-    border-radius: 50%; /* Smooth round images */
+    border-radius: 50%; 
 }
 
 .practice {
     background-color: rgb(240, 240, 240);
     border-color: lightgray;
     height: 10%;
-    border-radius: 12px; /* Rounded corners */
+    border-radius: 12px; 
     padding: 10px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .practice:hover {
@@ -186,14 +186,14 @@ img {
 
 .input {
     color: black;
-    border-radius: 6px; /* Smoother input field */
-    padding: 5px; /* Extra padding for comfort */
+    border-radius: 6px; 
+    padding: 5px; 
 }
 
 .input:focus {
     color: black;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Soft focus shadow */
-    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    outline: none; 
 }
 
 .input::placeholder {
@@ -204,24 +204,44 @@ img {
     color: transparent;
 }
 
-.botMessage, .studentMessage {
-    border-radius: 15px; /* Softer, more rounded corners */
-    padding: 15px; /* Increased padding */
-    margin: 5px; /* More space between messages */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Add shadow for depth */
-}
+/* .botMessage, .studentMessage {
+    border-radius: 15px; 
+    padding: 15px; 
+    margin: 5px; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
+} */
 
 .botMessage {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    border-radius: 10px;
+    background-color: rgb(210, 210, 210);
+    color: black;
+    width: fit-content;
+    max-width: 300px;
+    padding: 10px;
+    margin: 1px;
     background-color: rgb(210, 210, 210);
 }
 
 .studentMessage {
+    position: relative;
+    top: 20px;
+    right: 20px;
+    border-radius: 10px;
+    background-color: rgb(143, 163, 244);
+    color: black;
+    width: fit-content;
+    max-width: 300px;
+    padding: 10px;
+    margin: 1px;
     background-color: rgb(143, 163, 244);
 }
 
 .date {
     float: right;
-    font-size: 0.85rem; /* Slightly smaller date for subtle look */
+    font-size: 0.85rem; 
 }
 
 #me {
@@ -235,8 +255,8 @@ img {
     background-color: rgb(230, 230, 230);
     border: none;
     margin-right: 3px;
-    padding: 8px; /* Extra padding */
-    border-radius: 8px; /* Smooth corners */
+    padding: 8px; 
+    border-radius: 8px; 
 }
 
 #searchBar > input:focus {
@@ -261,9 +281,9 @@ img {
 #messageBar > input {
     background-color: rgb(240, 240, 240);
     border-color: lightgray;
-    border-radius: 10px; /* Rounded input bar */
+    border-radius: 10px; 
     margin-right: 5px;
-    padding: 10px; /* Comfortable padding */
+    padding: 10px; 
 }
 
 #messageBar > input:focus {
@@ -277,8 +297,8 @@ img {
     background-color: rgb(220, 220, 230);
     color: black;
     border: none;
-    border-radius: 8px; /* Rounded buttons */
-    padding: 10px 15px; /* Added padding for a softer look */
+    border-radius: 8px; 
+    padding: 10px 15px; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
@@ -298,21 +318,40 @@ img {
     color: black;
 }
 
-#chat {
+/* #chat {
     background-color: white;
     height: 79%;
-    border-radius: 12px; /* Round chat area corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    border-radius: 12px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); 
+} */
+
+#chat {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    height: 75vh;
+
+}
+
+
+
+#chat::-webkit-scrollbar {
+    display: none;
 }
 
 #chatFeed {
     background-color: rgb(220, 220, 230);
-    border-radius: 12px; /* Smoother corners */
+    border-radius: 12px; 
 }
 
 #practiceFeed {
     background-color: rgb(240, 240, 240);
-    border-radius: 12px; /* Smoother corners */
+    border-radius: 12px; 
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+#practiceFeed::-webkit-scrollbar {
+    display: none;
 }
 
 #window {
@@ -325,20 +364,230 @@ img {
 
 .list-group-item.active {
     background-color: #0d6efd;
-    border-radius: 10px; /* Round corners for active items */
+    border-radius: 10px; 
 }
 
 .row {
     height: 100%;
 }
 
-.custom-modal-width {
+.custom-modal .modal-dialog{
     width: 70% !important;
     max-width: 70% !important;
-    border-radius: 12px; /* Smoother modal */
+    height: 90vh !important;
+    overflow-y: auto;
+    border-radius: 12px; 
+}
+
+.modal-dialog::-webkit-scrollbar {
+    display: none;
 }
 
 .settingType:hover {
     background-color: lightblue;
     cursor: pointer;
 }
+
+.custom-disabled {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #6c757d; /* Muted text color */
+    border-color: #f0f0f0;
+    cursor: not-allowed; /* Show a "no entry" cursor */
+    opacity: 0.6; /* Make it look faded */
+}
+
+#grades {
+    height: 20vh;
+    overflow-y: auto;
+  }
+  
+  #grades::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .grades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .grade-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grade-title {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .grade-input {
+    width: 60px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+  }
+
+  .grade-status {
+    margin-left: 10px; /* Add some space between grade and status */
+    font-size: 0.9em; /* Adjust the font size if needed */
+    color: #666; /* Choose a suitable color for the status */
+}
+  
+
+#chatHistory {
+    overflow-y: auto;
+    height: 60vh;
+}
+
+#chatHistory::-webkit-scrollbar {
+    display: none;
+}
+/* ------------------------------------------------------------ */
+
+#addStudent {
+    color: gray;
+}
+
+.settings-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.settings-container::-webkit-scrollbar {
+    display: none;
+}
+
+.settings-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-item:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+.setting-item label {
+    font-size: 16px;
+    color: #555;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.save-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #1976D2;
+}
+
+/* ------------------------------------------------- */
+/* .grade-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .grade-title {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .grade-title:hover {
+    text-decoration: underline;
+  }
+  
+  .grade-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grade-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.3);
+  } */
+  
+

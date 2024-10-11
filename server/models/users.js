@@ -27,6 +27,7 @@ async function getStudents() {
     const users = db.collection('users');
 
     const allStudents = await users.find({ permissions: false }).toArray();
+    const allStudents = await users.find({ permissions: false }).toArray();
     if (!allStudents) {
       return { status: 404, students: "No students were found in the database." };
     }
@@ -64,8 +65,9 @@ async function postUser(userId) {
 }
 
 async function deleteUser(user) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
-    await client.connnect();
+    await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const existingUser = await users.findOne({ userId: user.userId });
@@ -85,6 +87,7 @@ async function deleteUser(user) {
 }
 
 async function changeAdminPermissions(user, permissions) {
+  const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
     const db = client.db('ChatBot');
@@ -93,10 +96,10 @@ async function changeAdminPermissions(user, permissions) {
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
-    await users.updateOne({existingUser},
+    await users.updateOne({ existingUser },
       {
         $update: {
-          permissions : permissions
+          permissions: permissions
         }
       }
     );

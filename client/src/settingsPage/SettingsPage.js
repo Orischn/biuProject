@@ -1,60 +1,58 @@
 import { useState } from "react"
-import BotSettingsPage from "../botSettingsPage/BotSettingsPage"
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
+import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
+import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, closeModal }) {
+function SettingsPage({ token, userId }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
-    const settingsOptions = [<GeneralSettings token={token} />, <BotSettingsPage token={token} />, <StudentSettingsPage token={token} />];
-    return (
-        <>
-            <div
-                className="modal fade show"
-                tabIndex="-1"
-                role="dialog"
-                style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-            >
-                <div className="modal-dialog modal-dialog-centered custom-modal-width" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Settings</h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                aria-label="Close"
-                                onClick={closeModal}
-                            ></button>
-                        </div>
+    const settingsOptions = [<GeneralSettingsPage token={token} userId={userId} />,
+    <AssignmentsSettingsPage token={token} />,
+    <StudentSettingsPage token={token} />];
 
-                        {/* end of title, now need rows and cols */}
+    return (
+        <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="staticBackdropLabel">SETTINGS</h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            onClick={() => setSelectedSettings(0)}></button>
+                    </div>
+                    <div className="modal-body">
                         <div className="row">
-                            <div className="col-6">
+                            <div className="col-3">
                                 {/* trying something */}
                                 <ul className="list-group mt-3">
-                                    <li className="list-group-item settingType">
-                                        <button className="bi bi-file-earmark-arrow-up" onClick={setSelectedSettings(0)}></button> General
+                                    <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(0)}>
+                                        <i className="bi bi-gear"></i> &nbsp; General
                                     </li>
-                                    <li className="list-group-item settingType">
-                                        <button className="bi bi-file-earmark-arrow-up" onClick={setSelectedSettings(1)}></button> Manage Bot
+                                    <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(1)}>
+                                        <i className="bi bi-ui-checks"></i> &nbsp; Assignments
                                     </li>
-                                    <li className="list-group-item settingType">
-                                        <button className="bi bi-people" onClick={setSelectedSettings(2)}></button> Manage Students
+                                    <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(2)}>
+                                        <i className="bi bi-people"></i> &nbsp; Students
                                     </li>
                                 </ul>
                             </div>
-                            <div className="col-6">
+                            <div className="col-9">
                                 {settingsOptions[selectedSettings]}
                             </div>
-
                         </div>
-                        {/* <form noValidate className="container-fluid modal-body" onSubmit={save} >
-                            <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
-                            <input type="submit" className="btn btn-primary submit" value="Save" />
-                        </form> */}
+                    </div>
+                    <div className="modal-footer" dir="rtl">
+                        <b>
+                            Think carefully before making any changes.
+                            Remember, with great power comes great responsibility
+                        </b>
                     </div>
                 </div>
             </div>
-        </>
-    )
+        </div>
+    );
+
 }
 
 export default SettingsPage

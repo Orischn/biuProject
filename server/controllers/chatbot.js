@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 const { getTasks } = require("../models/adminPanel");
 const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade, submitPractice } = require("../models/chatbot");
 const { getData } = require("../models/token");
+=======
+const { postPractice, getPractice, getPractices, addMessage, getMessages, updateGrade, endPractice } = require("../models/chatbot")
+const { getData } = require("../models/token")
+>>>>>>> 86b2b0881095c00faab2d5de56acd88cd8b6ad2f
 
 const decipherQuestion = async (req, res, next) => {
     const userData = await getData(req.headers.authorization);
