@@ -51,7 +51,7 @@ function AddAssignment({ token }) {
         <>
             {/* Button trigger modal */}
             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#addAssignment">
-                <i className="bi bi-plus-circle" />
+                <i className="bi bi-plus-circle" style={{color: "black"}}/>
                 &nbsp; Add new assignment
             </button>
             {/* Modal */}

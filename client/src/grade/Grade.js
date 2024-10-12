@@ -65,7 +65,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
                         <>
                             <span className="grade-title" onClick={() => setSelectedGradeId(chatId)}>
-                                Click to see Practice #{chatId}
+                                Click to see {chatId}
                             </span>
                             <span className="grade-display">{grade}</span>
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
