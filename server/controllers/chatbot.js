@@ -19,14 +19,18 @@ const answerQuestion = async (req, res) => {
 
 const addPractice = async (req, res) => {
     const userId = await getId(req.headers.authorization);
-    const result = await postPractice(userId, req.body.chatId);
-    return res.status(result.status).end(result.practice);
+    const existingPractice = await getPractice(req.body.chatId, userId);
+    if (!existingPractice.practice) {
+        const result = await postPractice(userId, req.body.chatId);
+        return res.status(result.status).end(JSON.stringify(result.practice));
+    }
+    return res.status(existingPractice.status).end(JSON.stringify(existingPractice.practice));
 }
 
 const recvPractice = async (req, res) => {
     const userId = await getId(req.headers.authorization);
-    const result = await getPractice(parseInt(req.params.practiceId), userId);
-    return res.status(result.status).end(result.practice);
+    const result = await getPractice(req.params.practiceId, userId);
+    return res.status(result.status).end(JSON.stringify(result.practice));
 }
 
 const recvPractices = async (req, res) => {
@@ -43,7 +47,7 @@ const finishPractice = async (req, res) => {
 
 const viewTasks = async (req, res) => {
     const result = await getTasks();
-    return res.status(result.status).end(result.tasks);
+    return res.status(result.status).end(JSON.stringify(result.tasks));
 }
 
 module.exports = {

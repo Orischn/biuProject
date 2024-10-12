@@ -23,7 +23,7 @@ async function makeTask(taskName, startingDate, endingDate, users) {
         const tasks = db.collection('tasks');
         submitList = [];
         users.map((user) => {
-            submitList.push({ userId: user.id, firstName: user.firstName, lastName: user.lastName, didSubmit: false });
+            submitList.push({ userId: user.userId, firstName: user.firstName, lastName: user.lastName, didSubmit: false });
         });
         await tasks.insertOne(
             {

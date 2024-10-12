@@ -23,7 +23,8 @@ const createUser = async (req, res) => {
 }
 
 const removeUser = async (req, res) => {
-    const result = await deleteUser(user);
+    const user = await getUser(req.body.userId)
+    const result = await deleteUser(user.user);
     return res.status(result.status).end(result.error);
 }
 

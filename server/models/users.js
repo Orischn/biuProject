@@ -73,8 +73,8 @@ async function deleteUser(user) {
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
-    const chats = db.collection('chats');
-    await chats.deleteMany({ userId: user.userId });
+    const practices = db.collection('practices');
+    await practices.deleteMany({ userId: user.userId });
     await users.deleteOne({ userId: user.userId });
     return { status: 200, error: "" };
   }

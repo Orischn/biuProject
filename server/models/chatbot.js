@@ -53,7 +53,7 @@ async function postPractice(userId, chatId) {
             grade: 0,
             startDate: dateTime,
             submissionDate: null,
-            alive: true
+            active: true
         };
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
@@ -102,10 +102,10 @@ async function submitPractice(userId, chatId) {
             return { status: 403, error: "Submission date passed." };
         }
         await practices.updateOne(
-            { chatId: chatId, userId: userId, alive: true },
+            { chatId: chatId, userId: userId, active: true },
             {
                 $set: {
-                    alive: false,
+                    active: false,
                     submissionDate: dateTime,
                 },
             },
@@ -128,7 +128,7 @@ async function submitPractice(userId, chatId) {
 
 async function getMessages(chatId, userId) {
     try {
-        const chat = await getPractice(chatId, userId);
+        const chat = (await getPractice(chatId, userId)).practice;
         return { status: 200, messages: chat.messages };
     } catch (error) {
         return { status: 500, messages: error.message };

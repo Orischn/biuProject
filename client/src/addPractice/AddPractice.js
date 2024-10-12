@@ -1,18 +1,23 @@
 
-function AddPractice({token, setSelectedPractice}) {
+function AddPractice({token, selectedTask, setSelectedTask}) {
 
     const add = async function (e) {
+
+        console.log(selectedTask.taskName)
         const res = await fetch(`http://localhost:5000/api/addPractice/`, {
             'method': 'post',
             'headers': {
                 'accept': 'application/json',
                 'Authorization': `Bearer ${token}`,
-            }
+            },
+            'body': JSON.stringify({
+                "chatId": selectedTask.taskName
+            })
         });
 
         if (res.status === 201) {
             res.text().then((practice) => {
-                setSelectedPractice(JSON.parse(practice));
+                setSelectedTask(JSON.parse(practice));
             });
         }
     };
@@ -20,10 +25,11 @@ function AddPractice({token, setSelectedPractice}) {
 
     return (
         <>
-            <button type="button" onClick={add}
+            {/* <button type="button" onClick={add}
             style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
                 <i id="addPractice" className="bi bi-plus-circle"></i>
-            </button>
+            </button> */}
+            {/* <div onLoad={add}></div> */}
         </>
     )
 }
