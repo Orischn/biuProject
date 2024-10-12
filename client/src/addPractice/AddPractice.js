@@ -3,7 +3,6 @@ function AddPractice({token, selectedTask, setSelectedTask}) {
 
     const add = async function (e) {
 
-        console.log(selectedTask.taskName)
         const res = await fetch(`http://localhost:5000/api/addPractice/`, {
             'method': 'post',
             'headers': {

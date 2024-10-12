@@ -11,7 +11,7 @@ function AddAssignment({ token }) {
     // const durationBar = useRef(null);
 
     const add = async function (e) {
-        console.log(startDateBar.current.value.trim(), typeof (startDateBar.current.value.trim()))
+        // console.log(startDateBar.current.value.trim(), typeof (startDateBar.current.value.trim()))
 
         e.preventDefault();
         setError('');

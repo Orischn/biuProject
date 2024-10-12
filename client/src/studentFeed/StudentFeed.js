@@ -26,28 +26,11 @@ function StudentFeed({ token, userId }) {
             }),
         });
         setSelectedTask(null);
+        setSelectedPractice(null);
     }
 
     useEffect(() => {
-        // const fetchPractices = async () => {
-        //     const res = await fetch('http://localhost:5000/api/getPractices', {
-        //         method: 'get',
-        //         headers: {
-        //             'accept': 'application/json',
-        //             'Authorization': `Bearer ${token}`,
-        //         }
-        //     });
-        //     if (res.status === 200) {
-        //         res.text().then((practices) => {
-        //             setPracticeList(JSON.parse(practices).map((practice, key) => {
-        //                 return <Practice practice={practice} key={key}
-        //                     selectedPractice={selectedPractice}
-        //                     setSelectedPractice={setSelectedPractice} />
-        //             }));
-        //         });
-        //     }
-        // }
-
+    
         const fetchTasks = async () => {
             const res = await fetch('http://localhost:5000/api/getTasks', {
                 method: 'get',
