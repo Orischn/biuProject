@@ -58,7 +58,7 @@ function AddAssignment({ token }) {
             <div className="modal fade" id="addAssignment" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="addAssignmentLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <div className="modal-header">
+                        <div className="modal-header text-white">
                             <h1 className="modal-title fs-5" id="addAssignmentLabel">CREATE ASSIGNMENT</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>

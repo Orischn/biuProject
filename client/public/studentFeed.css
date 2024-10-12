@@ -171,16 +171,21 @@ img {
 }
 
 .practice {
-    background-color: rgb(240, 240, 240);
-    border-color: lightgray;
+    /* background-color: rgb(240, 240, 240); */
+    /* background-color:   rgb(50, 138, 50); */
+    background-color: rgb(220, 251, 217);
+    /* background-color: white; */
+    /* border-color: lightgray; */
     height: 10%;
     border-radius: 12px; 
     padding: 10px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); 
+    /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);  */
 }
 
 .practice:hover {
-    background-color: lightblue;
+    /* background-color: lightblue; */
+    /* background-color: rgb(220, 251, 217); */
+    background-color: white;
     cursor: pointer;
 }
 
@@ -216,13 +221,12 @@ img {
     top: 20px;
     left: 20px;
     border-radius: 10px;
-    background-color: rgb(210, 210, 210);
+    background-color: rgb(233, 219, 194);
     color: black;
     width: fit-content;
     max-width: 300px;
     padding: 10px;
     margin: 1px;
-    background-color: rgb(210, 210, 210);
 }
 
 .studentMessage {
@@ -230,13 +234,12 @@ img {
     top: 20px;
     right: 20px;
     border-radius: 10px;
-    background-color: rgb(143, 163, 244);
+    background-color: rgb(173, 216, 230);
     color: black;
     width: fit-content;
     max-width: 300px;
     padding: 10px;
     margin: 1px;
-    background-color: rgb(143, 163, 244);
 }
 
 .date {
@@ -245,7 +248,10 @@ img {
 }
 
 #me {
-    background-color: rgb(230, 230, 230);
+    /* background-color: rgb(230, 230, 230); */
+    /* background-color: rgb(0, 100, 0); */
+    background-color: darkgreen;
+    color: white !important;
     height: 10%;
     border-radius: 12px;
     padding: 10px;
@@ -339,18 +345,33 @@ img {
 }
 
 #chatFeed {
-    background-color: rgb(220, 220, 230);
-    border-radius: 12px; 
+    /* second from right - off white */
+    /* background-color: rgb(220, 251, 217);  */
+    border-radius: 0px; 
 }
 
 #practiceFeed {
-    background-color: rgb(240, 240, 240);
-    border-radius: 12px; 
+    /* background-color: rgb(50, 138, 50); */
+    background-color: rgb(220, 251, 217); ;
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
 
+#adminFeed {
+    background-color: rgb(220, 251, 217);
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.active {
+    background-color: rgb(173, 216, 230) !important;
+}
+
 #practiceFeed::-webkit-scrollbar {
+    display: none;
+}
+
+#adminFeed::-webkit-scrollbar {
     display: none;
 }
 
@@ -381,6 +402,10 @@ img {
 
 .modal-dialog::-webkit-scrollbar {
     display: none;
+}
+
+.modal-header {
+    background-color: darkgreen;
 }
 
 .settingType:hover {
@@ -554,6 +579,10 @@ select {
 
 .save-button:hover {
     background-color: #1976D2;
+}
+
+button > i {
+    color: white;
 }
 
 /* ------------------------------------------------- */

@@ -49,7 +49,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
-                            <b className="ms-2 text-black-50">
+                            <b className="ms-2 text-white-50">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
                         </div>
@@ -77,7 +77,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
             <div className="modal fade" id="confirmModal" tabIndex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <div className="modal-header">
+                        <div className="modal-header text-white">
                             <h5 className="modal-title" id="confirmModalLabel">Confirm Submission</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>

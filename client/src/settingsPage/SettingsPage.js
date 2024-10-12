@@ -13,7 +13,7 @@ function SettingsPage({ token, userId, yearOption }) {
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
-                    <div className="modal-header">
+                    <div className="modal-header text-white">
                         <h1 className="modal-title fs-5" id="staticBackdropLabel">SETTINGS</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             onClick={() => setSelectedSettings(0)}></button>
