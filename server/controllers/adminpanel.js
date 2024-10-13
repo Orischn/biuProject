@@ -27,7 +27,7 @@ const checkAdmin = async (req, res, next) => {
 
 const viewSubmissionStatus = async (req, res) => {
     const result = await getSubmissionStatus(req.params.taskName);
-    return res.status(result.status).end(result.submissionStatus);
+    return res.status(result.status).end(JSON.stringify(result.submissionStatus));
 }
 
 const getStudentPractices = async (req, res) => {

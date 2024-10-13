@@ -34,20 +34,18 @@ function AssignmentsSettingsPage({ token }) {
         }
 
         const fetchSubmissionStatus = async function (taskName) {
-            const res = await fetch('http://localhost:5000/api/getSubmissionStatus', {
-                method: 'post',
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}`, {
+                method: 'get',
                 headers: {
                     'accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    taskName: taskName
-                })
+                }
             });
             if (res.status === 200) {
                 res.text().then((submissionList) => {
-                    setNumOfAssigned(submissionList.length);
-                    setNumOfSubmits(submissionList.filter(user => user.didSubmit).length);
+                    setNumOfAssigned(JSON.parse(submissionList).length);
+                    setNumOfSubmits(JSON.parse(submissionList).filter(user => user.didSubmit).length);
+                    console.log(numOfSubmits, numOfAssigned)
                 });
             }
         }
