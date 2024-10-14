@@ -1,73 +1,80 @@
 import { useEffect, useState } from "react";
 
-
 function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice, setSelectedPractice }) {
     const [isCreated, setIsCreated] = useState(false);
-    const [isFinished, setIsFinished] = useState(false)
+    const [isFinished, setIsFinished] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-    const add = async function (e) {
+    const handleTaskClick = () => {
+        if (!isCreated) {
+            setShowModal(true); // Open the modal if the task is not created
+        } else {
+            setSelectedTask(task); // Set the selected task
+            add(); // Fetch and display the practice directly for created tasks
+        }
+    };
 
+    const handleConfirm = () => {
+        add(); // Start the task on confirm
+        setSelectedTask(task); // Set the selected task
+        setShowModal(false); // Close the modal
+    };
+
+    const handleCancel = () => {
+        setShowModal(false); // Close the modal on cancel
+    };
+
+    const add = async function () {
         const res = await fetch(`http://localhost:5000/api/addPractice/`, {
-            'method': 'post',
-            'headers': {
-                'accept': 'application/json',
+            method: 'post',
+            headers: {
+                accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
-            'body': JSON.stringify({
-                'chatId': task.taskName
-            })
+            body: JSON.stringify({
+                chatId: task.taskName,
+            }),
         });
 
         if (res.status === 200) {
-            res.text().then((practice) => {
-                setSelectedPractice(JSON.parse(practice));
-            });
+            const practice = await res.text();
+            setSelectedPractice(JSON.parse(practice));
         }
     };
 
     useEffect(() => {
-
         const fetchPractice = async function () {
             const res = await fetch(`http://localhost:5000/api/getPractice/${task.taskName}`, {
-                'method': 'get',
-                'headers': {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
+                method: 'get',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             if (res.status === 200) {
-                const practice = await res.json(); // parse the response as JSON (???)
+                const practice = await res.json(); // parse the response as JSON
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
                     setIsCreated(true);
-                    if (!practice.active) {
-                        setIsFinished(true);
-                    } else {
-                        setIsFinished(false)
-                    }
+                    setIsFinished(!practice.active);
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
             }
-        }
+        };
         fetchPractice();
-    }, [selectedTask])
-
+    }, [selectedTask, task.taskName, token]);
 
     return (
         <>
-            {/* ${!task.submitList.find((u) => u.userId === userId).didSubmit ? 'text-muted' : ''} */}
-            <li key={task.taskName}
+            <li
+                key={task.taskName}
                 className={`list-group-item practice container
-                ${selectedTask && selectedTask.taskName === task.taskName ? 'active' : ''}
-                ${''}`} //doesn't work
-                onClick={() => {
-                    // if (practice.active) { // necessary checking? can be chosen even when not active
-                    add();
-                    setSelectedTask(task);
-                    // }
-                }}>
+                    ${selectedTask && selectedTask.taskName === task.taskName ? 'active' : ''}
+                    ${''}`}
+                onClick={handleTaskClick} // Adjusted logic to handle created and non-created tasks
+            >
                 <div className="row">
                     <div>
                         <b className="text-black w-100">Task: {task.taskName}</b>
@@ -82,6 +89,30 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                     </div>
                 </div>
             </li>
+
+            {showModal && (
+                <div className="modal show d-block" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
+                                <h5 className="modal-title text-white">Start Practice</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                            </div>
+                            <div className="modal-body">
+                                Are you sure you want to start <b>{task.taskName}</b>?
+                                This will start a timer of the time you have to finish your practice.
+                                After the time ends, the result will be automatically sent to the teacher, and no changes will be possible afterward.
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, Cancel</button>
+                                <button type="button" className="btn btn-danger" onClick={handleConfirm}>
+                                    Yes, Start Practice
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

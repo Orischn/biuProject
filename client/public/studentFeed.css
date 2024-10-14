@@ -618,5 +618,56 @@ button > i {
     border-color: #007bff;
     box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.3);
   } */
+
+  /* -------------------------------other modal------------------------------ */
+
+  /* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+/* Modal Content */
+.modal-content {
+    /* background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;*/
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.5s ease forwards; /* Slides the modal down */
+}
+
+/* Modal Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Bootstrap-like Slide Down & Fade In Animation for the modal */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-200px); /* Slide down from 50px above */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-100); /* End at normal position */
+    }
+}
+
+
   
 

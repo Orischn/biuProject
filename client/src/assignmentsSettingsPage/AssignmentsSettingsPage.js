@@ -5,9 +5,6 @@ import AddAssignment from "../addAssignment/AddAssignment";
 function AssignmentsSettingsPage({ token }) {
     const [taskList, setTaskList] = useState([]);
     const [error, setError] = useState('')
-    const [numOfSubmits, setNumOfSubmits] = useState(0);
-    const [numOfAssigned, setNumOfAssigned] = useState(0);
-    const [teskName, setTaskName] = useState('')
 
     useEffect(() => {
 
@@ -23,30 +20,13 @@ function AssignmentsSettingsPage({ token }) {
                 res.text().then((tasks) => {
                     
                     setTaskList(JSON.parse(tasks).map((task, key) => {
-                        fetchSubmissionStatus(task.taskName);
                         return <AssignmentDetails token={token} taskName={task.taskName}
                             timeTillEnd={15} />
-
                     }));
                 });
             }
         }
-
-        const fetchSubmissionStatus = async function (taskName) {
-            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}`, {
-                method: 'get',
-                headers: {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
-            if (res.status === 200) {
-                res.text().then((submissionList) => {
-                    setNumOfAssigned(JSON.parse(submissionList).length);
-                    setNumOfSubmits((JSON.parse(submissionList).filter(user => user.didSubmit)).length);
-                });
-            }
-        }
+        
         fetchTasks()
     }, [])
 

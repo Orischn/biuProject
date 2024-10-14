@@ -58,9 +58,9 @@ function ChangePassword({ token, userId }) {
     return (
         <>
             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#changePassModal">
-                <i id="openChangePassword" className="bi bi-shield-lock" style={{color: 'white'}}/>
+            <a href="#" class="tooltip-test" title="change password"><i id="openChangePassword" className="bi bi-shield-lock" style={{color: 'white'}}/></a>
             </button>
-change password
+{/* change password */}
 
             {/* Confirmation Modal */}
             <div className="modal fade" id="changePassModal" tabIndex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true" >
