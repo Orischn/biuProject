@@ -622,51 +622,41 @@ button > i {
   /* -------------------------------other modal------------------------------ */
 
   /* Modal Overlay */
-.modal-overlay {
+
+  .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3); /* Darker overlay */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align items to the top */
     z-index: 1050;
+    /* Remove or set padding-top to 0 if it's currently affecting position */
 }
 
 /* Modal Content */
 .modal-content {
-    /* background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;*/
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    animation: slideDown 0.5s ease forwards; /* Slides the modal down */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.5s ease forwards; /* Animation effect */
+    margin-top: 20px; /* Adjust this value to position the modal higher */
+    /* You can use margin-top: 0; for a higher placement */
 }
 
-/* Modal Fade-in Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Bootstrap-like Slide Down & Fade In Animation for the modal */
+/* Animation */
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-200px); /* Slide down from 50px above */
+        transform: translateY(-50px); /* Start slightly above its final position */
     }
     to {
         opacity: 1;
-        transform: translateY(-100); /* End at normal position */
+        transform: translateY(0); /* End at its final position */
     }
 }
+
 
 
   

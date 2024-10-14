@@ -9,6 +9,24 @@ function ChangePassword({ token, userId }) {
 
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleButtonClick = () => {
+        setShowModal(true)
+    }
+
+    // const handleConfirm = () => {
+
+    //     setShowModal(false); // Close the modal
+    // };
+
+    const handleCancel = () => {
+        currentPassBar.current.value = '';
+        newPassBar.current.value = '';
+        newPassBarCon.current.value = '';
+        setError('');
+        setShowModal(false); // Close the modal on cancel
+    };
 
     const change = async function (e) {
 
@@ -56,71 +74,118 @@ function ChangePassword({ token, userId }) {
     }
 
     return (
+
         <>
-            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#changePassModal">
-            <a href="#" class="tooltip-test" title="change password"><i id="openChangePassword" className="bi bi-shield-lock" style={{color: 'white'}}/></a>
+            <button type="button" className="btn" onClick={handleButtonClick}>
+                <a href="#" class="tooltip-test" title="change password"><i id="openChangePassword" className="bi bi-shield-lock" style={{ color: 'white' }} /></a>
             </button>
-{/* change password */}
 
-            {/* Confirmation Modal */}
-            <div className="modal fade" id="changePassModal" tabIndex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true" >
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header text-white">
-                            <h5 className="modal-title" id="changePassModalLabel">Change your Password</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                onClick={() => {
-                                    currentPassBar.current.value = '';
-                                    newPassBar.current.value = '';
-                                    newPassBarCon.current.value = '';
-                                    setError('');
-                                }}></button>
-                        </div>
-                        {/* ----------------------------------------------------------------- */}
-
-
-                        <form onSubmit={change}>
-                            <div className="modal-body">
-                                <input type="password" ref={currentPassBar} className="form-control" placeholder="Current Password" />
-                                <input type="text" ref={newPassBar} className="form-control" placeholder="Press New Password" />
-                                <input type="text" ref={newPassBarCon} className="form-control" placeholder="Press New Password Again" />
-
+            {showModal && (
+                <div className="modal show d-block" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header text-white">
+                                <h5 className="modal-title">Change your Password</h5>
+                                <button type="button" className="btn-close"
+                                    onClick={handleCancel}></button>
                             </div>
-                            <div className="modal-footer">
-                                {error &&
-                                    <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                        {error}
-                                    </span>}
-                                <button type="button" onClick={() => {
-                                    currentPassBar.current.value = '';
-                                    newPassBar.current.value = '';
-                                    newPassBarCon.current.value = '';
-                                    setError('');
-                                }}
-                                    className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" className="btn btn-primary">Save new Password</button>
-                            </div>
-                        </form>
-
-
-
-                        {/* ------------------------------------------------------------------- */}
-                        {/* <div className="modal-body">
-                            bla bla bla
+                            <form onSubmit={change}>
+                                <div className="modal-body">
+                                    <input type="password" ref={currentPassBar} className="form-control" placeholder="Current Password" />
+                                    <input type="text" ref={newPassBar} className="form-control" placeholder="Press New Password" />
+                                    <input type="text" ref={newPassBarCon} className="form-control" placeholder="Press New Password Again" />
+                                </div>
+                                <div className="modal-footer">
+                                    {error &&
+                                        <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+                                            {error}
+                                        </span>}
+                                    <button type="button" onClick={handleCancel}
+                                        className="btn btn-secondary">Cancel</button>
+                                    <button type="submit" className="btn btn-primary">Save new Password</button>
+                                </div>
+                            </form>        
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal"
-                                onClick={() => change()}>
-                                Save new Password
-                            </button>
-                        </div> */}
                     </div>
                 </div>
-            </div >
-        </>
+            )}
+        </>   
     );
 
 }
 
 export default ChangePassword;
+
+// import React, { useState, useRef } from 'react';
+
+// const ChangePasswordModal = () => {
+//     const [showModal, setShowModal] = useState(false);
+//     const [error, setError] = useState(null);
+//     const [isSuccessful, setIsSuccessful] = useState(false);
+//     const currentPassBar = useRef();
+//     const newPassBar = useRef();
+//     const newPassBarCon = useRef();
+
+//     const handleButtonClick = () => {
+//         setShowModal(true);
+//     };
+
+//     const handleCancel = () => {
+//         setShowModal(false);
+//     };
+
+//     const handleOverlayClick = (e) => {
+//         // Check if the click was outside the modal content
+//         if (e.target.classList.contains('modal-overlay')) {
+//             alert('Please close the modal before proceeding.');
+//         }
+//     };
+
+//     const change = (e) => {
+//         e.preventDefault();
+//         // Add your change password logic here
+//     };
+
+//     return (
+//         <>
+//             <button type="button" className="btn" onClick={handleButtonClick}>
+//                 <a href="#" className="tooltip-test" title="change password">
+//                     <i id="openChangePassword" className="bi bi-shield-lock" style={{ color: 'white' }} />
+//                 </a>
+//             </button>
+
+//             {showModal && (
+//                 <div className="modal-overlay" onClick={handleOverlayClick}>
+//                     <div className="modal show d-block" tabIndex="-1" role="dialog">
+//                         <div className="modal-dialog modal-dialog-centered" role="document">
+//                             <div className="modal-content">
+//                                 <div className="modal-header text-white">
+//                                     <h5 className="modal-title">Change your Password</h5>
+//                                     <button type="button" className="btn-close" onClick={handleCancel}></button>
+//                                 </div>
+//                                 <form onSubmit={change}>
+//                                     <div className="modal-body">
+//                                         <input type="password" ref={currentPassBar} className="form-control" placeholder="Current Password" />
+//                                         <input type="text" ref={newPassBar} className="form-control" placeholder="New Password" />
+//                                         <input type="text" ref={newPassBarCon} className="form-control" placeholder="Confirm New Password" />
+//                                     </div>
+//                                     <div className="modal-footer">
+//                                         {error && (
+//                                             <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+//                                                 {error}
+//                                             </span>
+//                                         )}
+//                                         <button type="button" onClick={handleCancel} className="btn btn-secondary">Cancel</button>
+//                                         <button type="submit" className="btn btn-primary">Save new Password</button>
+//                                     </div>
+//                                 </form>        
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+//             )}
+//         </>
+//     );
+// };
+
+// export default ChangePasswordModal;
