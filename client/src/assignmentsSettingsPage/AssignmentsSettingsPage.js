@@ -24,8 +24,7 @@ function AssignmentsSettingsPage({ token }) {
                     
                     setTaskList(JSON.parse(tasks).map((task, key) => {
                         fetchSubmissionStatus(task.taskName);
-                        return <AssignmentDetails name={task.taskName}
-                            numOfSubmits={numOfSubmits} numOfAssigned={numOfAssigned}
+                        return <AssignmentDetails token={token} taskName={task.taskName}
                             timeTillEnd={15} />
 
                     }));
@@ -44,8 +43,7 @@ function AssignmentsSettingsPage({ token }) {
             if (res.status === 200) {
                 res.text().then((submissionList) => {
                     setNumOfAssigned(JSON.parse(submissionList).length);
-                    setNumOfSubmits(JSON.parse(submissionList).filter(user => user.didSubmit).length);
-                    console.log(numOfSubmits, numOfAssigned)
+                    setNumOfSubmits((JSON.parse(submissionList).filter(user => user.didSubmit)).length);
                 });
             }
         }
