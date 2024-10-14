@@ -123,7 +123,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     await users.updateOne({ userId: user.userId },
       {
         $set: {
-          password: password
+          password: newPassword
         }
       }
     );
