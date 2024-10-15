@@ -1,4 +1,5 @@
 import BotMessage from "../botMessage/BotMessage";
+import Countdown from "../countdown/Countdown";
 import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
@@ -74,7 +75,12 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                             </span>
                                         </>
                                     )
-                                    : ''}
+                                    : (
+                                        <>
+                                        <Countdown targetDate={'2024-10-15T20:30:00'} />
+                                        </>
+                                    ) 
+                                    }
                             </b>
                         </div>
                         {/*  */}
