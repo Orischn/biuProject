@@ -18,7 +18,7 @@ const receiveAllStudents = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const result = await postUser(req.body.userId);
+    const result = await postUser(req.body.user);
     return res.status(result.status).end(result.error);
 }
 

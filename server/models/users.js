@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 
 async function getUser(userId) {
@@ -38,23 +39,40 @@ async function getStudents() {
   }
 }
 
-async function postUser(userId) {
+async function hashPassword(plainPassword) {
+  try {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(plainPassword, salt);
+    return hash;
+  } catch (err) {
+    return { status: 500, error: err };
+  }
+}
+
+async function postUser(user) {
   const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ userId: userId });
+    const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
       return { status: 409, error: "User already exists in the database." };
     }
+
+    //Hashing the user's password with salt
+    // const hashedPassword = await hashPassword(user.password);
+
     await users.insertOne({
-      userId: userId,
-      firstname: "",
-      lastname: "",
-      password: "12345678",
+      userId: user.userId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      password: user.password,
       permissions: false,
+      year: parseInt(user.year)
     });
+
     return { status: 201, error: "" };
   } catch (error) {
     return { status: 500, error: error.message };
@@ -117,9 +135,16 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    if (oldPassword !== user.password) {
+    // if (await bcrypt.compare(oldPassword, user.password)) {
+    //   return { status: 403, error: "Old password isn't correct." };
+    // }
+
+    if (oldPassword!== user.password) {
       return { status: 403, error: "Old password isn't correct." };
     }
+
+    // const hashedNewPassword = await hashPassword(newPassword)
+
     await users.updateOne({ userId: user.userId },
       {
         $set: {
