@@ -38,6 +38,7 @@ function AssignmentDetails({ token, taskName, timeTillEnd }) {
                         </div>
                         <div className="col-4">
                             {numOfSubmits} / {numOfAssigned} submitted
+                            <i className="bi bi-caret-down" style={{cursor: 'pointer'}}/>
                         </div>
                         <div className="col-4">
                             {/* needs to be input so we could edit? like in grade? */}
@@ -46,7 +47,7 @@ function AssignmentDetails({ token, taskName, timeTillEnd }) {
 
                         <div className="col-2">
 
-                            <i className="bi bi-pencil" onClick={() => {setIsEditing(true)}}/>
+                            <i className="bi bi-pencil" style={{cursor: 'pointer'}} onClick={() => {setIsEditing(true)}}/>
                         </div>
                     </div>
                 </ul>

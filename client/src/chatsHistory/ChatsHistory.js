@@ -66,7 +66,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
         <>
             {selectedGradeId ?
                 <>
-                    <h5>Chat History - practice {selectedGradeId}</h5>
+                    <h5>Chat History - {selectedGradeId}</h5>
                     {messages}
                 </> :
                 <></>}

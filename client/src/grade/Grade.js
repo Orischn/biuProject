@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Feedback from "../feedback/Feedback";
 
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade, isActive }) {
 
@@ -13,7 +14,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     const changeGrade = async () => {
 
-        if (input.current.value === null) {
+        if (!input.current.value.trim()) {
+            alert('grade must be a number')
             return;
         }
 
@@ -57,35 +59,49 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                 />
             </div> */}
             <div className="grade-container">
-
                 {!isEditing ? (
-                    isActive ? (
-                            <span>Still in progress can't give grade yet</span>
-                    ) : (
-
-                        <>
-                            <span className="grade-title" onClick={() => setSelectedGradeId(chatId)}>
-                                Click to see {chatId}
+                    <>
+                        <div className="grade-title">{chatId}</div>
+                        <div className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
+                            Click to check
+                        </div>
+                        <div className="grade-feedback">
+                            <span className="grade-display">
+                                {grade ?
+                                    (
+                                        <>
+                                            Grade: {grade}
+                                        </>
+                                    ) :
+                                    ('')}
                             </span>
-                            <span className="grade-display">{grade}</span>
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
-                        </>
-                    )
+                            {/* <span id="feedback" className="w-100 mt-3"> */}
+                            <Feedback token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
+                            {/* </span> */}
+                        </div>
+                    </>
                 ) : (
                     <>
-                        <input
-                            className="grade-input"
-                            type="text"
-                            min="0"
-                            max="100"
-                            ref={input}
-                            placeholder={`${grade}`} />
-                        <button className="save-btn" onClick={changeGrade}>
-                            Save
-                        </button>
+                        <div className="grade-title">{chatId}</div>
+                        <div>
+                            Give the desired grade
+                        </div>
+                        <div className="grade-feedback">
+                            <input
+                                className="grade-input"
+                                type="text"
+                                min="0"
+                                max="100"
+                                ref={input}
+                                placeholder={`${grade}`} />
+                            <button className="save-btn" onClick={changeGrade}>
+                                Save
+                            </button>
+                        </div>
                     </>
                 )}
-            </div>
+            </div >
         </>
 
     )

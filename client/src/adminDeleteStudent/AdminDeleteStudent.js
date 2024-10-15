@@ -40,7 +40,7 @@ function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
         <>
             {/* Button trigger modal */}
             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target={`#deleteStudentModal-${userId}`}>
-                <i id="deleteStudentIcon" className="bi bi-person-x"></i>
+                <i id="deleteStudentIcon" className="bi bi-person-x" style={{color: 'black'}}></i>
             </button>
             {/* Modal */}
             <div className="modal fade" id={`deleteStudentModal-${userId}`} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

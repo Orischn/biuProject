@@ -23,13 +23,13 @@ function StudentStats({ token, selectedStudent }) {
             )
             if (res.status === 200) {
                 res.text().then((practices) => {
-                    setGrades(JSON.parse(practices).reverse().map((practice, key) => {
-                        return <Grade selectedGradeId={selectedGradeId}
-                            setSelectedGradeId={setSelectedGradeId}
-                            token={token} selectedStudent={selectedStudent}
-                            chatId={practice.chatId} grade={practice.grade}
-                            key={key} setGrades={setGrades} setNewGrade={setNewGrade}
-                            isActive={practice.active} />
+                    setGrades(JSON.parse(practices).reverse().filter(practice => !practice.active).map((practice, key) => {
+                            return <Grade selectedGradeId={selectedGradeId}
+                                setSelectedGradeId={setSelectedGradeId}
+                                token={token} selectedStudent={selectedStudent}
+                                chatId={practice.chatId} grade={practice.grade}
+                                key={key} setGrades={setGrades} setNewGrade={setNewGrade}
+                                isActive={practice.active} />
                     }))
                 })
             } else {
@@ -47,19 +47,26 @@ function StudentStats({ token, selectedStudent }) {
             </div> */}
 
             <div id="grades" className="w-100 mt-3">
-                <h5>Grades</h5>
-                <div className="grades-grid">
-                    {grades}
-                </div>
+                {grades.length > 0 ? (
+                    <>
+                        <h5>Check Assignemnts of {selectedStudent.firstName} {selectedStudent.lastName}</h5>
+                        <div className="grades-grid">
+                            {grades}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        No assignemnts had been submitted
+                        by {selectedStudent.firstName} {selectedStudent.lastName} yet
+                    </>
+                )}
+
             </div>
 
             <div id="chatHistory" className="w-100 mt-3">
                 <ChatsHistory token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
             </div>
 
-            <div id="feedback" className="w-100 mt-3">
-                <Feedback token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
-            </div>
         </>
     );
 }
