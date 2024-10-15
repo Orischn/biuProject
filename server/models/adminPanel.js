@@ -74,9 +74,32 @@ async function getSubmissionStatus(taskName) {
     }
 }
 
+async function postFeedback(userId, chatId, feedback) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        await practices.updateOne(
+            { chatId: chatId, userId: userId, active: false },
+            {
+                $set: {
+                    feedback: feedback,
+                },
+            },
+        );
+        return { status: 200, error: '' }
+    } catch (error) {
+        return { status: 500, error: error.message }
+    } finally {
+        await client.close()
+    }
+}
+
 module.exports = {
     uploadFile,
     makeTask,
     getTasks,
     getSubmissionStatus,
+    postFeedback
 };

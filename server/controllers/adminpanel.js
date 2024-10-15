@@ -1,4 +1,4 @@
-const { uploadFile, makeTask, getSubmissionStatus } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const {getId} = require('../models/token');
 const {getUser, getStudents} = require('../models/users');
@@ -40,6 +40,11 @@ const changeGrade = async (req, res) => {
     return res.status(result.status).end(result.error);
 }
 
+const createFeedback = async (req, res) => {
+    const result = await postFeedback(req.body.userId, req.body.chatId, req.body.feedback)
+    return res.status(result.status).end(result.error);
+}
+
 module.exports = {
     uploadCSVTree,
     checkAdmin,
@@ -47,4 +52,5 @@ module.exports = {
     viewSubmissionStatus,
     getStudentPractices,
     changeGrade,
+    createFeedback
 };

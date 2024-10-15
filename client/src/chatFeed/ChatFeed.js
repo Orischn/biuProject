@@ -2,10 +2,12 @@ import BotMessage from "../botMessage/BotMessage";
 import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-const { useState, useEffect, useRef } = require("react");
+const { useState, useEffect, useRef, useCallback } = require("react");
 
 function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage }) {
     const [messages, setMessages] = useState([]);
+    const [grade, setGrade] = useState(null);
+    const [feedback, setFeedback] = useState('');
     const chat = useRef(null);
 
     useEffect(() => {
@@ -35,11 +37,21 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                             return <StudentMessage message={message} />
                         }
                     }));
+                    setGrade(JSON.parse(practice).grade);
+                    setFeedback(JSON.parse(practice).feedback);
                 });
             }
         }
+
         fetchMessages();
     }, [selectedPractice, token])
+
+    const handleClick = useCallback(() => {
+        alert(`Maybe this should be in a modal, but for now...\n
+            your grade is: ${selectedPractice.grade}\n
+            And the feedback of the teacher is: \n 
+            ${selectedPractice.feedback}`);
+      }, []);
 
     return (
         <>
@@ -47,10 +59,25 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
-                            <b className="ms-2 text-white-50">
+                            <b className="ms-2">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
                         </div>
+                        {/*  */}
+                        <div className="d-flex align-items-center">
+                            <b className="ms-2 text-white-50">
+                                {(selectedPractice.grade && selectedPractice.feedback !== '') ?
+                                    (
+                                        <>
+                                            <span id="feedback-link" class="hyperlink">
+                                                click <span id="click-here" onClick={handleClick}>here</span> to see the grade and the teacher's feedback
+                                            </span>
+                                        </>
+                                    )
+                                    : ''}
+                            </b>
+                        </div>
+                        {/*  */}
                         <button type="button"
                             className={`btn btn-danger ${!selectedPractice.active ? 'custom-disabled' : ''}`}
                             disabled={!selectedPractice.active}

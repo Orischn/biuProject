@@ -78,8 +78,8 @@ function StudentFeed({ token, userId }) {
             <div id="window" className="container">
                 <div className="row">
                     <div id="practiceFeed" className="col-3" style={{ overflowY: "auto" }}>
-                        <div id="me" className="d-flex align-items-center w-100 ">
-                            <b className="ms-2 w-100 text-white-50">{fullName}</b>
+                        <div id="me" className="d-flex align-items-center w-100">
+                            <b className="ms-2 w-100">{fullName}</b>
 
                             <ChangePassword token={token} userId={userId} />
                         </div>

@@ -657,6 +657,24 @@ button > i {
     }
 }
 
+/* ---------------------------------------------------------- */
+
+.hyperlink {
+    color: white;
+    cursor: default;
+}
+
+#click-here {
+    color: rgb(154, 210, 229);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#click-here:hover {
+    color: darkblue;
+}
+
+
 
 
   

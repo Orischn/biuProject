@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkAdmin, uploadCSVTree, createTask, viewSubmissionStatus, changeGrade, getStudentPractices } = require('../controllers/adminpanel.js');
+const { checkAdmin, uploadCSVTree, createTask, viewSubmissionStatus, changeGrade, getStudentPractices, createFeedback } = require('../controllers/adminpanel.js');
 const { validateUser } = require("../controllers/token.js");
 const { removeUser, createUser, receiveUser, receiveAllStudents, changePermissions } = require('../controllers/user.js');
 const router = express.Router();
@@ -14,4 +14,5 @@ router.post('/api/deleteUser/', validateUser, checkAdmin, removeUser);
 router.post('/api/updateGrade/', validateUser, checkAdmin, changeGrade)
 router.post('/api/changePermissions/', validateUser, checkAdmin, changePermissions);
 router.post('/api/createTask/', validateUser, checkAdmin, createTask);
+router.post('/api/createFeedback/', validateUser, checkAdmin, createFeedback)
 module.exports = router;

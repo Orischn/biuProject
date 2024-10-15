@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Practice from "../practice/Practice";
 import Grade from "../grade/Grade";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
+import Feedback from "../feedback/Feedback";
 
 
 function StudentStats({ token, selectedStudent }) {
@@ -33,7 +34,7 @@ function StudentStats({ token, selectedStudent }) {
                 })
             } else {
                 res.text().then((error) => {
-                    console.log(error);
+                    alert(error);
                 })
             }
         }
@@ -57,12 +58,7 @@ function StudentStats({ token, selectedStudent }) {
             </div>
 
             <div id="feedback" className="w-100 mt-3">
-                <h5>Feedback</h5>
-                <textarea
-                    placeholder="Enter feedback"
-                    className="form-control feedback-textarea"
-                    rows={3} // You can adjust this for height
-                />
+                <Feedback token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
             </div>
         </>
     );

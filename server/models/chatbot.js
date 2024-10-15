@@ -50,7 +50,8 @@ async function postPractice(userId, chatId) {
             userId: userId,
             chatId: chatId,
             messages: [],
-            grade: 0,
+            grade: null,
+            feedback: '',
             startDate: dateTime,
             submissionDate: null,
             active: true

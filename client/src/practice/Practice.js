@@ -3,25 +3,26 @@ import { useEffect, useState } from "react";
 function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice, setSelectedPractice }) {
     const [isCreated, setIsCreated] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
+    const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
     const handleTaskClick = () => {
         if (!isCreated) {
-            setShowModal(true); // Open the modal if the task is not created
+            setShowModal(true);
         } else {
-            setSelectedTask(task); // Set the selected task
-            add(); // Fetch and display the practice directly for created tasks
+            setSelectedTask(task);
+            add();
         }
     };
 
     const handleConfirm = () => {
-        add(); // Start the task on confirm
-        setSelectedTask(task); // Set the selected task
-        setShowModal(false); // Close the modal
+        add();
+        setSelectedTask(task);
+        setShowModal(false);
     };
 
     const handleCancel = () => {
-        setShowModal(false); // Close the modal on cancel
+        setShowModal(false);
     };
 
     const add = async function () {
@@ -58,6 +59,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
                     setIsCreated(true);
                     setIsFinished(!practice.active);
+                    setIsFeedbackAvailable((practice.grade > 0 && practice.feedback !== ''));
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
@@ -87,6 +89,26 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         </span>
                         <br />
                     </div>
+                </div>
+                <div style={{color: 'blue'}}>
+                    {isFeedbackAvailable ? (
+                        <>
+                            Grade and feedback are available
+                        </>
+                    ) : isFinished ? (
+                        <>
+                            Waiting for checking
+                        </>
+                    ) : isCreated ? (
+                        <>
+                            MAYBE TIMER ALSO HERE?
+                        </>
+                    ) : (
+                        <>
+                            good luck! MAYBE TIME LIMIT
+                        </>
+                    )
+                    }
                 </div>
             </li>
 
