@@ -9,6 +9,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     const [messages, setMessages] = useState([]);
     const [grade, setGrade] = useState(null);
     const [feedback, setFeedback] = useState('');
+    const [showTimer, setShowTimer] = useState(true);
+
     const chat = useRef(null);
 
     useEffect(() => {
@@ -47,33 +49,48 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
         fetchMessages();
     }, [selectedPractice, token])
 
-    const handleClick = useCallback(() => {
+    const handleSeeFeedbackClick = useCallback(() => {
         alert(`Maybe this should be in a modal, but for now...\n
             your grade is: ${selectedPractice.grade}\n
             And the feedback of the teacher is: \n 
             ${selectedPractice.feedback}`);
     }, []);
 
-    const getPracticeFormattedFinishDate = (startDate, minutesToAdd) => {
-        // Replace the space between date and time with 'T' for valid Date parsing
-        const formattedString = startDate.replace(' ', 'T');
+    const handleTimerClick = () => {
+        setShowTimer(!showTimer)
+    }
 
-        // Parse the date string to create a Date object
+    const addMinutesToDateString = (dateString, minutesToAdd) => {
+        // Split the date and time part from the string
+        const [datePart, timePart] = dateString.split(' ');
+
+        // Split the time into hours, minutes, and seconds, and pad each part to ensure it's 2 digits
+        const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
+
+        // Reconstruct the time part with padded values
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+        // Create a valid ISO string by combining the date and padded time
+        const formattedString = `${datePart}T${formattedTime}`;
+
+        // Parse the formatted string into a Date object
         const date = new Date(formattedString);
 
         // Add the specified number of minutes
         date.setMinutes(date.getMinutes() + minutesToAdd);
 
+        // Format the result in yyyy-mm-ddThh:mm:ss
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
 
-        const hours = String(date.getHours()).padStart(2, '0');
-        const mins = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const hoursFormatted = String(date.getHours()).padStart(2, '0');
+        const minutesFormatted = String(date.getMinutes()).padStart(2, '0');
+        const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
 
-        return `${year}-${month}-${day}T${hours}:${mins}:${seconds}`;
+        return `${year}-${month}-${day}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
     };
+
 
     return (
         <>
@@ -92,14 +109,33 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                     (
                                         <>
                                             <span id="feedback-link" class="hyperlink">
-                                                click <span id="click-here" onClick={handleClick}>here</span> to see the grade and the teacher's feedback
+                                                click <span id="click-here" onClick={handleSeeFeedbackClick}>here</span> to see the grade and the teacher's feedback
                                             </span>
                                         </>
                                     )
                                     : (<></>)}
                                 {selectedPractice.active ? (
-                                    <Countdown targetDate={getPracticeFormattedFinishDate(
-                                        selectedPractice.startDate, selectedPractice.duration)} />
+                                    <>
+                                        {showTimer ? (
+                                            <>
+                                                <Countdown targetDate={addMinutesToDateString(
+                                                    selectedPractice.startDate, selectedPractice.duration)} />
+                                                <button type="button"
+                                                    className="btn btn-primary"
+                                                    style={{ height: '5vh', text: 'center' }}
+                                                    onClick={handleTimerClick}>
+                                                    Hide Time
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleTimerClick}>
+                                                Show Time
+                                            </button>
+                                        )}
+
+                                    </>
                                 ) : ('')}
                             </b>
                         </div>
