@@ -11,7 +11,6 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
 
     const createFeedback = async function (e) {
         e.preventDefault();
-
         const feedback = feedbackBar.current.value.trim();
         const res = await fetch('http://localhost:5000/api/createFeedback', {
             'method': 'post',
