@@ -52,7 +52,28 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
             your grade is: ${selectedPractice.grade}\n
             And the feedback of the teacher is: \n 
             ${selectedPractice.feedback}`);
-      }, []);
+    }, []);
+
+    const getPracticeFormattedFinishDate = (startDate, minutesToAdd) => {
+        // Replace the space between date and time with 'T' for valid Date parsing
+        const formattedString = startDate.replace(' ', 'T');
+
+        // Parse the date string to create a Date object
+        const date = new Date(formattedString);
+
+        // Add the specified number of minutes
+        date.setMinutes(date.getMinutes() + minutesToAdd);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const mins = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${mins}:${seconds}`;
+    };
 
     return (
         <>
@@ -75,12 +96,11 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                             </span>
                                         </>
                                     )
-                                    : (
-                                        <>
-                                        <Countdown targetDate={'2024-10-15T20:30:00'} />
-                                        </>
-                                    ) 
-                                    }
+                                    : (<></>)}
+                                {selectedPractice.active ? (
+                                    <Countdown targetDate={getPracticeFormattedFinishDate(
+                                        selectedPractice.startDate, selectedPractice.duration)} />
+                                ) : ('')}
                             </b>
                         </div>
                         {/*  */}

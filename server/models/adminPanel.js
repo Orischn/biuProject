@@ -15,7 +15,7 @@ async function uploadFile(fileName, fileContent) {
     }
 }
 
-async function makeTask(taskName, startingDate, endingDate, users) {
+async function makeTask(taskName, startingDate, endingDate, duration, users) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -30,6 +30,7 @@ async function makeTask(taskName, startingDate, endingDate, users) {
                 taskName: taskName,
                 startDate: startingDate,
                 endDate: endingDate,
+                duration: parseInt(duration),
                 submitList: submitList
             },
         );

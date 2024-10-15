@@ -8,6 +8,7 @@ function AddAssignment({ token }) {
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
     const endDateBar = useRef(null);
+    const durationBar = useRef(null)
     // const durationBar = useRef(null);
 
     const add = async function (e) {
@@ -18,6 +19,7 @@ function AddAssignment({ token }) {
         const name = nameBar.current.value.trim();
         const startDate = startDateBar.current.value.trim();
         const endDate = endDateBar.current.value.trim();
+        const duration = durationBar.current.value.trim();
 
         const res = await fetch('http://localhost:5000/api/createTask', {
             'method': 'post',
@@ -28,7 +30,8 @@ function AddAssignment({ token }) {
             'body': JSON.stringify({
                 "taskName": name,
                 "startDate": new Date(startDate).getTime(),
-                "endDate": new Date(endDate).getTime()
+                "endDate": new Date(endDate).getTime(),
+                "duration": duration
             })
 
         })
@@ -43,6 +46,7 @@ function AddAssignment({ token }) {
             nameBar.current.value = "";
             startDateBar.current.value = "";
             endDateBar.current.value = "";
+            durationBar.current.value = "";
         }
 
     }
@@ -67,6 +71,7 @@ function AddAssignment({ token }) {
                                 <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" />
                                 <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" />
                                 <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" />
+                                <input type="text" ref={durationBar} className="form-control" placeholder="Assignment's duration" />
                                 {/* <input type="text" ref={durationBar} className="form-control" placeholder="How much time? (should be calculated)" /> */}
 
                             </div>

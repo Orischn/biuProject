@@ -45,7 +45,8 @@ function StudentFeed({ token, userId }) {
                         return <Practice task={task} key={key}
                             selectedTask={selectedTask}
                             setSelectedTask={setSelectedTask}
-                            setSelectedPractice={setSelectedPractice} token={token} />
+                            setSelectedPractice={setSelectedPractice} token={token}
+                             />
                     }));
                 });
             }

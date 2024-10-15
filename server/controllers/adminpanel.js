@@ -10,7 +10,7 @@ const uploadCSVTree = async (req, res) => {
 
 const createTask = async (req, res) => {
     const users = await getStudents()
-    const result = await makeTask(req.body.taskName, req.body.startDate, req.body.endDate, users.students);
+    const result = await makeTask(req.body.taskName, req.body.startDate, req.body.endDate, req.body.duration, users.students);
     return res.status(result.status).end(result.error);
 }
 

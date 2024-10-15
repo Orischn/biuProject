@@ -35,6 +35,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
             },
             body: JSON.stringify({
                 chatId: task.taskName,
+                duration: task.duration
             }),
         });
 
@@ -122,8 +123,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                             </div>
                             <div className="modal-body">
                                 Are you sure you want to start <b>{task.taskName}</b>?
-                                This will start a timer of the time you have to finish your practice.
-                                After the time ends, the result will be automatically sent to the teacher, and no changes will be possible afterward.
+                                This will start a timer of {task.duration} minutes.
+                                After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, Cancel</button>
