@@ -49,8 +49,8 @@ function AssignemntStatus({ token, taskName }) {
 
 
         <>
-            <h2 className="settings-title">title</h2>
-            <div className="settings-container">
+            <h2 className="settings-title">{taskName} details</h2>
+            {/* <div className="settings-container"> */}
 
                 <ul className="setting-item">
                     <SearchStudent filter={filter} setFilter={setFilter} />
@@ -81,7 +81,7 @@ function AssignemntStatus({ token, taskName }) {
                 )}
 
 
-            </div>
+            {/* </div> */}
         </>
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-const Countdown = ({ targetDate }) => {
+const Countdown = ({ targetDate, setIsTimeUp }) => {
     const calculateTimeLeft = () => {
         const difference = +new Date(targetDate) - +new Date();
         let timeLeft = {};
@@ -33,7 +33,13 @@ const Countdown = ({ targetDate }) => {
     });
     return (
         <div>
-            {timerComponents.length ? timerComponents : <span>Time's up!</span>}
+            {timerComponents.length ? timerComponents : (
+                <>
+                {setIsTimeUp(true)}
+                <span>Time's up!</span>
+                </>
+            )}
+
         </div>
     );
 };

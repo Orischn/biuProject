@@ -59,7 +59,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
                     </>
                 ) : (
                     <>
-                        <div className="a">
+                        <div>
                             <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
                             go back
                         </div>

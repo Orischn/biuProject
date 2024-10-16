@@ -2,7 +2,7 @@ import { useRef } from "react";
 import BotMessage from "../botMessage/BotMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage }) {
+function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage, isTimeUp }) {
 
     const typeBar = useRef(null);
     const send = async (e) => {
@@ -45,13 +45,13 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
             <span id="messageBar" className="input-group">
                 <form onSubmit={send} className="input-group">
                     <input ref={typeBar} 
-                    className={`form-control input ${!selectedPractice.active ? 'custom-disabled' : ''}`}
+                    className={`form-control input ${(!selectedPractice.active || isTimeUp) ? 'custom-disabled' : ''}`}
                     placeholder="Type a message"
-                    disabled={!selectedPractice.active}/>
+                    disabled={!selectedPractice.active || isTimeUp}/>
                     <button id="sendButton" type="submit" 
-                    className={`btn ${!selectedPractice.active ? 'custom-disabled' : ''}`}
-                    disabled={!selectedPractice.active}>
-                        <i className="bi bi-send" />
+                    className={`btn ${(!selectedPractice.active || isTimeUp)? 'custom-disabled' : ''}`}
+                    disabled={!selectedPractice.active || isTimeUp}>
+                        <i className="bi bi-send" style={{color: 'black'}}/>
                     </button>
                 </form>
             </span>

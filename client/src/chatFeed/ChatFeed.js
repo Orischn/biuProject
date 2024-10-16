@@ -10,6 +10,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     const [grade, setGrade] = useState(null);
     const [feedback, setFeedback] = useState('');
     const [showTimer, setShowTimer] = useState(true);
+    const [isTimeUp, setIsTimeUp] = useState(false);
 
     const chat = useRef(null);
 
@@ -116,10 +117,16 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                     : (<></>)}
                                 {selectedPractice.active ? (
                                     <>
+                                        {/* {isTimeUp ? (
+                                            <><div>times over man</div></>
+                                        ) : (
+                                            <>you good</>
+                                        )} */}
                                         {showTimer ? (
                                             <>
                                                 <Countdown targetDate={addMinutesToDateString(
-                                                    selectedPractice.startDate, selectedPractice.duration)} />
+                                                    selectedPractice.startDate, selectedPractice.duration)}
+                                                    setIsTimeUp={setIsTimeUp} />
                                                 <button type="button"
                                                     className="btn btn-primary"
                                                     style={{ height: '5vh', text: 'center' }}
@@ -141,7 +148,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                         </div>
                         {/*  */}
                         <button type="button"
-                            className={`btn btn-danger ${!selectedPractice.active ? 'custom-disabled' : ''}`}
+                            className={`btn btn-danger ${(!selectedPractice.active) ? 'custom-disabled' : ''}`}
                             disabled={!selectedPractice.active}
                             data-bs-toggle="modal" data-bs-target="#confirmModal">
                             Submit
@@ -157,6 +164,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                     messages={messages}
                     setMessages={setMessages}
                     setLatestMessage={setLatestMessage}
+                    isTimeUp={isTimeUp}
                 />
             </div>
 
