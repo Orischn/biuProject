@@ -103,20 +103,10 @@ function LoginPage({ setToken, setUserId }) {
             </g>
           </svg>
           <h2 className="login-title">LOGIN</h2>
-          <p class="description">Medical history questioning practice - Department of Optometry</p>
+          <p className="description">Medical history questioning practice - Department of Optometry</p>
           <form noValidate className="container-fluid" onSubmit={handleSubmit}>
 
-
-            {/* <div class="input-field">
-              <input type="text" placeholder="Personal ID Number" />
-              <i id="personIcon" className="bi bi-person" />
-            </div>
-            <div class="input-field">
-              <input type="text" placeholder="Secret Password" />
-              <i id="shieldIcon" className="bi bi-shield-lock" />
-            </div> */}
             {infoInputList}
-
 
             <button type="submit" class="sign-in-btn">Sign In</button>
             {error &&
@@ -127,23 +117,6 @@ function LoginPage({ setToken, setUserId }) {
         </div>
       </div>
 
-
-      {/* <div className="rounded-pill"></div>
-      <br /><br /><br />
-      <div className="card">
-        <form noValidate className="container-fluid" onSubmit={handleSubmit}>
-          {infoInputList}
-          <div className="row justify-content-md-center">
-            <div className="col-7">
-              <input type="submit" className="btn btn-primary submit" value="Login" />
-              {error &&
-                <span className="alert alert-danger w-50" role="alert">
-                  {error}
-                </span>}
-            </div>
-          </div>
-        </form>
-      </div> */}
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script>
     </>
   );
