@@ -363,7 +363,7 @@ img {
     scroll-behavior: smooth;
 }
 
-.active {
+.practice-active {
     background-color: rgb(173, 216, 230) !important;
 }
 
@@ -382,19 +382,19 @@ img {
     width: 100%;
     height: 100%;
 }
-
+/* 
 .list-group-item.active {
     background-color: #0d6efd;
     border-radius: 10px; 
-}
+} */
 
 .row {
     height: 100%;
 }
 
 .custom-modal .modal-dialog{
-    width: 70% !important;
-    max-width: 70% !important;
+    width: 90% !important;
+    max-width: 90% !important;
     height: 90vh !important;
     overflow-y: auto;
     border-radius: 12px; 
@@ -411,6 +411,11 @@ img {
 .settingType:hover {
     background-color: lightblue;
     cursor: pointer;
+}
+
+.settingType.active:hover {
+    background-color: #007bff;
+    cursor: auto;
 }
 
 .custom-disabled {

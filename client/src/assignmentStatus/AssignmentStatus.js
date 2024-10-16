@@ -7,6 +7,11 @@ function AssignemntStatus({ token, taskName }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
+    const [isChanged, setIsChanged] = useState(false);
+
+    const refreshData = () => {
+        setIsChanged(!isChanged); // This will trigger the useEffect to refetch the data
+    };
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName) {
@@ -27,16 +32,18 @@ function AssignemntStatus({ token, taskName }) {
                         }
                         return true;
                     }).map((student, key) => {
-                        return <StudentAssignment
+                        return <StudentAssignment token={token}
                             fullname={student.firstName + ' ' + student.lastName}
-                            didSubmit={student.didSubmit} canSubmitLate={student.canSubmitLate} />
+                            userId={student.userId} didSubmit={student.didSubmit}
+                            canSubmitLate={student.canSubmitLate} taskName={taskName}
+                            refreshData={refreshData} />
 
                     }))
                 });
             }
         }
         fetchSubmissionStatus(taskName);
-    }, [token, filter])
+    }, [token, filter, isChanged])
 
     return (
 
@@ -48,6 +55,22 @@ function AssignemntStatus({ token, taskName }) {
                 <ul className="setting-item">
                     <SearchStudent filter={filter} setFilter={setFilter} />
                 </ul>
+
+                <ul>
+                    <div className="row">
+                        <div className="col-2">
+                            <b><u>name</u></b>
+                        </div>
+                        <div className="col-1">
+                        <b><u>id</u></b>
+                        </div>
+                        <div className="col-3">
+                            <b><u>submission status</u></b>
+                        </div>
+
+                    </div>
+                </ul>
+
                 {/* {console.log(studentList)} */}
                 {studentList.length > 0 ? (
                     studentList

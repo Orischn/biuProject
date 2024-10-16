@@ -89,7 +89,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
             <li
                 key={task.taskName}
                 className={`list-group-item practice container
-                    ${selectedTask && selectedTask.taskName === task.taskName ? 'active' : ''}
+                    ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
                 onClick={handleTaskClick} // Adjusted logic to handle created and non-created tasks
             >

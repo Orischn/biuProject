@@ -1,7 +1,7 @@
-const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
-const {getId} = require('../models/token');
-const {getUser, getStudents} = require('../models/users');
+const { getId } = require('../models/token');
+const { getUser, getStudents } = require('../models/users');
 
 const uploadCSVTree = async (req, res) => {
     const result = await uploadFile(req.body.fileName, req.body.CSVTree);
@@ -49,6 +49,16 @@ const createFeedback = async (req, res) => {
     return res.status(result.status).end(result.error);
 }
 
+const allowLateSubmit = async (req, res) => {
+    const result = await giveLateSubmit(req.body.taskName, req.body.userId);
+    return res.status(result.status).end(result.error);
+}
+
+const cancelLateSubmit = async (req, res) => {
+    const result = await takeLateSubmit(req.body.taskName, req.body.userId);
+    return res.status(result.status).end(result.error);
+}
+
 module.exports = {
     uploadCSVTree,
     checkAdmin,
@@ -57,5 +67,7 @@ module.exports = {
     getStudentPractices,
     changeGrade,
     createFeedback,
-    updateTask
+    updateTask,
+    allowLateSubmit,
+    cancelLateSubmit
 };
