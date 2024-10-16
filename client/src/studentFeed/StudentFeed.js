@@ -12,6 +12,7 @@ function StudentFeed({ token, userId }) {
     const [selectedPractice, setSelectedPractice] = useState(null);
     const [fullName, setFullName] = useState("");
     const [latestMessage, setLatestMessage] = useState(null);
+    const [year, setYear] = useState(0);
 
     const finishPractice = async () => {
         const res = await fetch('http://localhost:5000/api/finishPractice/', {
@@ -30,7 +31,7 @@ function StudentFeed({ token, userId }) {
     }
 
     useEffect(() => {
-    
+
         const fetchTasks = async () => {
             const res = await fetch('http://localhost:5000/api/getTasks', {
                 method: 'get',
@@ -41,12 +42,15 @@ function StudentFeed({ token, userId }) {
             });
             if (res.status === 200) {
                 res.text().then((tasks) => {
-                    setTaskList(JSON.parse(tasks).map((task, key) => {
-                        return <Practice task={task} key={key}
-                            selectedTask={selectedTask}
-                            setSelectedTask={setSelectedTask}
-                            setSelectedPractice={setSelectedPractice} token={token}
-                             />
+                    setTaskList(JSON.parse(tasks).reverse().map((task, key) => {
+                        console.log(year, task.year)
+                        if (year === task.year) {
+                            return <Practice task={task} key={key}
+                                selectedTask={selectedTask}
+                                setSelectedTask={setSelectedTask}
+                                setSelectedPractice={setSelectedPractice} token={token}
+                            />
+                        }
                     }));
                 });
             }
@@ -64,13 +68,14 @@ function StudentFeed({ token, userId }) {
             if (res.status === 200) {
                 res.text().then((user) => {
                     setFullName(JSON.parse(user).firstName + " " + JSON.parse(user).lastName);
+                    setYear(JSON.parse(user).year);
                 });
             }
         }
 
         fetchMyName();
         fetchTasks();
-    }, [selectedTask, token, userId])
+    }, [selectedTask, token, userId, year])
 
 
 

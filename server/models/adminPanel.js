@@ -139,6 +139,7 @@ async function giveLateSubmit(taskName, userId) {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
+        const practices = db.collection('practices');
 
         await tasks.updateOne(
             { taskName: taskName, 'submitList.userId': userId },
@@ -147,6 +148,15 @@ async function giveLateSubmit(taskName, userId) {
                     'submitList.$.canSubmitLate': true,
                 }
             }
+        );
+
+        await practices.updateOne(
+            { chatId: taskName, userId: userId},
+            {
+                $set: {
+                    lateSubmit: true,
+                },
+            },
         );
         return { status: 200, error: '' }
     } catch (error) {
@@ -171,6 +181,15 @@ async function takeLateSubmit(taskName, userId) {
                     'submitList.$.canSubmitLate': false,
                 }
             }
+        );
+
+        await practices.updateOne(
+            { chatId: taskName, userId: userId},
+            {
+                $set: {
+                    lateSubmit: false,
+                },
+            },
         );
         return { status: 200, error: '' }
     } catch (error) {

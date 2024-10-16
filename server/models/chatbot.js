@@ -55,7 +55,8 @@ async function postPractice(userId, chatId, duration) {
             startDate: dateTime,
             submissionDate: null,
             duration: duration,
-            active: true
+            active: true,
+            lateSubmit: false
         };
         await practices.insertOne(practice);
         return { status: 200, practice: practice };

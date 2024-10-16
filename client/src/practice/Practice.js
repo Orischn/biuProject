@@ -4,6 +4,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
     const [isCreated, setIsCreated] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
+    // const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false)
     const [showModal, setShowModal] = useState(false);
 
     const handleTaskClick = () => {
@@ -60,7 +61,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
                     setIsCreated(true);
                     setIsFinished(!practice.active);
-                    setIsFeedbackAvailable((practice.grade > 0 && practice.feedback !== ''));
+                    setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
+                    // setIsLateSubmitAllowed(practice.lateSubmit);
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
