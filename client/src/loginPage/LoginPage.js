@@ -22,8 +22,8 @@ function LoginPage({ setToken, setUserId }) {
     {
       title: "Password:",
       iconTitle: "shieldIcon",
-      iconName: "bi bi-shield",
-      placeholder: 'Secret Password',
+      iconName: "bi bi-shield-lock",
+      placeholder: 'Password',
       setValue: setPassword,
       error: passwordError
     }
