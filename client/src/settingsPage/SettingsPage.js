@@ -6,7 +6,7 @@ import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSetti
 function SettingsPage({ token, userId, yearOption }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const settingsOptions = [<GeneralSettingsPage token={token} userId={userId} />,
-    <AssignmentsSettingsPage token={token} />,
+    <AssignmentsSettingsPage token={token} yearOption={yearOption}/>,
     <StudentSettingsPage token={token} yearOption={yearOption} />];
 
     return (

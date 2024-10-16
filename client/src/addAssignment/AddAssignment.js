@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 
-function AddAssignment({ token, refreshData }) {
+function AddAssignment({ token, refreshData, yearOption }) {
 
     const [error, setError] = useState('');
     
@@ -9,7 +9,8 @@ function AddAssignment({ token, refreshData }) {
     const startDateBar = useRef(null);
     const endDateBar = useRef(null);
     const durationBar = useRef(null)
-    // const durationBar = useRef(null);
+
+    // const year = yearOption.current.value;
 
     const add = async function (e) {
         // console.log(startDateBar.current.value.trim(), typeof (startDateBar.current.value.trim()))
@@ -31,7 +32,8 @@ function AddAssignment({ token, refreshData }) {
                 "taskName": name,
                 "startDate": convertTimestampToDate(new Date(startDate).getTime()),
                 "endDate": convertTimestampToDate(new Date(endDate).getTime()),
-                "duration": duration
+                "duration": duration,
+                "year": parseInt(yearOption.current.value)
             })
 
         })
@@ -91,8 +93,6 @@ function AddAssignment({ token, refreshData }) {
                                 <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" />
                                 <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" />
                                 <input type="text" ref={durationBar} className="form-control" placeholder="Assignment's duration" />
-                                {/* <input type="text" ref={durationBar} className="form-control" placeholder="How much time? (should be calculated)" /> */}
-
                             </div>
                             <div className="modal-footer">
                                 {/* {error &&

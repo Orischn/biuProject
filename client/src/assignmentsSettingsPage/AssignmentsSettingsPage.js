@@ -3,7 +3,7 @@ import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
-function AssignmentsSettingsPage({ token }) {
+function AssignmentsSettingsPage({ token, yearOption }) {
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
@@ -53,7 +53,8 @@ function AssignmentsSettingsPage({ token }) {
             <div className="settings-container">
                 {!expand ? (
                     <>
-                        <AddAssignment token={token} refreshData={refreshData}/>
+                    {/* undefined for some reason, continue checking */}
+                        <AddAssignment token={token} refreshData={refreshData} yearOption={yearOption} />
                         {taskList}
                     </>
                 ) : (

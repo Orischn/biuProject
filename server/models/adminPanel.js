@@ -15,14 +15,14 @@ async function uploadFile(fileName, fileContent) {
     }
 }
 
-async function makeTask(taskName, startingDate, endingDate, duration, users) {
+async function makeTask(taskName, startingDate, endingDate, duration, year, users) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         submitList = [];
-        users.map((user) => {
+        users.filter((user) => user.year === year).map((user) => {
             submitList.push({ userId: user.userId, firstName: user.firstName, lastName: user.lastName, didSubmit: false, canSubmitLate: false });
         });
         await tasks.insertOne(
@@ -31,7 +31,8 @@ async function makeTask(taskName, startingDate, endingDate, duration, users) {
                 startDate: startingDate,
                 endDate: endingDate,
                 duration: parseInt(duration),
-                submitList: submitList
+                year: year,
+                submitList: submitList,
             },
         );
         return { status: 200, error: "" };

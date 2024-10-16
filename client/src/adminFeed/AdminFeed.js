@@ -100,8 +100,8 @@ function AdminFeed({ token, userId }) {
                                 <StudentStats token={token} selectedStudent={selectedStudent} />
                             </> :
                             <>
-                                {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}
-                                <AssignmentsSettingsPage token={token} />
+                                <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/>
+                                <AssignmentsSettingsPage token={token} yearOption={yearOption}/>
                             </>
                         }
                     </div>

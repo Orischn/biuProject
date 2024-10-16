@@ -56,6 +56,7 @@ async function postUser(user) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
+    const tasks = db.collection('tasks');
     const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
       return { status: 409, error: "User already exists in the database." };
@@ -72,6 +73,15 @@ async function postUser(user) {
       permissions: false,
       year: parseInt(user.year)
     });
+
+    await tasks.updateMany(
+      { year: parseInt(user.year) },
+      {
+        $push: {
+          submitList: { userId: user.userId, firstName: user.firstName, lastName: user.lastName, didSubmit: false, canSubmitLate: false },
+        },
+      },
+    )
 
     return { status: 201, error: "" };
   } catch (error) {
@@ -139,7 +149,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     //   return { status: 403, error: "Old password isn't correct." };
     // }
 
-    if (oldPassword!== user.password) {
+    if (oldPassword !== user.password) {
       return { status: 403, error: "Old password isn't correct." };
     }
 
