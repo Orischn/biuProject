@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
+import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
 function AssignmentsSettingsPage({ token }) {
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState('');
     const [error, setError] = useState('')
+    const [expand, setExpand] = useState(false);
+    const [selectedTask, setSelectedTask] = useState('');
+
+    const handleUnexpand = () => {
+        setExpand(false)
+        setSelectedTask('');
+    }
+
 
     useEffect(() => {
 
@@ -19,15 +28,16 @@ function AssignmentsSettingsPage({ token }) {
             });
             if (res.status === 200) {
                 res.text().then((tasks) => {
-                    
+
                     setTaskList(JSON.parse(tasks).map((task, key) => {
                         return <AssignmentDetails token={token} taskName={task.taskName}
-                            endDate={task.endDate} setIsChanged={setIsChanged}/>
+                            endDate={task.endDate} setIsChanged={setIsChanged}
+                            setExpand={setExpand} setSelectedTask={setSelectedTask} />
                     }));
                 });
             }
         }
-        
+
         fetchTasks()
     }, [])
 
@@ -37,10 +47,25 @@ function AssignmentsSettingsPage({ token }) {
         <>
             <h2 className="settings-title">Manage Assignments</h2>
             <div className="settings-container">
-                <AddAssignment token={token} />
-                {taskList}
+                {!expand ? (
+                    <>
+                        <AddAssignment token={token} />
+                        {taskList}
+                    </>
+                ) : (
+                    <>
+                        <div className="a">
+                            <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
+                            go back
+                        </div>
+                        <AssignemntStatus token={token} taskName={selectedTask} />
+                        
+                    </>
+                )}
 
             </div>
+
+
         </>
     )
 }

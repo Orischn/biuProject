@@ -100,8 +100,6 @@ function AdminFeed({ token, userId }) {
                                 <StudentStats token={token} selectedStudent={selectedStudent} />
                             </> :
                             <>
-                                {/* PlaceHolder. */}
-                                {/* <AdminAddStudent token={token} /> */}
                                 {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}
                                 <AssignmentsSettingsPage token={token} />
                             </>

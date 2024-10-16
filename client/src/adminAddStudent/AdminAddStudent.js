@@ -75,7 +75,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
             //     userId={userId} year={year} /> ])
 
             setIsChanged(userId + firstName);
-            
+
         }
     }
 
@@ -95,7 +95,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
                         </div>
                         <form onSubmit={add}>
                             <div className="modal-body">
-                                <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id"/>
+                                <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
                                 <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
                                 <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
                                 <input type="text" ref={yearBar} className="form-control" placeholder="year" />

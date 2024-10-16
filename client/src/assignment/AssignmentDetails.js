@@ -1,11 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 
 
-function AssignmentDetails({ token, taskName, endDate, setIsChanged }) {
+function AssignmentDetails({ token, taskName, endDate, setIsChanged, setExpand, setSelectedTask }) {
 
     const [numOfAssigned, setNumOfAssigned] = useState(0);
     const [numOfSubmits, setNumOfSubmits] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+
+
+    const handleExpand = () => {
+        setExpand(true);
+        setSelectedTask(taskName)
+    }
+
+    const handleUnexpand = () => {
+        setExpand(false);
+    }
+
     const [error, setError] = useState('');
     const newTaskNameBar = useRef(null);
     const newEndDateBar = useRef(null)
@@ -46,7 +57,7 @@ function AssignmentDetails({ token, taskName, endDate, setIsChanged }) {
             newEndDateBar.current.value = "";
             setIsEditing(false);
             setIsChanged(newEndDate);
-            
+
         }
     }
 
@@ -90,26 +101,34 @@ function AssignmentDetails({ token, taskName, endDate, setIsChanged }) {
     return (
         <>
             {!isEditing ? (
-                <ul>
-                    <div className="row">
-                        <div className="col-2">
-                            {taskName}
-                        </div>
-                        <div className="col-3">
-                            {numOfSubmits} / {numOfAssigned} submitted
-                            <i className="bi bi-caret-down" style={{ cursor: 'pointer' }} />
-                        </div>
-                        <div className="col-5">
-                            {/* maybe remove the T for design */}
-                            Submission until {endDate}
-                        </div>
+                <>
 
-                        <div className="col-2">
+                    <ul>
+                        <div className="row">
+                            <div className="col-2">
+                                {taskName}
+                            </div>
+                            <div className="col-3">
+                                {numOfSubmits} / {numOfAssigned} submitted
+                            </div>
+                            <div className="col-5">
+                                {/* maybe remove the T for design */}
+                                Submit until {endDate}
+                            </div>
 
-                            <i className="bi bi-pencil" style={{ cursor: 'pointer' }} onClick={() => { setIsEditing(true) }} />
+                            <div className="col-1">
+                                <i className="bi bi-pencil" style={{ cursor: 'pointer' }} onClick={() => { setIsEditing(true) }} />
+                            </div>
+                            <div className="col-1">
+                                <i className="bi bi-caret-right" style={{ cursor: 'pointer' }} onClick={handleExpand} />
+                            </div>
                         </div>
-                    </div>
-                </ul>
+                    </ul>
+
+                    
+                </>
+
+
             ) : (
                 <ul>
                     <div className="row">
@@ -121,7 +140,7 @@ function AssignmentDetails({ token, taskName, endDate, setIsChanged }) {
                         </div>
                         <div className="col-5">
                             {/* needs to be input so we could edit? like in grade? */}
-                            Submission until <input ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "50%" }} />
+                            Submit until <input ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "50%" }} />
                         </div>
 
                         <div className="col-2">
