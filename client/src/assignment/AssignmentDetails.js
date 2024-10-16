@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-function AssignmentDetails({ token, taskName, endDate, setIsChanged, setExpand, setSelectedTask }) {
+function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask }) {
 
     const [numOfAssigned, setNumOfAssigned] = useState(0);
     const [numOfSubmits, setNumOfSubmits] = useState(0);
@@ -56,7 +56,7 @@ function AssignmentDetails({ token, taskName, endDate, setIsChanged, setExpand, 
             newTaskNameBar.current.value = "";
             newEndDateBar.current.value = "";
             setIsEditing(false);
-            setIsChanged(newEndDate);
+            refreshData()
 
         }
     }

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 
-function AddAssignment({ token }) {
+function AddAssignment({ token, refreshData }) {
 
     const [error, setError] = useState('');
     
@@ -47,6 +47,7 @@ function AddAssignment({ token }) {
             startDateBar.current.value = "";
             endDateBar.current.value = "";
             durationBar.current.value = "";
+            refreshData()
         }
 
     }

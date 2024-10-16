@@ -5,7 +5,7 @@ import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
 function AssignmentsSettingsPage({ token }) {
     const [taskList, setTaskList] = useState([]);
-    const [isChanged, setIsChanged] = useState('');
+    const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
     const [expand, setExpand] = useState(false);
     const [selectedTask, setSelectedTask] = useState('');
@@ -13,6 +13,10 @@ function AssignmentsSettingsPage({ token }) {
     const handleUnexpand = () => {
         setExpand(false)
         setSelectedTask('');
+    }
+
+    const refreshData = () => {
+        setIsChanged(!isChanged)
     }
 
 
@@ -31,7 +35,7 @@ function AssignmentsSettingsPage({ token }) {
 
                     setTaskList(JSON.parse(tasks).map((task, key) => {
                         return <AssignmentDetails token={token} taskName={task.taskName}
-                            endDate={task.endDate} setIsChanged={setIsChanged}
+                            endDate={task.endDate} refreshData={refreshData}
                             setExpand={setExpand} setSelectedTask={setSelectedTask} />
                     }));
                 });
@@ -39,7 +43,7 @@ function AssignmentsSettingsPage({ token }) {
         }
 
         fetchTasks()
-    }, [])
+    }, [isChanged])
 
 
 
@@ -49,7 +53,7 @@ function AssignmentsSettingsPage({ token }) {
             <div className="settings-container">
                 {!expand ? (
                     <>
-                        <AddAssignment token={token} />
+                        <AddAssignment token={token} refreshData={refreshData}/>
                         {taskList}
                     </>
                 ) : (

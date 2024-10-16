@@ -121,7 +121,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         </>
                     ) : (
                         <>
-                            submission until {convertTimestampToDateOnly(task.endDate)}
+                            submission until {task.endDate}
                         </>
                     )
                     }
