@@ -1,4 +1,4 @@
-.card {
+/* .card {
     margin: 0 auto;
     padding: 30px;
     width: 75%;
@@ -28,4 +28,75 @@ body {
     margin-left: 10px;
     font-weight: bold;
  }
+ */
 
+
+ .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-title {
+    /* background-color: #004d40; */
+    background-color: darkgreen;
+    color: white;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+input {
+    width: calc(100% - 30px);
+    padding: 10px;
+    padding-left: 35px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.input-field {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+#personIcon, #shieldIcon {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sign-in-btn {
+    /* maybe this one looks better than darkgreen? */
+    /* background-color: #004d40; */   
+    background-color: darkgreen;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.sign-in-btn:hover {
+    background-color: #003d33;
+}
