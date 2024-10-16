@@ -97,10 +97,46 @@ async function postFeedback(userId, chatId, feedback) {
     }
 }
 
+async function changeTask(taskName, newTaskName, newEndDate) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const tasks = db.collection('tasks');
+        const practices = db.collection('practices');
+
+        await tasks.updateOne(
+            { taskName: taskName },
+            {
+                $set: {
+                    taskName: newTaskName,
+                    endDate: newEndDate,
+                },
+            },
+        );
+
+        await practices.updateMany(
+            { chatId: taskName},
+            {
+                $set: {
+                    chatId: newTaskName,
+                },
+            },
+        );
+
+        return { status: 200, error: '' }
+    } catch (error) {
+        return { status: 500, error: error.message }
+    } finally {
+        await client.close()
+    }
+}
+
 module.exports = {
     uploadFile,
     makeTask,
     getTasks,
     getSubmissionStatus,
-    postFeedback
+    postFeedback,
+    changeTask
 };

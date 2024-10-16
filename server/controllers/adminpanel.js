@@ -1,4 +1,4 @@
-const { uploadFile, makeTask, getSubmissionStatus, postFeedback } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const {getId} = require('../models/token');
 const {getUser, getStudents} = require('../models/users');
@@ -17,7 +17,6 @@ const createTask = async (req, res) => {
 const checkAdmin = async (req, res, next) => {
     const userId = await getId(req.headers.authorization);
     const result = await getUser(userId);
-    // console.log(result.user.permissions)
     if (result.user.permissions) {
         return next();
     } else {
@@ -40,6 +39,11 @@ const changeGrade = async (req, res) => {
     return res.status(result.status).end(result.error);
 }
 
+const updateTask = async (req, res) => {
+    const result = await changeTask(req.body.taskName, req.body.newTaskName, req.body.newEndDate)
+    return res.status(result.status).end(result.error);
+}
+
 const createFeedback = async (req, res) => {
     const result = await postFeedback(req.body.userId, req.body.chatId, req.body.feedback)
     return res.status(result.status).end(result.error);
@@ -52,5 +56,6 @@ module.exports = {
     viewSubmissionStatus,
     getStudentPractices,
     changeGrade,
-    createFeedback
+    createFeedback,
+    updateTask
 };
