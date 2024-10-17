@@ -1,5 +1,34 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+
+// Create a transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'some.new.mail1@gmail.com',
+    pass: 'hxqx grrl lieh urdw', // or use an app password for Gmail
+  },
+});
+
+const sendEmail = (toEmail, subject, html) => {
+  const mailOptions = {
+    from: 'some.new.mail1@gmail.com',
+    to: toEmail,
+    subject: subject,
+    html: html,
+  };
+
+  // 
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error: ' + error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
 
 
 async function getUser(userId) {
@@ -62,14 +91,19 @@ async function postUser(user) {
       return { status: 409, error: "User already exists in the database." };
     }
 
+    sendEmail(`${user.email}`, 'Your password for first login',
+       `Hello ${user.firstName} ${user.lastName}, your password is: <b>${user.password}</b><br />
+       Use this password for your first login to the app.<br />
+       We strongly advise you to change this password after you logged in successfully`);
+
     //Hashing the user's password with salt
-    // const hashedPassword = await hashPassword(user.password);
+    const hashedPassword = await hashPassword(user.password);
 
     await users.insertOne({
       userId: user.userId,
       firstName: user.firstName,
       lastName: user.lastName,
-      password: user.password,
+      password: hashedPassword,
       permissions: false,
       year: parseInt(user.year)
     });
@@ -145,20 +179,21 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    // if (await bcrypt.compare(oldPassword, user.password)) {
-    //   return { status: 403, error: "Old password isn't correct." };
-    // }
 
-    if (oldPassword !== user.password) {
+    if (!await bcrypt.compare(oldPassword, user.password)) {
       return { status: 403, error: "Old password isn't correct." };
     }
 
-    // const hashedNewPassword = await hashPassword(newPassword)
+    // if (oldPassword !== user.password) {
+    //   return { status: 403, error: "Old password isn't correct." };
+    // }
+
+    const hashedNewPassword = await hashPassword(newPassword)
 
     await users.updateOne({ userId: user.userId },
       {
         $set: {
-          password: newPassword
+          password: hashedNewPassword
         }
       }
     );

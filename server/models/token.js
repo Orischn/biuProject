@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcrypt');
 const key = "Sara shara shir sameihah shir sameihah shara Sara";
+
 
 const checkToken = async (authorization) => {
     if (authorization) {
@@ -22,9 +24,16 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({ userId: user.userId, password: user.password });
+
+        const existingUser = await users.findOne({ userId: user.userId });
         if (!existingUser) {
             return { status: 404, token: "User doesn't exist." };
+        }
+
+        // Compare the input password with the stored hashed password
+        const passwordMatch = await bcrypt.compare(user.password, existingUser.password);
+        if (!passwordMatch) {
+            return { status: 401, token: "Password is incorrect." };
         }
         const token = jwt.sign(user.userId, key);
         return { status: 200, token: token };

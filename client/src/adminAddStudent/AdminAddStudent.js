@@ -8,6 +8,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
     const firstNameBar = useRef(null);
     const lastNameBar = useRef(null);
     const yearBar = useRef(null);
+    const emailBar = useRef(null);
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
 
@@ -30,6 +31,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
         const lastName = lastNameBar.current.value.trim();
         const year = yearBar.current.value.trim();
         const password = generateRandomPassword();
+        const email = emailBar.current.value.trim();
 
         // console.log(userId, firstName, lastName, password)
 
@@ -46,7 +48,8 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
                     "firstName": firstName,
                     "lastName": lastName,
                     "userId": userId,
-                    "year": year
+                    "year": year,
+                    "email": email
                 }
             })
 
@@ -69,6 +72,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
             firstNameBar.current.value = "";
             lastNameBar.current.value = "";
             yearBar.current.value = "";
+            emailBar.current.value="";
 
             // setStudentList([...studentList, <StudentDetails token={token}
             //     fullName={firstName + ' ' + lastName}
@@ -99,6 +103,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
                                 <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
                                 <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
                                 <input type="text" ref={yearBar} className="form-control" placeholder="year" />
+                                <input type="text" ref={emailBar} className="form-control" placeholder="Student's email address" />
 
                             </div>
                             <div className="modal-footer">
@@ -111,6 +116,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
                                     firstNameBar.current.value = '';
                                     lastNameBar.current.value = '';
                                     yearBar.current.value = '';
+                                    emailBar.current.value='';
                                     setError('');
                                 }}
                                     className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
