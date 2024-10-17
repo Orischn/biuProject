@@ -4,6 +4,24 @@ import Feedback from "../feedback/Feedback";
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade, isActive }) {
 
     var input = useRef(null);
+
+    const [inputGrade, setInputGrade] = useState(null);
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+
+        // Allow only numeric input and enforce range between 0 and 100
+        if (!isNaN(value) && value >= 0 && value <= 100) {
+            setInputGrade(value);
+        } 
+
+        // maybe she would like to cancel the grade???
+        // else if (value === "") {
+        //     // Allow clearing the input field
+        //     setInputGrade("");
+        // }
+    };
+
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
@@ -14,8 +32,15 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     const changeGrade = async () => {
 
-        if (!input.current.value.trim()) {
-            alert('grade must be a number')
+        if (input.current.value.trim() === '') {
+            alert('must enter a valid grade');
+            return;
+        }
+
+        const gradeValue = Number(input.current.value.trim());
+
+        if (isNaN(gradeValue) || gradeValue < 0 && gradeValue > 100) {
+            alert('grade must be a number between 0 to 100')
             return;
         }
 
@@ -28,7 +53,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             'body': JSON.stringify({
                 "userId": selectedStudent.userId,
                 "chatId": chatId,
-                "newGrade": input.current.value
+                "newGrade": gradeValue
             })
         })
         if (res === 500) {
@@ -94,7 +119,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                 min="0"
                                 max="100"
                                 ref={input}
-                                placeholder={`${grade}`} />
+                                value={inputGrade}
+                                onChange={handleChange} />
                             <button className="save-btn" onClick={changeGrade}>
                                 Save
                             </button>
