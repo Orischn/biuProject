@@ -39,6 +39,7 @@ function StudentStats({ token, selectedStudent }) {
             }
         }
         fetchGrades()
+        setSelectedGradeId('');
     }, [selectedStudent, token, newGrade])
     return (
         <>
