@@ -15,11 +15,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     const chat = useRef(null);
 
     useEffect(() => {
-        chat.current.scrollTop = chat.current.scrollHeight;
-        setLatestMessage(null);
-    }, [selectedPractice, latestMessage])
 
-    useEffect(() => {
+        
         const fetchMessages = async () => {
             if (!selectedPractice) {
                 return;
@@ -47,8 +44,10 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
             }
         }
 
+        chat.current.scrollTop = chat.current.scrollHeight;
+        setLatestMessage(null);
         fetchMessages();
-    }, [selectedPractice, token])
+    }, [selectedPractice, token, latestMessage])
 
     const handleSeeFeedbackClick = useCallback(() => {
         alert(`Maybe this should be in a modal, but for now...\n

@@ -17,7 +17,7 @@ const Countdown = ({ targetDate, setIsTimeUp }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
-        }, 1000);
+        }, 1);
         return () => clearTimeout(timer);
     });
     const timerComponents = [];
@@ -33,12 +33,18 @@ const Countdown = ({ targetDate, setIsTimeUp }) => {
     });
     return (
         <div>
-            {timerComponents.length ? timerComponents : (
-                <>
-                {setIsTimeUp(true)}
-                <span>Time's up!</span>
-                </>
-            )}
+            {timerComponents.length ?
+                (
+                    <>
+                        {setIsTimeUp(false)}
+                        {timerComponents}
+                    </>
+                ) : (
+                    <>
+                        {setIsTimeUp(true)}
+                        <span>Time's up!</span>
+                    </>
+                )}
 
         </div>
     );
