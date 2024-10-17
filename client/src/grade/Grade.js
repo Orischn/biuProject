@@ -16,10 +16,10 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         } 
 
         // maybe she would like to cancel the grade???
-        // else if (value === "") {
-        //     // Allow clearing the input field
-        //     setInputGrade("");
-        // }
+        else if (value === "") {
+            // Allow clearing the input field
+            setInputGrade("");
+        }
     };
 
     const [isEditing, setIsEditing] = useState(false);
@@ -32,10 +32,10 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     const changeGrade = async () => {
 
-        if (input.current.value.trim() === '') {
-            alert('must enter a valid grade');
-            return;
-        }
+        // if (input.current.value.trim() === '') {
+        //     alert('must enter a valid grade');
+        //     return;
+        // }
 
         const gradeValue = Number(input.current.value.trim());
 

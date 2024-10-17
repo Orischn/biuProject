@@ -31,7 +31,7 @@ async function getPractices(userId) {
 }
 
 
-async function postPractice(userId, chatId, duration) {
+async function postPractice(userId, chatId, durationHours, durationMinutes) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -54,7 +54,8 @@ async function postPractice(userId, chatId, duration) {
             feedback: '',
             startDate: dateTime,
             submissionDate: null,
-            duration: duration,
+            durationHours: durationHours,
+            durationMinutes: durationMinutes,
             active: true,
             lateSubmit: false
         };

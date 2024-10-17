@@ -1,142 +1,3 @@
- /* img {
-    height: 45px;
-    width: 45px;
-}
-
-.practice {
-    background-color: rgb(240, 240, 240);
-    border-color: lightgray;
-    height: 10%;
-}
-
-.practice:hover {
-    background-color: lightblue;
-    cursor: pointer;
-}
-
-.input{
-    color: black;
-}
-
-.input:focus {
-    color: black;
-    box-shadow: none;
-}
-
-.input::placeholder {
-    color: black;
-}
-
-.input:focus::placeholder {
-    color: transparent;
-}
-
-.botMessage {
-    position: relative;
-    top: 20px;
-    left: 20px;
-    border-radius: 10px;
-    background-color: rgb(210, 210, 210);
-    color: black;
-    width: fit-content;
-    max-width: 300px;
-    padding: 10px;
-    margin: 1px;
-}
-
-.studentMessage {
-    position: relative;
-    top: 20px;
-    right: 20px;
-    border-radius: 10px;
-    background-color: rgb(143, 163, 244);
-    color: black;
-    width: fit-content;
-    max-width: 300px;
-    padding: 10px;
-    margin: 1px;
-}
-
-.date {
-    float: right;
-}
-
-#me {
-    background-color: rgb(230, 230, 230);
-    height: 10%;
-}
-
-#searchBar > input {
-    background-color: rgb(230, 230, 230);
-    border: none;
-    margin-right: 3px;
-}
-
-#searchBar > input:focus {
-    background-color: rgb(230, 230, 230);
-}
-
-#searchBar > span {
-    background-color: rgb(230, 230, 230);
-    border: none;
-}
-
-#searchBar > span > i {
-    color: black;
-}
-
-#searchBar {
-    width: 90%;
-}
-
-#messageBar > input {
-    background-color: rgb(240, 240, 240);
-    border-color: lightgray;
-    border-radius: 7px;
-    margin-right: 5px;
-}
-
-#messageBar > input:focus {
-    background-color: rgb(240, 240, 240);
-    border-color: lightgray;
-}
-
-#messageBar > button {
-    background-color: rgb(220, 220, 230);
-    color: black;
-    border: none;
-}
-
-#messageBar > button:focus {
-    border: none;
-}
-
-#messageBar {
-    margin-top: 2%;
-}
-
-#plus {
-    color: black;
-}
-
-#addPractice {
-    color: black;
-}
-
-#chat {
-    background-color: white;
-    height: 79%;
-    
-}
-
-#chatFeed {
-    background-color: rgb(220, 220, 230);
-}
-
-#practiceFeed {
-    background-color: rgb(240, 240, 240);
-}
-
 #window {
     max-width: 100%;
     max-height: 100%;
@@ -153,10 +14,6 @@
     height: 100%;
 }
 
-.custom-modal-width {
-    width: 70% !important;
-    max-width: 70% !important;
-}
 
 .settingType:hover {
     background-color: lightblue;
@@ -208,13 +65,6 @@ img {
 .input:focus::placeholder {
     color: transparent;
 }
-
-/* .botMessage, .studentMessage {
-    border-radius: 15px; 
-    padding: 15px; 
-    margin: 5px; 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
-} */
 
 .botMessage {
     position: relative;
@@ -636,7 +486,7 @@ button > i {
   .modal-overlay {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 100;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.3); /* Darker overlay */
@@ -646,6 +496,23 @@ button > i {
     z-index: 1050;
     /* Remove or set padding-top to 0 if it's currently affecting position */
 }
+
+.modal-dialog-custom {
+    position: relative;
+    left: 100;
+    width: 50% !important;
+    max-width: 50% !important;
+    height: 90vh !important;
+    overflow-y: auto;
+    border-radius: 12px;
+    align-self: center;
+}
+
+
+.modal-dialog-custom::-webkit-scrollbar {
+    display: none;
+}
+
 
 /* Modal Content */
 .modal-content {
@@ -684,23 +551,4 @@ button > i {
     color: darkblue;
 }
 
-
-
-/* -------------------------------trying------------------------------------- */
-
-/* .modal:nth-of-type(even) {
-    z-index: 1700 !important;
-}
-.modal-backdrop.show:nth-of-type(even) {
-    z-index: 1699 !important;
-}
-   */
-
-   /* modal backdrop fix */
-/* .modal:nth-of-type(even) {
-    z-index: 1052 !important;
-}
-.modal-backdrop.show:nth-of-type(even) {
-    z-index: 1051 !important;
-} */
 

@@ -82,7 +82,7 @@ function ChangePassword({ token, userId }) {
 
             {showModal && (
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header text-white">
                                 <h5 className="modal-title">Change your Password</h5>

@@ -60,36 +60,37 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
         setShowTimer(!showTimer)
     }
 
-    const addMinutesToDateString = (dateString, minutesToAdd) => {
+    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
         // Split the date and time part from the string
         const [datePart, timePart] = dateString.split(' ');
-
+      
         // Split the time into hours, minutes, and seconds, and pad each part to ensure it's 2 digits
         const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
-
+      
         // Reconstruct the time part with padded values
         const formattedTime = `${hours}:${minutes}:${seconds}`;
-
+      
         // Create a valid ISO string by combining the date and padded time
         const formattedString = `${datePart}T${formattedTime}`;
-
+      
         // Parse the formatted string into a Date object
         const date = new Date(formattedString);
-
-        // Add the specified number of minutes
+      
+        // Add the specified number of hours and minutes
+        date.setHours(date.getHours() + hoursToAdd);
         date.setMinutes(date.getMinutes() + minutesToAdd);
-
+      
         // Format the result in yyyy-mm-ddThh:mm:ss
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-
+      
         const hoursFormatted = String(date.getHours()).padStart(2, '0');
         const minutesFormatted = String(date.getMinutes()).padStart(2, '0');
         const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
-
+      
         return `${year}-${month}-${day}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
-    };
+      };
 
 
     return (
@@ -123,8 +124,9 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                         )} */}
                                         {showTimer ? (
                                             <>
-                                                <Countdown targetDate={addMinutesToDateString(
-                                                    selectedPractice.startDate, selectedPractice.duration)}
+                                                <Countdown targetDate={addTimeToDateString(
+                                                    selectedPractice.startDate, selectedPractice.durationHours,
+                                                selectedPractice.durationMinutes)}
                                                     setIsTimeUp={setIsTimeUp} />
                                                 <button type="button"
                                                     className="btn btn-primary"

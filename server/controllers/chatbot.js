@@ -21,7 +21,7 @@ const addPractice = async (req, res) => {
     const userId = await getId(req.headers.authorization);
     const existingPractice = await getPractice(req.body.chatId, userId);
     if (!existingPractice.practice) {
-        const result = await postPractice(userId, req.body.chatId, req.body.duration);
+        const result = await postPractice(userId, req.body.chatId, req.body.durationHours, req.body.durationMinutes);
         return res.status(result.status).end(JSON.stringify(result.practice));
     }
     return res.status(existingPractice.status).end(JSON.stringify(existingPractice.practice));

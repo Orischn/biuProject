@@ -36,7 +36,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
             },
             body: JSON.stringify({
                 chatId: task.taskName,
-                duration: task.duration
+                durationHours: task.durationHours,
+                durationMinutes: task.durationMinutes
             }),
         });
 
@@ -71,20 +72,20 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
         fetchPractice();
     }, [selectedTask, task.taskName, token]);
 
-    
 
-      const convertTimestampToDateOnly = (timestamp) => {
+
+    const convertTimestampToDateOnly = (timestamp) => {
         // Create a Date object from the timestamp
         const date = new Date(timestamp);
-      
+
         // Extract and format the year, month, and day
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const day = String(date.getDate()).padStart(2, '0');
-      
+
         // Return the formatted date string (yyyy-mm-dd)
         return `${day}/${month}/${year}`;
-      };
+    };
 
     return (
         <>
@@ -108,7 +109,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         <br />
                     </div>
                 </div>
-                <div style={{color: 'blue'}}>
+                <div style={{ color: 'blue' }}>
                     {isFeedbackAvailable ? (
                         <>
                             Grade and feedback are available
@@ -131,7 +132,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
             </li>
 
             {showModal && (
-                <div className="modal show d-block" tabIndex="-1" role="dialog">
+                <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
@@ -139,8 +140,12 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                                 <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
                             </div>
                             <div className="modal-body">
-                                Are you sure you want to start <b>{task.taskName}</b>?
-                                This will start a timer of {task.duration} minutes.
+                                Are you sure you want to start <b>{task.taskName}</b>?<br />
+                                This will start a timer of&nbsp;
+                                <b>{task.durationHours > 0 ? (
+                                    `${task.durationHours} hours and `
+                                ) : ('')}
+                                {task.durationMinutes} minutes.</b><br />
                                 After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
                             </div>
                             <div className="modal-footer">
