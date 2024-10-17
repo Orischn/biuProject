@@ -55,6 +55,7 @@ function GeneralSettingsPage({ token, userId }) {
                 <div className="setting-item">
                     <label htmlFor="changePassword">Change your password</label>
                     <ChangePassword token={token} userId={userId} />
+                    <div>123</div>
                 </div>
 
                 {/* <div class="setting-item">
