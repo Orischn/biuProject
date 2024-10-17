@@ -43,7 +43,6 @@ function StudentFeed({ token, userId }) {
             if (res.status === 200) {
                 res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).reverse().map((task, key) => {
-                        console.log(year, task.year)
                         if (year === task.year) {
                             return <Practice task={task} key={key}
                                 selectedTask={selectedTask}

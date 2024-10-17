@@ -33,7 +33,6 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
         const password = generateRandomPassword();
         const email = emailBar.current.value.trim();
 
-        // console.log(userId, firstName, lastName, password)
 
         const res = await fetch('http://localhost:5000/api/createUser', {
             'method': 'post',

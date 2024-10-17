@@ -71,7 +71,6 @@ function AssignemntStatus({ token, taskName }) {
                     </div>
                 </ul>
 
-                {/* {console.log(studentList)} */}
                 {studentList.length > 0 ? (
                     studentList
                 ) : (
