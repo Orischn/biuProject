@@ -131,6 +131,7 @@ async function deleteUser(user) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
+    const tasks = db.collection('tasks');
     const existingUser = await users.findOne({ userId: user.userId });
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
@@ -138,6 +139,17 @@ async function deleteUser(user) {
     const practices = db.collection('practices');
     await practices.deleteMany({ userId: user.userId });
     await users.deleteOne({ userId: user.userId });
+
+    await tasks.updateMany(
+      { 'submitList.userId': user.userId },
+      {
+        $pull: {
+          submitList: { userId: user.userId },
+        },
+      },
+    )
+
+
     return { status: 200, error: "" };
   }
   catch (error) {

@@ -4,13 +4,15 @@ import StudentDetails from "../studentDetails/StudentDetails";
 
 function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
 
+    const [isSuccessful, setIsSuccessful] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
     const userIdBar = useRef(null);
     const firstNameBar = useRef(null);
     const lastNameBar = useRef(null);
     const yearBar = useRef(null);
     const emailBar = useRef(null);
     const [error, setError] = useState('');
-    const [isSuccessful, setIsSuccessful] = useState(false);
 
     const generateRandomPassword = () => {
         const length = 12;
@@ -22,6 +24,37 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
         return password;
     };
 
+    const handleClick = () => {
+        setShowModal(true)
+        // if (!isCreated) {
+        //     setShowModal(true);
+        // } else {
+        //     setSelectedTask(task);
+        //     add();
+        // }
+    };
+
+    const handleSubmit = (e) => {
+        add(e);
+        userIdBar.current.value = '';
+        firstNameBar.current.value = '';
+        lastNameBar.current.value = '';
+        yearBar.current.value = '';
+        emailBar.current.value = '';
+
+        // setShowModal(false);
+    };
+
+    const handleCancel = () => {
+        userIdBar.current.value = '';
+        firstNameBar.current.value = '';
+        lastNameBar.current.value = '';
+        yearBar.current.value = '';
+        emailBar.current.value = '';
+        setShowModal(false);
+        // setError('');
+
+    };
 
     const add = async function (e) {
         e.preventDefault();
@@ -67,64 +100,66 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
             setError("Added Successfully");
             setIsSuccessful(true);
 
-            userIdBar.current.value = "";
-            firstNameBar.current.value = "";
-            lastNameBar.current.value = "";
-            yearBar.current.value = "";
-            emailBar.current.value="";
+            // userIdBar.current.value = "";
+            // firstNameBar.current.value = "";
+            // lastNameBar.current.value = "";
+            // yearBar.current.value = "";
+            // emailBar.current.value = "";
 
             // setStudentList([...studentList, <StudentDetails token={token}
             //     fullName={firstName + ' ' + lastName}
             //     userId={userId} year={year} /> ])
 
-            setIsChanged(userId + firstName);
+            setIsChanged(userId + firstName); //probably there is a better way to do so...
 
         }
     }
 
     return (
         <>
-            {/* Button trigger modal */}
-            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                <i id="addStudent" className="bi bi-person-fill-add" />
-            </button>
-            {/* Modal */}
-            <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header text-white">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">ADD STUDENT</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form onSubmit={add}>
-                            <div className="modal-body">
-                                <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
-                                <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
-                                <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
-                                <input type="text" ref={yearBar} className="form-control" placeholder="year" />
-                                <input type="text" ref={emailBar} className="form-control" placeholder="Student's email address" />
 
+
+            {/* Button trigger modal */}
+            <button type="button" className="btn" onClick={handleClick}>
+                <i id="addStudent" className="bi bi-person-fill-add" style={{ color: "black" }} />
+            </button>
+
+            {/* Modal */}
+            {showModal && (
+                // check first line for backdrop
+                <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
+                        <div className="modal-content">
+                            <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
+                                <h5 className="modal-title text-white">ADD STUDENT</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
                             </div>
-                            <div className="modal-footer">
-                                {error &&
-                                    <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                        {error}
-                                    </span>}
-                                <button type="button" onClick={() => {
-                                    userIdBar.current.value = '';
-                                    firstNameBar.current.value = '';
-                                    lastNameBar.current.value = '';
-                                    yearBar.current.value = '';
-                                    emailBar.current.value='';
-                                    setError('');
-                                }}
-                                    className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" className="btn btn-primary">Add Student</button>
-                            </div>
-                        </form>
+
+
+                            <form onSubmit={handleSubmit}>
+                                <div className="modal-body">
+                                    <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
+                                    <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
+                                    <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
+                                    <input type="text" ref={yearBar} className="form-control" placeholder="year" />
+                                    <input type="text" ref={emailBar} className="form-control" placeholder="Student's email address" />
+
+                                </div>
+                                <div className="modal-footer">
+                                    {error &&
+                                        <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+                                            {error}
+                                        </span>}
+                                    <button type="button" className="btn btn-secondary" onClick={handleCancel} >Cancel</button>
+                                    <button type="submit" className="btn btn-primary">Add Student</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div >
+            )}
+
+
         </>
     );
 }

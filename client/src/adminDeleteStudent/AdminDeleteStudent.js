@@ -5,6 +5,16 @@ function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
 
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleClick = () => {
+        setShowModal(true);
+    }
+
+    const handleCancel = () => {
+        setError('');
+        setShowModal(false);
+    }
 
 
     const deleteStudent = async function (e) {
@@ -32,45 +42,47 @@ function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
         else {
             // setError("Deleted Successfully");
             setIsSuccessful(true);
-            setIsChanged(userId);
+            // setIsChanged(userId);
+            setShowModal(false);
         }
     }
 
     return (
         <>
             {/* Button trigger modal */}
-            <button type="button" className="btn" data-bs-toggle="modal" data-bs-target={`#deleteStudentModal-${userId}`}>
-                <i id="deleteStudentIcon" className="bi bi-person-x" style={{color: 'black'}}></i>
+            <button type="button" className="btn" onClick={handleClick}>
+                <i id="deleteStudentIcon" className="bi bi-person-x" style={{ color: 'black' }}></i>
+
             </button>
+
             {/* Modal */}
-            <div className="modal fade" id={`deleteStudentModal-${userId}`} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header text-white">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">DELETE STUDENT</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                onClick={() => setError('')}></button>
-                        </div>
-                        <div className="modal-body">
-                            Are you sure tou want to delete {fullName} from your course?
-                            <br />
-                            This action is ireversible!
-                        </div>
-
-
-                        <div className="modal-footer">
-                            {error &&
-                                <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                    {error}
-                                </span>}
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"
-                                onClick={() => setError('')}>No, cancel</button>
-                            <button type="button" className="btn btn-primary" 
-                                onClick={() => deleteStudent()}>Yes, delete {fullName}</button>
+            {showModal && (
+                // check first line for backdrop
+                <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
+                        <div className="modal-content">
+                            <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
+                                <h5 className="modal-title text-white">DELETE STUDENT</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                            </div>
+                            <div className="modal-body">
+                                Are you sure tou want to delete {fullName} from your course?
+                                <br />
+                                This action is ireversible!
+                            </div>
+                            <div className="modal-footer">
+                                {error &&
+                                    <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+                                        {error}
+                                    </span>}
+                                <button type="button" className="btn btn-secondary"onClick={handleCancel}>No, cancel</button>
+                                <button type="button" className="btn btn-primary"
+                                    onClick={() => deleteStudent()}>Yes, delete {fullName}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div >
+            )}
         </>
     );
 }
