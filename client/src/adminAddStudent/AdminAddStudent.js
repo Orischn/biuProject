@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StudentDetails from "../studentDetails/StudentDetails";
 
 
-function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
+function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -41,8 +41,8 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
         lastNameBar.current.value = '';
         yearBar.current.value = '';
         emailBar.current.value = '';
-
-        // setShowModal(false);
+        refreshData();
+        setShowModal(false);
     };
 
     const handleCancel = () => {
@@ -98,7 +98,9 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
         else {
 
             setError("Added Successfully");
+            // refreshData()
             setIsSuccessful(true);
+            // setShowModal(false);
 
             // userIdBar.current.value = "";
             // firstNameBar.current.value = "";
@@ -110,7 +112,7 @@ function AdminAddStudent({ token, studentList, setStudentList, setIsChanged }) {
             //     fullName={firstName + ' ' + lastName}
             //     userId={userId} year={year} /> ])
 
-            setIsChanged(userId + firstName); //probably there is a better way to do so...
+            // setIsChanged(userId + firstName); //probably there is a better way to do so...
 
         }
     }

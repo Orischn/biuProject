@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
+function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
 
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
@@ -43,6 +43,7 @@ function AdminDeleteStudent({ token, userId, fullName, setIsChanged }) {
             // setError("Deleted Successfully");
             setIsSuccessful(true);
             // setIsChanged(userId);
+            refreshData();
             setShowModal(false);
         }
     }

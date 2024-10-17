@@ -1,7 +1,7 @@
 import AdminDeleteStudent from "../adminDeleteStudent/AdminDeleteStudent";
 
 
-function StudentDetails({ token, fullName, userId, year, setIsChanged }) {
+function StudentDetails({ token, fullName, userId, year, refreshData }) {
 
     return (
         <ul>
@@ -23,7 +23,7 @@ function StudentDetails({ token, fullName, userId, year, setIsChanged }) {
                 <div className="col-3">
                     Delete Student
                     <AdminDeleteStudent token={token} userId={userId} fullName={fullName}
-                    setIsChanged={setIsChanged} />
+                    refreshData={refreshData}/>
                 </div>
             </div>
         </ul>

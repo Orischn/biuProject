@@ -3,10 +3,16 @@ import StudentDetails from "../studentDetails/StudentDetails"
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import SearchStudent from "../searchStudent/SearchStudent";
 
-function StudentSettingsPage({ token, isChanged, setIsChanged, yearOption }) {
+function StudentSettingsPage({ token, yearOption }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
+    const [isChanged, setIsChanged] = useState(false);
+
+    const refreshData = () => {
+        setIsChanged(!isChanged);
+    }
+
 
     useEffect(() => {
         const fetchStudents = async (filter) => {
@@ -30,7 +36,7 @@ function StudentSettingsPage({ token, isChanged, setIsChanged, yearOption }) {
                         if (user.year === parseInt(yearOption.current.value))
                         return <StudentDetails key={key} token={token}
                             fullName={user.firstName + ' ' + user.lastName}
-                            userId={user.userId} year={user.year} setIsChanged={setIsChanged} />
+                            userId={user.userId} year={user.year} refreshData={refreshData} />
                     }));
                 });
             }
@@ -47,7 +53,7 @@ function StudentSettingsPage({ token, isChanged, setIsChanged, yearOption }) {
                     <SearchStudent filter={filter} setFilter={setFilter} />
                     Add Student
                     <AdminAddStudent token={token} studentList={studentList}
-                        setStudentList={setStudentList} setIsChanged={setIsChanged} />
+                        setStudentList={setStudentList} refreshData={refreshData} />
                 </ul>
                 {studentList.length > 0 ? (
                      studentList 
