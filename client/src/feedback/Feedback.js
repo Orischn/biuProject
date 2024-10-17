@@ -5,6 +5,7 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
 
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
+    const [feedbackSent, setFeedbackSent] = useState('');
 
 
 
@@ -30,13 +31,13 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
                 alert(errorMessage);
             })
             return;
-        }
-
-        else {
+        } else {
+            res.text().then((feedback) => {
+                setFeedbackSent(feedback);
+            })
             alert('feedback sent to student')
             setShowModal(false)
         }
-
     }
 
     const handleButtonClick = () => {
@@ -75,6 +76,8 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
                                         className="form-control feedback-textarea"
                                         rows={3} // You can adjust this for height
                                     />
+                                    Feedback Given: <br />
+                                    {feedbackSent}
                                 </div>
                                 <div className="modal-footer">
                                 <button type="button" onClick={handleCancel}

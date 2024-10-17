@@ -91,7 +91,7 @@ async function postFeedback(userId, chatId, feedback) {
                 },
             },
         );
-        return { status: 200, error: '' }
+        return { status: 200, error: feedback }
     } catch (error) {
         return { status: 500, error: error.message }
     } finally {

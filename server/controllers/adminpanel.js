@@ -47,7 +47,7 @@ const updateTask = async (req, res) => {
 
 const createFeedback = async (req, res) => {
     const result = await postFeedback(req.body.userId, req.body.chatId, req.body.feedback)
-    return res.status(result.status).end(result.error);
+    return res.status(result.status).end(JSON.stringify(result.error));
 }
 
 const allowLateSubmit = async (req, res) => {
