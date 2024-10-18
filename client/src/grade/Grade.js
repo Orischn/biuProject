@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Feedback from "../feedback/Feedback";
 
-function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, setNewGrade, isActive }) {
+function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback, setNewGrade, isActive, refreshData }) {
 
     var input = useRef(null);
 
@@ -13,7 +13,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         // Allow only numeric input and enforce range between 0 and 100
         if (!isNaN(value) && value >= 0 && value <= 100) {
             setInputGrade(value);
-        } 
+        }
 
         // maybe she would like to cancel the grade???
         else if (value === "") {
@@ -101,9 +101,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     ('')}
                             </span>
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
-                            {/* <span id="feedback" className="w-100 mt-3"> */}
-                            <Feedback token={token} selectedGradeId={selectedGradeId} selectedStudent={selectedStudent} />
-                            {/* </span> */}
+                            <Feedback token={token} chatId={chatId} feedback={feedback}
+                                selectedStudent={selectedStudent} refreshData={refreshData} />
                         </div>
                     </>
                 ) : (

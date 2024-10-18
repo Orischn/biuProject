@@ -1,15 +1,12 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 
-function Feedback({ token, selectedGradeId, selectedStudent }) {
+function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
 
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
-    const [feedbackSent, setFeedbackSent] = useState('');
 
-
-
-
+    
     const createFeedback = async function (e) {
         e.preventDefault();
         const feedback = feedbackBar.current.value.trim();
@@ -21,7 +18,7 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
             },
             'body': JSON.stringify({
                 "userId": selectedStudent.userId,
-                "chatId": selectedGradeId,
+                "chatId": chatId,
                 "feedback": feedback
             })
         })
@@ -32,11 +29,9 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
             })
             return;
         } else {
-            res.text().then((feedback) => {
-                setFeedbackSent(feedback);
-            })
             alert('feedback sent to student')
             setShowModal(false)
+            refreshData()
         }
     }
 
@@ -49,8 +44,6 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
         // setError('');
         setShowModal(false); // Close the modal on cancel
     };
-
-
 
     return (
 
@@ -76,11 +69,16 @@ function Feedback({ token, selectedGradeId, selectedStudent }) {
                                         className="form-control feedback-textarea"
                                         rows={3} // You can adjust this for height
                                     />
-                                    Feedback Given: <br />
-                                    {feedbackSent}
+                                    <b><u>Feedback Given:</u></b> <br />
+                                    {feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
                                 </div>
                                 <div className="modal-footer">
-                                <button type="button" onClick={handleCancel}
+                                    <button type="button" onClick={handleCancel}
                                         className="btn btn-secondary">Cancel</button>
                                     <button type="submit" className="btn btn-primary" >Send Feedback</button>
                                 </div>

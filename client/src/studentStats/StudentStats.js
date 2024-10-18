@@ -9,6 +9,11 @@ function StudentStats({ token, selectedStudent }) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
+    const [isChanged, setIsChanged] = useState(false);
+
+    const refreshData = () => {
+        setIsChanged(!isChanged);
+    }
 
     useEffect(() => {
         const fetchGrades = async () => {
@@ -28,8 +33,9 @@ function StudentStats({ token, selectedStudent }) {
                                 setSelectedGradeId={setSelectedGradeId}
                                 token={token} selectedStudent={selectedStudent}
                                 chatId={practice.chatId} grade={practice.grade}
+                                feedback={practice.feedback}
                                 key={key} setGrades={setGrades} setNewGrade={setNewGrade}
-                                isActive={practice.active} />
+                                isActive={practice.active} refreshData={refreshData}/>
                     }))
                 })
             } else {
@@ -40,7 +46,7 @@ function StudentStats({ token, selectedStudent }) {
         }
         fetchGrades()
         setSelectedGradeId('');
-    }, [selectedStudent, token, newGrade])
+    }, [selectedStudent, token, newGrade, isChanged])
     return (
         <>
             {/* <div id="studentDetails" className="d-flex align-items-center w-100">
