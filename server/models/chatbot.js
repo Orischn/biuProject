@@ -31,14 +31,14 @@ async function getPractices(userId) {
 }
 
 
-async function postPractice(userId, chatId, durationHours, durationMinutes) {
+async function postPractice(userId, chatId, durationHours, durationMinutes, endDate, year) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-        if (!tasks.findOne({ taskName: chatId })) {
+        if (!tasks.findOne({ taskName: chatId, year: year })) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
         var today = new Date();
@@ -54,8 +54,10 @@ async function postPractice(userId, chatId, durationHours, durationMinutes) {
             feedback: '',
             startDate: dateTime,
             submissionDate: null,
+            endDate: endDate,
             durationHours: durationHours,
             durationMinutes: durationMinutes,
+            year: year,
             active: true,
             lateSubmit: false
         };

@@ -11,12 +11,54 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     const [feedback, setFeedback] = useState('');
     const [showTimer, setShowTimer] = useState(true);
     const [isTimeUp, setIsTimeUp] = useState(false);
+    const [isEndDatePassed, setIsEndDatePassed] = useState(false);
 
     const chat = useRef(null);
 
+    // const hasEndDatePassed = function (endDate) {
+    //     const [datePart, timePart] = endDate.split('T');
+    //     const [day, month, year] = datePart.split('-');
+    //     const formattedDateString = `${year}-${month}-${day}T${timePart}`;
+    //     const inputDate = new Date(formattedDateString.replace(/-/g, '/'));
+    //     const currentDate = new Date();
+    //     // setIsEndDatePassed(inputDate < currentDate);
+    //     return inputDate < currentDate;
+    // }
+
+
+    // useEffect(() => {
+    //     console.log(1)
+    //     if (!selectedPractice || !selectedPractice.endDate) return;
+
+    //     // Function to check if the current time has passed the end date
+    //     const checkIfEndDatePassed = () => {
+    //         const isPassed = hasEndDatePassed(selectedPractice.endDate);
+    //         console.log(isPassed);
+    //         setIsEndDatePassed(isPassed);
+    //     };
+
+    //     // Initial check when component mounts
+    //     checkIfEndDatePassed();
+
+    //     // Set an interval to continuously check if the end date is passed
+    //     const intervalId = setInterval(() => {
+    //         checkIfEndDatePassed();
+    //     }, 1000); // Check every second
+
+    //     // Cleanup interval on component unmount
+    //     return () => clearInterval(intervalId);
+    // }, []); // Run once after the initial render
+
+    const changeEndDateFormat = (endDate) => {
+        const [datePart, timePart] = endDate.split('T');
+        const [day, month, year] = datePart.split('-');
+        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
+        return formattedDateString;
+    }
+
     useEffect(() => {
 
-        
+
         const fetchMessages = async () => {
             if (!selectedPractice) {
                 return;
@@ -38,8 +80,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                             return <StudentMessage message={message} />
                         }
                     }));
-                    setGrade(JSON.parse(practice).grade);
-                    setFeedback(JSON.parse(practice).feedback);
+                    // setGrade(JSON.parse(practice).grade); really necessary?
+                    // setFeedback(JSON.parse(practice).feedback); really necessary?
                 });
             }
         }
@@ -61,36 +103,25 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     }
 
     const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
-        // Split the date and time part from the string
         const [datePart, timePart] = dateString.split(' ');
-      
-        // Split the time into hours, minutes, and seconds, and pad each part to ensure it's 2 digits
         const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
-      
-        // Reconstruct the time part with padded values
         const formattedTime = `${hours}:${minutes}:${seconds}`;
-      
-        // Create a valid ISO string by combining the date and padded time
         const formattedString = `${datePart}T${formattedTime}`;
-      
-        // Parse the formatted string into a Date object
         const date = new Date(formattedString);
-      
-        // Add the specified number of hours and minutes
+
         date.setHours(date.getHours() + hoursToAdd);
         date.setMinutes(date.getMinutes() + minutesToAdd);
-      
-        // Format the result in yyyy-mm-ddThh:mm:ss
+
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
-      
+
         const hoursFormatted = String(date.getHours()).padStart(2, '0');
         const minutesFormatted = String(date.getMinutes()).padStart(2, '0');
         const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
-      
+
         return `${year}-${month}-${day}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
-      };
+    };
 
 
     return (
@@ -117,17 +148,21 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                     : (<></>)}
                                 {selectedPractice.active ? (
                                     <>
-                                        {/* {isTimeUp ? (
-                                            <><div>times over man</div></>
-                                        ) : (
-                                            <>you good</>
-                                        )} */}
-                                        {showTimer ? (
+                                        <Countdown targetDate={changeEndDateFormat(selectedPractice.endDate)}
+                                            setIsTimeUp={setIsTimeUp}
+                                            setIsEndDatePassed={setIsEndDatePassed}
+                                            purpose={'date'} />
+
+                                        {!isEndDatePassed ? (
+                                            <>
+                                            {showTimer ? (
                                             <>
                                                 <Countdown targetDate={addTimeToDateString(
                                                     selectedPractice.startDate, selectedPractice.durationHours,
-                                                selectedPractice.durationMinutes)}
-                                                    setIsTimeUp={setIsTimeUp} />
+                                                    selectedPractice.durationMinutes)}
+                                                    setIsTimeUp={setIsTimeUp}
+                                                    purpose={'timer'} />
+
                                                 <button type="button"
                                                     className="btn btn-primary"
                                                     style={{ height: '5vh', text: 'center' }}
@@ -142,7 +177,11 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                 Show Time
                                             </button>
                                         )}
-
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )}
+                                        
                                     </>
                                 ) : ('')}
                             </b>
@@ -150,7 +189,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                         {/*  */}
                         <button type="button"
                             className={`btn btn-danger ${(!selectedPractice.active) ? 'custom-disabled' : ''}`}
-                            disabled={!selectedPractice.active}
+                            disabled={!selectedPractice.active ||
+                                (isEndDatePassed && !selectedPractice.lateSubmit)}
                             data-bs-toggle="modal" data-bs-target="#confirmModal">
                             Submit
                         </button>
@@ -166,6 +206,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                     setMessages={setMessages}
                     setLatestMessage={setLatestMessage}
                     isTimeUp={isTimeUp}
+                    isEndDatePassed={isEndDatePassed}
                 />
             </div>
 

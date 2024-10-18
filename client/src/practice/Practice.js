@@ -4,8 +4,9 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
     const [isCreated, setIsCreated] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
-    // const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false)
     const [showModal, setShowModal] = useState(false);
+    const [isEndDatePassed, setIsEndDatePassed] = useState(false);
+    // const [isTimeUp, setIsTimeUp] = useState(false);
 
     const handleTaskClick = () => {
         if (!isCreated) {
@@ -37,7 +38,9 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
             body: JSON.stringify({
                 chatId: task.taskName,
                 durationHours: task.durationHours,
-                durationMinutes: task.durationMinutes
+                durationMinutes: task.durationMinutes,
+                endDate: task.endDate,
+                year: task.year
             }),
         });
 
@@ -69,7 +72,18 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                 }
             }
         };
+
+        const hadEndDatePassed = function (endDate) {
+            const [datePart, timePart] = endDate.split('T');
+            const [day, month, year] = datePart.split('-');
+            const formattedDateString = `${year}-${month}-${day}T${timePart}`;
+            const inputDate = new Date(formattedDateString.replace(/-/g, '/'));
+            const currentDate = new Date();
+            setIsEndDatePassed(inputDate < currentDate);
+        }
+        hadEndDatePassed(task.endDate);
         fetchPractice();
+
     }, [selectedTask, task.taskName, token]);
 
 
@@ -94,17 +108,19 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                 className={`list-group-item practice container
                     ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
-                onClick={handleTaskClick} // Adjusted logic to handle created and non-created tasks
+                onClick={handleTaskClick}
             >
                 <div className="row">
                     <div>
                         <b className="text-black w-100">Task: {task.taskName}</b>
                         <span className="text-black badge date">
-                            {!isCreated
-                                ? 'Click to start'
-                                : !isFinished
-                                    ? 'Task in progress...'
-                                    : 'Finished'}
+                            {(isEndDatePassed && !isFinished) ?
+                                'Can\'t submit' :
+                                !isCreated
+                                    ? 'Click to start'
+                                    : !isFinished
+                                        ? 'Task in progress...'
+                                        : 'Finished'}
                         </span>
                         <br />
                     </div>
@@ -118,18 +134,25 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         <>
                             Waiting for checking
                         </>
-                    ) : isCreated ? (
+                    ) : isEndDatePassed ? (
                         <>
-                            MAYBE TIMER ALSO HERE?
+                            Submission date had passed!
                         </>
-                    ) : (
-                        <>
-                            submission until {task.endDate}
-                        </>
-                    )
+                    ) :
+                        isCreated ? (
+                            <>
+                                Started
+                            </>
+                        ) : (
+                            <>
+                                submission until {task.endDate.split('T')[0]}
+                                <br />
+                                at {task.endDate.split('T')[1].slice(0, -3)}
+                            </>
+                        )
                     }
                 </div>
-            </li>
+            </li >
 
             {showModal && (
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
@@ -145,7 +168,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                                 <b>{task.durationHours > 0 ? (
                                     `${task.durationHours} hours and `
                                 ) : ('')}
-                                {task.durationMinutes} minutes.</b><br />
+                                    {task.durationMinutes} minutes.</b><br />
                                 After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
                             </div>
                             <div className="modal-footer">
@@ -157,8 +180,11 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         </div>
                     </div>
                 </div>
-            )}
+
+            )
+            }
         </>
+
     );
 }
 
