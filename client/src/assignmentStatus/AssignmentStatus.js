@@ -43,7 +43,7 @@ function AssignemntStatus({ token, taskName }) {
             // }
 
             if (res.status === 200) {
-                res.text().then((submissionList) => {
+                await res.text().then((submissionList) => {
                     const filteredUsers = JSON.parse(submissionList)
                         .filter((user) => {
                             if (filter !== '') {

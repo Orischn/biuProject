@@ -16,7 +16,7 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
         })
 
         if (res.status !== 200) { //error
-            res.text().then((error) => {
+            await res.text().then((error) => {
                 alert(error)
             })
         } else {
@@ -38,7 +38,7 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
         })
 
         if (res.status !== 200) { //error
-            res.text().then((error) => {
+            await res.text().then((error) => {
                 alert(error)
             })
         } else {

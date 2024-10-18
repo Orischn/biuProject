@@ -38,7 +38,7 @@ function AdminFeed({ token, userId }) {
             });
 
             if (res.status === 200) {
-                res.text().then((students) => {
+                await res.text().then((students) => {
                     const filteredStudents = JSON.parse(students)
                         .filter((student) => {
                             if (filter !== '') {
@@ -79,7 +79,7 @@ function AdminFeed({ token, userId }) {
                 }
             });
             if (res.status === 200) {
-                res.text().then((user) => {
+                await res.text().then((user) => {
                     setFullName(JSON.parse(user).firstName + " " + JSON.parse(user).lastName);
                 });
             }

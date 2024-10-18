@@ -41,7 +41,7 @@ function StudentFeed({ token, userId }) {
                 }
             });
             if (res.status === 200) {
-                res.text().then((tasks) => {
+                await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).reverse().map((task, key) => {
                         if (year === task.year) {
                             return <Practice task={task} key={key}
@@ -65,7 +65,7 @@ function StudentFeed({ token, userId }) {
                 }
             });
             if (res.status === 200) {
-                res.text().then((user) => {
+                await res.text().then((user) => {
                     setFullName(JSON.parse(user).firstName + " " + JSON.parse(user).lastName);
                     setYear(JSON.parse(user).year);
                 });

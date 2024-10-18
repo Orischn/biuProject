@@ -43,7 +43,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             // }
 
             if (res.status === 200) {
-                res.text().then((practices) => {
+                await res.text().then((practices) => {
                     JSON.parse(practices).map((practice, index) => {
                         if (practice.chatId === selectedGradeId) {
                             setMessages((practice).messages.reverse().map((message, key) => {

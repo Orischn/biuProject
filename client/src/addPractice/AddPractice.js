@@ -15,7 +15,7 @@ function AddPractice({token, selectedTask, setSelectedTask}) {
         });
 
         if (res.status === 201) {
-            res.text().then((practice) => {
+            await res.text().then((practice) => {
                 setSelectedTask(JSON.parse(practice));
             });
         }

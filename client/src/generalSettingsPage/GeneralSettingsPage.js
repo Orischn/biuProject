@@ -22,9 +22,9 @@ function GeneralSettingsPage({ token, userId }) {
                 })
             })
             if (res === 500) {
-                res.text().then((errorText) => alert(errorText))
+                await res.text().then((errorText) => alert(errorText))
             } else if (res === 400) {
-                res.text.then((errorText) => setError(errorText))
+                await res.text.then((errorText) => setError(errorText))
             }
         }
         e.preventDefault();

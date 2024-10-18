@@ -77,7 +77,7 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
                                         {error}
                                     </span>}
                                 <button type="button" className="btn btn-secondary"onClick={handleCancel}>No, cancel</button>
-                                <button type="button" className="btn btn-primary"
+                                <button type="button" className="btn btn-danger"
                                     onClick={() => deleteStudent()}>Yes, delete {fullName}</button>
                             </div>
                         </div>

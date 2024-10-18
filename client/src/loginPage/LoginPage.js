@@ -41,7 +41,7 @@ function LoginPage({ setToken, setUserId }) {
       }
     });
     if (res.status === 200) {
-      res.text().then((user) => {
+      await res.text().then((user) => {
         if (JSON.parse(user).permissions) {
           navigate('/adminFeed');
         } else {
@@ -76,12 +76,12 @@ function LoginPage({ setToken, setUserId }) {
       })
     })
     if (res.status !== 200) {
-      res.text().then((error) => {
+      await res.text().then((error) => {
         setError(error);
       });
       return;
     }
-    res.text().then((token) => {
+    await res.text().then((token) => {
       setToken(token);
       setUserId(userId)
       navigateTo(token);

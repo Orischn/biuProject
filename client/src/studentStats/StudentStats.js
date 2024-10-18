@@ -27,7 +27,7 @@ function StudentStats({ token, selectedStudent }) {
                 }
             )
             if (res.status === 200) {
-                res.text().then((practices) => {
+                await res.text().then((practices) => {
                     setGrades(JSON.parse(practices).reverse().filter(practice => !practice.active).map((practice, key) => {
                             return <Grade selectedGradeId={selectedGradeId}
                                 setSelectedGradeId={setSelectedGradeId}
@@ -39,7 +39,7 @@ function StudentStats({ token, selectedStudent }) {
                     }))
                 })
             } else {
-                res.text().then((error) => {
+                await res.text().then((error) => {
                     alert(error);
                 })
             }

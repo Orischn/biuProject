@@ -25,7 +25,7 @@ function StudentSettingsPage({ token, yearOption }) {
             });
 
             if (res.status === 200) {
-                res.text().then((students) => {
+                await res.text().then((students) => {
                     const filteredStudents = JSON.parse(students)
                         .filter((student) => {
                             if (filter !== '') {

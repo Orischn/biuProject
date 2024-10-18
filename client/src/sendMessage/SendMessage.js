@@ -31,7 +31,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
         }
 
         if (res.status === 200) {
-            res.text().then((message) => {
+            await res.text().then((message) => {
                 setMessages(messages => [...messages, <BotMessage message={JSON.parse(message)} />]);
             })
         }

@@ -89,7 +89,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                 }
             });
             if (res.status === 200) {
-                res.text().then((submissionList) => {
+                await res.text().then((submissionList) => {
                     setNumOfAssigned(JSON.parse(submissionList).length);
                     setNumOfSubmits((JSON.parse(submissionList).filter(user => user.didSubmit)).length);
                 });

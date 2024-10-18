@@ -57,7 +57,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             })
         })
         if (res === 500) {
-            res.text().then((error) => alert(error));
+            await res.text().then((error) => alert(error));
             return;
         }
         setNewGrade(input.current.value)

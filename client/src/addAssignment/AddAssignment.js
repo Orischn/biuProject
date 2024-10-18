@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 function AddAssignment({ token, refreshData, yearOption }) {
 
     const [error, setError] = useState('');
+    const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
 
     const nameBar = useRef(null);
@@ -12,36 +13,31 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const durationHoursBar = useRef(null);
     const durationMinutesBar = useRef(null);
 
-    const handleClick = () => {
-        setShowModal(true)
-        // if (!isCreated) {
-        //     setShowModal(true);
-        // } else {
-        //     setSelectedTask(task);
-        //     add();
-        // }
-    };
-
-    const handleSubmit = (e) => {
-        add(e);
+    const cleanInput = () => {
         nameBar.current.value = '';
         startDateBar.current.value = '';
         endDateBar.current.value = '';
         durationHoursBar.current.value= '';
         durationMinutesBar.current.value= '';
+    }
+
+    const handleClick = () => {
+        setShowModal(true)
+    };
+
+    const handleSubmit = async (e) => {
+        await add(e);
+        cleanInput();
+
+        // setTimeout(3000);
 
         // setShowModal(false);
     };
 
     const handleCancel = () => {
-        nameBar.current.value = '';
-        startDateBar.current.value = '';
-        endDateBar.current.value = '';
-        durationHoursBar.current.value= '';
-        durationMinutesBar.current.value= '';
+        cleanInput();
+        setError('');
         setShowModal(false);
-        // setError('');
-
     };
 
 
@@ -77,16 +73,14 @@ function AddAssignment({ token, refreshData, yearOption }) {
         if (res.status !== 200) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);
+                setIsSuccessful(false)
             })
             return;
         } else {
             setError("Added Successfully");
-            nameBar.current.value = "";
-            startDateBar.current.value = "";
-            endDateBar.current.value = "";
-            durationHoursBar.current.value = "";
-            durationMinutesBar.current.value = "";
-            refreshData()
+            setIsSuccessful(true)
+            cleanInput();
+            refreshData();
         }
 
     }
@@ -138,10 +132,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{width: '70%', margin: '0 auto'}}/>
                                 </div>
                                 <div className="modal-footer">
-                                    {/* {error &&
+                                    {error &&
                                     <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
                                         {error}
-                                    </span>} */}
+                                    </span>}
                                     <button type="button" className="btn btn-secondary" onClick={handleCancel}>Close</button>
                                     <button type="submit" className="btn btn-primary">Create Assignemnt</button>
                                 </div>
