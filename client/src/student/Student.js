@@ -10,6 +10,7 @@ function Student({ student, selectedStudent, setSelectedStudent }) {
                 <div>
                     <b className="text-black w-100">{student.firstName} {student.lastName}</b>
                     <br />
+                    ID: {student.userId}
                 </div>
             </div>
         </li>

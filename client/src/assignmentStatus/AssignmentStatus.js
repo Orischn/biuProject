@@ -22,25 +22,57 @@ function AssignemntStatus({ token, taskName }) {
                     'Authorization': `Bearer ${token}`,
                 }
             });
+            // if (res.status === 200) {
+            //     res.text().then((submissionList) => {
+            //         setStudentList(JSON.parse(submissionList).filter((user) => {
+            //             if (filter !== '') {
+            //                 return (user.firstName + ' ' + user.lastName).toLowerCase().
+            //                     includes(filter.toLowerCase()) ||
+            //                     user.userId.includes(filter);
+            //             }
+            //             return true;
+            //         }).map((student, key) => {
+            //             return <StudentAssignment token={token}
+            //                 fullname={student.firstName + ' ' + student.lastName}
+            //                 userId={student.userId} didSubmit={student.didSubmit}
+            //                 canSubmitLate={student.canSubmitLate} taskName={taskName}
+            //                 refreshData={refreshData} />
+
+            //         }))
+            //     });
+            // }
+
             if (res.status === 200) {
                 res.text().then((submissionList) => {
-                    setStudentList(JSON.parse(submissionList).filter((user) => {
-                        if (filter !== '') {
-                            return (user.firstName + ' ' + user.lastName).toLowerCase().
-                                includes(filter.toLowerCase()) ||
-                                user.userId.includes(filter);
-                        }
-                        return true;
-                    }).map((student, key) => {
-                        return <StudentAssignment token={token}
+                    const filteredUsers = JSON.parse(submissionList)
+                        .filter((user) => {
+                            if (filter !== '') {
+                                return (user.firstName + ' ' + user.lastName).toLowerCase()
+                                    .includes(filter.toLowerCase()) ||
+                                    user.userId.includes(filter);
+                            }
+                            return true;
+                        });
+            
+                    const sortedUsers = filteredUsers
+                        .sort((a, b) => {
+                            const firstNameComparison = a.firstName.localeCompare(b.firstName);
+                            if (firstNameComparison !== 0) {
+                                return firstNameComparison;  // Sort by first name if different
+                            }
+                            return a.lastName.localeCompare(b.lastName);  // Sort by last name if first names are the same
+                        });
+            
+                    setStudentList(sortedUsers.map((student, key) => (
+                        <StudentAssignment key={key} token={token}
                             fullname={student.firstName + ' ' + student.lastName}
                             userId={student.userId} didSubmit={student.didSubmit}
                             canSubmitLate={student.canSubmitLate} taskName={taskName}
                             refreshData={refreshData} />
-
-                    }))
+                    )));
                 });
             }
+            
         }
         fetchSubmissionStatus(taskName);
     }, [token, filter, isChanged])

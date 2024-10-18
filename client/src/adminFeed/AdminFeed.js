@@ -6,6 +6,7 @@ import SettingsPage from "../settingsPage/SettingsPage";
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
+import SearchStudent from "../searchStudent/SearchStudent";
 
 
 
@@ -14,8 +15,10 @@ function AdminFeed({ token, userId }) {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
     const [isChanged, setIsChanged] = useState(null);
+    const [filter, setFilter] = useState('');
+
     const yearOption = useRef(null);
-    
+
     // const [showModal, setShowModal] = useState(false);
     // const handleShowModal = () => setShowModal(true);
     // const handleCloseModal = () => setShowModal(false);
@@ -33,17 +36,39 @@ function AdminFeed({ token, userId }) {
                     'Authorization': `Bearer ${token}`,
                 }
             });
+
             if (res.status === 200) {
                 res.text().then((students) => {
-                    setStudentList(JSON.parse(students).map((student, key) => {
-                        if (year === student.year) {
+                    const filteredStudents = JSON.parse(students)
+                        .filter((student) => {
+                            if (filter !== '') {
+                                return (student.firstName + ' ' + student.lastName).toLowerCase()
+                                    .includes(filter.toLowerCase()) ||
+                                    student.userId.includes(filter);
+                            }
+                            return true;
+                        });
+
+                    const sortedStudents = filteredStudents
+                        .sort((a, b) => {
+                            const firstNameComparison = a.firstName.localeCompare(b.firstName);
+                            if (firstNameComparison !== 0) {
+                                return firstNameComparison;  // Sort by first name if different
+                            }
+                            return a.lastName.localeCompare(b.lastName);  // Sort by last name if first names are the same
+                        });
+
+                    setStudentList(sortedStudents.map((student, key) => {
+                        if (student.year === parseInt(yearOption.current.value)) {
                             return <Student student={student} key={key}
                                 selectedStudent={selectedStudent}
                                 setSelectedStudent={setSelectedStudent} />
                         }
+                        return null; // Ensure that the map function returns null if no match
                     }));
                 });
             }
+
         }
         const fetchName = async () => {
             const res = await fetch(`http://localhost:5000/api/getStudent/${userId}`, {
@@ -62,7 +87,7 @@ function AdminFeed({ token, userId }) {
 
         fetchName()
         fetchStudents();
-    }, [selectedStudent, token, userId, isChanged])
+    }, [selectedStudent, token, userId, isChanged, filter])
 
     return (
         <>
@@ -92,6 +117,8 @@ function AdminFeed({ token, userId }) {
                         <div className="d-flex align-items-center">
                             <br />
                         </div>
+                        
+                            <SearchStudent filter={filter} setFilter={setFilter} />
                         {studentList}
                     </div>
                     <div id="gradesChatBlock" className="col-9">
