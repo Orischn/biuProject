@@ -34,9 +34,12 @@ function AssignmentsSettingsPage({ token, yearOption }) {
                 res.text().then((tasks) => {
 
                     setTaskList(JSON.parse(tasks).map((task, key) => {
-                        return <AssignmentDetails token={token} taskName={task.taskName}
-                            endDate={task.endDate} refreshData={refreshData}
-                            setExpand={setExpand} setSelectedTask={setSelectedTask} />
+                        if (task.year === parseInt(yearOption.current.value)) {
+                            return <AssignmentDetails token={token} taskName={task.taskName}
+                                endDate={task.endDate} refreshData={refreshData}
+                                setExpand={setExpand} setSelectedTask={setSelectedTask} 
+                                yearOption={yearOption}/>
+                        }
                     }));
                 });
             }
@@ -53,7 +56,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
             <div className="settings-container">
                 {!expand ? (
                     <>
-                    {/* undefined for some reason, continue checking */}
+                        {/* undefined for some reason, continue checking */}
                         <AddAssignment token={token} refreshData={refreshData} yearOption={yearOption} />
                         {taskList}
                     </>
@@ -63,8 +66,8 @@ function AssignmentsSettingsPage({ token, yearOption }) {
                             <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
                             go back
                         </div>
-                        <AssignemntStatus token={token} taskName={selectedTask} />
-                        
+                        <AssignemntStatus token={token} taskName={selectedTask} yearOption={yearOption} />
+
                     </>
                 )}
 

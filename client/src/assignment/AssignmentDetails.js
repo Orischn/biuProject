@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask }) {
+function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask, yearOption }) {
 
     const [numOfAssigned, setNumOfAssigned] = useState(0);
     const [numOfSubmits, setNumOfSubmits] = useState(0);
@@ -80,8 +80,8 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
 
 
     useEffect(() => {
-        const fetchSubmissionStatus = async function (taskName) {
-            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}`, {
+        const fetchSubmissionStatus = async function (taskName, year) {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -95,7 +95,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                 });
             }
         }
-        fetchSubmissionStatus(taskName);
+        fetchSubmissionStatus(taskName, yearOption.current.value);
     }, [])
 
     return (

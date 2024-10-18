@@ -59,13 +59,13 @@ async function getTasks() {
     }
 }
 
-async function getSubmissionStatus(taskName) {
+async function getSubmissionStatus(taskName, year) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ taskName: taskName });
+        const task = await tasks.findOne({ taskName: taskName, year: parseInt(year) });
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }

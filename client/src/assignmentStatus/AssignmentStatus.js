@@ -3,7 +3,7 @@ import SearchStudent from "../searchStudent/SearchStudent";
 import StudentAssignment from "../studentAssignment/StudentAssignment";
 
 
-function AssignemntStatus({ token, taskName }) {
+function AssignemntStatus({ token, taskName, yearOption }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
@@ -14,36 +14,19 @@ function AssignemntStatus({ token, taskName }) {
     };
 
     useEffect(() => {
-        const fetchSubmissionStatus = async function (taskName) {
-            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}`, {
+        const fetchSubmissionStatus = async function (taskName, year) {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 }
             });
-            // if (res.status === 200) {
-            //     res.text().then((submissionList) => {
-            //         setStudentList(JSON.parse(submissionList).filter((user) => {
-            //             if (filter !== '') {
-            //                 return (user.firstName + ' ' + user.lastName).toLowerCase().
-            //                     includes(filter.toLowerCase()) ||
-            //                     user.userId.includes(filter);
-            //             }
-            //             return true;
-            //         }).map((student, key) => {
-            //             return <StudentAssignment token={token}
-            //                 fullname={student.firstName + ' ' + student.lastName}
-            //                 userId={student.userId} didSubmit={student.didSubmit}
-            //                 canSubmitLate={student.canSubmitLate} taskName={taskName}
-            //                 refreshData={refreshData} />
-
-            //         }))
-            //     });
-            // }
 
             if (res.status === 200) {
                 await res.text().then((submissionList) => {
+                    console.log(submissionList)
+                    console.log(yearOption.current.value);
                     const filteredUsers = JSON.parse(submissionList)
                         .filter((user) => {
                             if (filter !== '') {
@@ -71,10 +54,14 @@ function AssignemntStatus({ token, taskName }) {
                             refreshData={refreshData} />
                     )));
                 });
+            } else {
+                await res.text().then((error) => {
+                    console.log(error)
+                })
             }
             
         }
-        fetchSubmissionStatus(taskName);
+        fetchSubmissionStatus(taskName, yearOption.current.value);
     }, [token, filter, isChanged])
 
     return (
