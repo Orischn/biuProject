@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice, setSelectedPractice }) {
+function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice, setSelectedPractice, refreshData }) {
     const [isCreated, setIsCreated] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isEndDatePassed, setIsEndDatePassed] = useState(false);
-    // const [isTimeUp, setIsTimeUp] = useState(false);
+    const [isTimeUp, setIsTimeUp] = useState(false);
+    const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false);
 
     const handleTaskClick = () => {
         if (!isCreated) {
@@ -50,6 +51,36 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
         }
     };
 
+    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
+        const [datePart, timePart] = dateString.split(' ');
+        const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
+        const formattedString = `${datePart}T${formattedTime}`;
+        const date = new Date(formattedString);
+
+        date.setHours(date.getHours() + hoursToAdd);
+        date.setMinutes(date.getMinutes() + minutesToAdd);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const hoursFormatted = String(date.getHours()).padStart(2, '0');
+        const minutesFormatted = String(date.getMinutes()).padStart(2, '0');
+        const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
+
+        return `${day}-${month}-${year}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
+    };
+
+    const hasTimePassed = function (targetDate) {
+        const [datePart, timePart] = targetDate.split('T');
+        const [day, month, year] = datePart.split('-');
+        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
+        const inputDate = new Date(formattedDateString);
+        const currentDate = new Date();
+        return inputDate < currentDate;
+    }
+
     useEffect(() => {
         const fetchPractice = async function () {
             const res = await fetch(`http://localhost:5000/api/getPractice/${task.taskName}`, {
@@ -66,22 +97,16 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                     setIsCreated(true);
                     setIsFinished(!practice.active);
                     setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
-                    // setIsLateSubmitAllowed(practice.lateSubmit);
+                    setIsLateSubmitAllowed(practice.lateSubmit);
+                    setIsTimeUp(hasTimePassed(addTimeToDateString(practice.startDate,
+                         practice.durationHours, practice.durationMinutes)));
+                        setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
             }
         };
-
-        const hadEndDatePassed = function (endDate) {
-            const [datePart, timePart] = endDate.split('T');
-            const [day, month, year] = datePart.split('-');
-            const formattedDateString = `${year}-${month}-${day}T${timePart}`;
-            const inputDate = new Date(formattedDateString.replace(/-/g, '/'));
-            const currentDate = new Date();
-            setIsEndDatePassed(inputDate < currentDate);
-        }
-        hadEndDatePassed(task.endDate);
+        // refreshData();
         fetchPractice();
 
     }, [selectedTask, task.taskName, token]);
@@ -110,6 +135,10 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                     ${''}`}
                 onClick={handleTaskClick}
             >
+                
+                isTimeUp ? {String(isTimeUp)}
+                <br />
+                isEndDatePassed ? {String(isEndDatePassed)}
                 <div className="row">
                     <div>
                         <b className="text-black w-100">Task: {task.taskName}</b>
@@ -136,7 +165,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         </>
                     ) : isEndDatePassed ? (
                         <>
-                            Submission date had passed!
+                            Submission date has passed!
                         </>
                     ) :
                         isCreated ? (

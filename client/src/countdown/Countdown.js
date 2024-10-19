@@ -63,7 +63,7 @@ const Countdown = ({ targetDate, setIsTimeUp, setIsEndDatePassed, purpose }) => 
                             <>
                                 {setIsEndDatePassed(true)}
                                 {/* {timerComponents} */}
-                                Missed submission
+                                Submission date has passed
                             </>
                         )}
                     </>

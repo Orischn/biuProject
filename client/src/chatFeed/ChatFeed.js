@@ -5,49 +5,16 @@ import StudentMessage from "../studentMessage/StudentMessage";
 
 const { useState, useEffect, useRef, useCallback } = require("react");
 
-function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage }) {
+function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage, 
+    isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed }) {
     const [messages, setMessages] = useState([]);
     const [grade, setGrade] = useState(null);
     const [feedback, setFeedback] = useState('');
     const [showTimer, setShowTimer] = useState(true);
-    const [isTimeUp, setIsTimeUp] = useState(false);
-    const [isEndDatePassed, setIsEndDatePassed] = useState(false);
+    // const [isTimeUp, setIsTimeUp] = useState(false);
+    // const [isEndDatePassed, setIsEndDatePassed] = useState(false);
 
     const chat = useRef(null);
-
-    // const hasEndDatePassed = function (endDate) {
-    //     const [datePart, timePart] = endDate.split('T');
-    //     const [day, month, year] = datePart.split('-');
-    //     const formattedDateString = `${year}-${month}-${day}T${timePart}`;
-    //     const inputDate = new Date(formattedDateString.replace(/-/g, '/'));
-    //     const currentDate = new Date();
-    //     // setIsEndDatePassed(inputDate < currentDate);
-    //     return inputDate < currentDate;
-    // }
-
-
-    // useEffect(() => {
-    //     console.log(1)
-    //     if (!selectedPractice || !selectedPractice.endDate) return;
-
-    //     // Function to check if the current time has passed the end date
-    //     const checkIfEndDatePassed = () => {
-    //         const isPassed = hasEndDatePassed(selectedPractice.endDate);
-    //         console.log(isPassed);
-    //         setIsEndDatePassed(isPassed);
-    //     };
-
-    //     // Initial check when component mounts
-    //     checkIfEndDatePassed();
-
-    //     // Set an interval to continuously check if the end date is passed
-    //     const intervalId = setInterval(() => {
-    //         checkIfEndDatePassed();
-    //     }, 1000); // Check every second
-
-    //     // Cleanup interval on component unmount
-    //     return () => clearInterval(intervalId);
-    // }, []); // Run once after the initial render
 
     const changeEndDateFormat = (endDate) => {
         const [datePart, timePart] = endDate.split('T');
@@ -57,8 +24,6 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
     }
 
     useEffect(() => {
-
-
         const fetchMessages = async () => {
             if (!selectedPractice) {
                 return;
@@ -80,8 +45,6 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                             return <StudentMessage message={message} />
                         }
                     }));
-                    // setGrade(JSON.parse(practice).grade); really necessary?
-                    // setFeedback(JSON.parse(practice).feedback); really necessary?
                 });
             }
         }
@@ -151,7 +114,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                         <Countdown targetDate={changeEndDateFormat(selectedPractice.endDate)}
                                             setIsTimeUp={setIsTimeUp}
                                             setIsEndDatePassed={setIsEndDatePassed}
-                                            purpose={'date'} />
+                                            purpose={'date'} 
+                                            />
 
                                         {!isEndDatePassed ? (
                                             <>

@@ -13,6 +13,9 @@ function StudentFeed({ token, userId }) {
     const [fullName, setFullName] = useState("");
     const [latestMessage, setLatestMessage] = useState(null);
     const [year, setYear] = useState(0);
+    const [isTimeUp, setIsTimeUp] = useState(false);
+    const [isEndDatePassed, setIsEndDatePassed] = useState(false);
+    const [isChanged, setIsChanged] = useState(false);
 
     const finishPractice = async () => {
         const res = await fetch('http://localhost:5000/api/finishPractice/', {
@@ -28,6 +31,10 @@ function StudentFeed({ token, userId }) {
         });
         setSelectedTask(null);
         setSelectedPractice(null);
+    }
+
+    const refreshData = () => {
+        setIsChanged(!isChanged);
     }
 
     useEffect(() => {
@@ -48,6 +55,7 @@ function StudentFeed({ token, userId }) {
                                 selectedTask={selectedTask}
                                 setSelectedTask={setSelectedTask}
                                 setSelectedPractice={setSelectedPractice} token={token}
+                                refreshData={refreshData}
                             />
                         }
                     }));
@@ -74,7 +82,7 @@ function StudentFeed({ token, userId }) {
 
         fetchMyName();
         fetchTasks();
-    }, [selectedTask, token, userId, year])
+    }, [selectedTask, token, userId, year, isChanged])
 
 
 
@@ -101,7 +109,10 @@ function StudentFeed({ token, userId }) {
                              setSelectedTask={setSelectedTask} /> */}
                             <ChatFeed token={token} selectedPractice={selectedPractice}
                                 finishPractice={finishPractice} latestMessage={latestMessage}
-                                setLatestMessage={setLatestMessage} />
+                                setLatestMessage={setLatestMessage} isTimeUp={isTimeUp}
+                                setIsTimeUp={setIsTimeUp} isEndDatePassed={isEndDatePassed} 
+                                setIsEndDatePassed={setIsEndDatePassed}
+                                />
                         </>
                     ) : (
 
