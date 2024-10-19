@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
+const path = require('path');
 const https = require('https')
 const fs = require('fs')
 const app = express();
+
 
 const options = {
     origin: 'https://localhost:3000', // Allow requests from this origin
@@ -12,9 +15,10 @@ const options = {
 
 // SSL certificate and private key
 const sslOptions = {
-    key: fs.readFileSync('certs/key.pem'),
-    cert: fs.readFileSync('certs/cert.pem')
+    key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem')),
 };
+
 
 app.use(cors(options))
 app.use(express.json());

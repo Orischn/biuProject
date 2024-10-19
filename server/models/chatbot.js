@@ -1,4 +1,20 @@
 const { MongoClient } = require('mongodb');
+const { check, validationResult } = require('express-validator');
+
+const client = new MongoClient("mongodb://127.0.0.1:27017");
+const dbName = 'ChatBot';
+const db = client.db(dbName);
+const tasks = db.collection('tasks');
+const practices = db.collection('practices');
+
+const validateTaskInputs = [
+    check('taskName').isString().trim().escape(),
+    check('startingDate').isISO8601(),
+    check('endingDate').isISO8601(),
+    check('durationHours').isInt({ min: 0 }),
+    check('durationMinutes').isInt({ min: 0 }),
+    check('year').isInt({ min: 0 }),
+];
 
 async function getPractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");

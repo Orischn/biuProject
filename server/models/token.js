@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
-const key = "Sara shara shir sameihah shir sameihah shara Sara";
+const key = process.env.SECRET_TOKEN;
 
 
 const checkToken = async (authorization) => {
