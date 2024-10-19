@@ -23,7 +23,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
     useEffect(() => {
 
         const fetchTasks = async () => {
-            const res = await fetch('http://localhost:5000/api/getTasks', {
+            const res = await fetch('https://localhost:5000/api/getTasks', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

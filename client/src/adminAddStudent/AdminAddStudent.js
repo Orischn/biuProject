@@ -67,7 +67,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         const email = emailBar.current.value.trim();
 
 
-        const res = await fetch('http://localhost:5000/api/createUser', {
+        const res = await fetch('https://localhost:5000/api/createUser', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

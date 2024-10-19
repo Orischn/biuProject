@@ -20,7 +20,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             //     }
             // });
 
-            const res = await fetch(`http://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
+            const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
                 {
                     method: 'get',
                     headers: {

@@ -44,7 +44,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             return;
         }
 
-        const res = await fetch('http://localhost:5000/api/updateGrade/', {
+        const res = await fetch('https://localhost:5000/api/updateGrade/', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const durationHours = durationHoursBar.current.value.trim();
         const durationMinutes = durationMinutesBar.current.value.trim();
 
-        const res = await fetch('http://localhost:5000/api/createTask', {
+        const res = await fetch('https://localhost:5000/api/createTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

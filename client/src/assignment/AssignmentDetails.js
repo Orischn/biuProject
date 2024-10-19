@@ -32,7 +32,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
-        const res = await fetch('http://localhost:5000/api/updateTask', {
+        const res = await fetch('https://localhost:5000/api/updateTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

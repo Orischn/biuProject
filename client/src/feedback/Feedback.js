@@ -10,7 +10,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
     const createFeedback = async function (e) {
         e.preventDefault();
         const feedback = feedbackBar.current.value.trim();
-        const res = await fetch('http://localhost:5000/api/createFeedback', {
+        const res = await fetch('https://localhost:5000/api/createFeedback', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

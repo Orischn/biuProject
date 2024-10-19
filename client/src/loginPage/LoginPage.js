@@ -33,7 +33,7 @@ function LoginPage({ setToken, setUserId }) {
   })
 
   const navigateTo = async (token) => {
-    const res = await fetch('http://localhost:5000/api/student/', {
+    const res = await fetch('https://localhost:5000/api/student/', {
       method: 'get',
       headers: {
         'accept': 'application/json',
@@ -65,7 +65,7 @@ function LoginPage({ setToken, setUserId }) {
       setPasswordError('Password is required!');
       return;
     }
-    const res = await fetch('http://localhost:5000/api/login', {
+    const res = await fetch('https://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
         'Content-Type': 'application/json',

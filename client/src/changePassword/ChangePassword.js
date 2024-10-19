@@ -41,7 +41,7 @@ function ChangePassword({ token, userId }) {
             return;
         }
 
-        const res = await fetch('http://localhost:5000/api/changePassword', {
+        const res = await fetch('https://localhost:5000/api/changePassword', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

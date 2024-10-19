@@ -16,7 +16,7 @@ function StudentSettingsPage({ token, yearOption }) {
 
     useEffect(() => {
         const fetchStudents = async (filter) => {
-            const res = await fetch('http://localhost:5000/api/getStudents', {
+            const res = await fetch('https://localhost:5000/api/getStudents', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
