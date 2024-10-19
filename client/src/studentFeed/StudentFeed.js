@@ -65,7 +65,7 @@ function StudentFeed({ token, userId }) {
 
 
         const fetchMyName = async () => {
-            const res = await fetch(`http://localhost:5000/api/student`, {
+            const res = await fetch(`https://localhost:5000/api/student`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

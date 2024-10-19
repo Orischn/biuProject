@@ -17,7 +17,7 @@ function StudentStats({ token, selectedStudent }) {
 
     useEffect(() => {
         const fetchGrades = async () => {
-            const res = await fetch(`http://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
+            const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
                 {
                     method: 'get',
                     headers: {

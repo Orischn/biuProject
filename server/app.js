@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors')
-const https = require('http')
+const https = require('https')
 const fs = require('fs')
 const app = express();
 
 const options = {
-    origin: '*',
-    allowedHeaders: '*'
-}
+    origin: 'https://localhost:3000', // Allow requests from this origin
+    methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
+};
 
 // SSL certificate and private key
 const sslOptions = {
@@ -26,3 +27,7 @@ app.use(require('./routes/user'));
 const server = https.createServer(sslOptions, app);
 
 server.listen(5000);
+
+// server.listen(5000, () => {
+//     console.log('Server running at https://localhost:5000/');
+// });

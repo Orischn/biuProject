@@ -65,6 +65,7 @@ function LoginPage({ setToken, setUserId }) {
       setPasswordError('Password is required!');
       return;
     }
+    
     const res = await fetch('https://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
@@ -75,6 +76,7 @@ function LoginPage({ setToken, setUserId }) {
         "password": password,
       })
     })
+  
     if (res.status !== 200) {
       await res.text().then((error) => {
         setError(error);
@@ -86,6 +88,7 @@ function LoginPage({ setToken, setUserId }) {
       setUserId(userId)
       navigateTo(token);
     });
+  
   }
   return (
     <>

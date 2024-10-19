@@ -71,7 +71,7 @@ function AdminFeed({ token, userId }) {
 
         }
         const fetchName = async () => {
-            const res = await fetch(`http://localhost:5000/api/getStudent/${userId}`, {
+            const res = await fetch(`https://localhost:5000/api/getStudent/${userId}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

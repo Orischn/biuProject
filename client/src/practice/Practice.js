@@ -29,7 +29,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
     };
 
     const add = async function () {
-        const res = await fetch(`http://localhost:5000/api/addPractice/`, {
+        const res = await fetch(`https://localhost:5000/api/addPractice/`, {
             method: 'post',
             headers: {
                 accept: 'application/json',
@@ -83,7 +83,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
 
     useEffect(() => {
         const fetchPractice = async function () {
-            const res = await fetch(`http://localhost:5000/api/getPractice/${task.taskName}`, {
+            const res = await fetch(`https://localhost:5000/api/getPractice/${task.taskName}`, {
                 method: 'get',
                 headers: {
                     accept: 'application/json',

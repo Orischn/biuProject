@@ -27,7 +27,6 @@ const checkAdmin = async (req, res, next) => {
 
 const viewSubmissionStatus = async (req, res) => {
     const result = await getSubmissionStatus(req.params.taskName, req.params.year);
-    console.log(result.submissionStatus);
     return res.status(result.status).end(JSON.stringify(result.submissionStatus));
 }
 

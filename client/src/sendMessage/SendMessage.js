@@ -15,7 +15,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
         const message = {content: content}
         setMessages(messages => [...messages, <StudentMessage message={message} />]);
         typeBar.current.value = '';
-        const res = await fetch(`http://localhost:5000/api/sendMessage/`, {
+        const res = await fetch(`https://localhost:5000/api/sendMessage/`, {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

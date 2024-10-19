@@ -12,7 +12,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             if (!selectedGradeId) {
                 return;
             }
-            // const res = await fetch(`http://localhost:5000/api/getPractice/${selectedGradeId}`, {
+            // const res = await fetch(`https://localhost:5000/api/getPractice/${selectedGradeId}`, {
             //     'method': 'get',
             //     'headers': {
             //         'accept': 'application/json',
