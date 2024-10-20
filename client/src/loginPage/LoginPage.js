@@ -17,7 +17,8 @@ function LoginPage({ setToken, setUserId }) {
       iconName: "bi bi-person",
       placeholder: 'Personal ID Number',
       setValue: setUserIdTry,
-      error: userIdError
+      error: userIdError,
+      type: 'text'
     },
 
     {
@@ -26,7 +27,8 @@ function LoginPage({ setToken, setUserId }) {
       iconName: "bi bi-shield-lock",
       placeholder: 'Password',
       setValue: setPassword,
-      error: passwordError
+      error: passwordError,
+      type: 'password'
     }
   ]
   const infoInputList = neededInfo.map((data, key) => {

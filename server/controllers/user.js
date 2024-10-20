@@ -40,7 +40,7 @@ const changePassword = async (req, res) => {
         return res.status(result.status).end(JSON.stringify(result.user));
     }
     const changeResult = await changeUserPassword(result.user, req.body.oldPassword, req.body.newPassword)
-    return res.status(changeResult.status).end(JSON.stringify(changeResult.user));
+    return res.status(changeResult.status).end(JSON.stringify(changeResult.error));
 
 }
 

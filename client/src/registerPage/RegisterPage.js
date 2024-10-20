@@ -29,7 +29,8 @@ function RegisterPage() {
             iconName: "bi bi-person",
             placeholder: 'Personal ID Number',
             setValue: setUserId,
-            error: userIdError
+            error: userIdError,
+            type: 'text'
         },
 
         {
@@ -38,7 +39,8 @@ function RegisterPage() {
             iconName: "bi bi-battery-half",
             placeholder: "First Name",
             setValue: setFirstName,
-            error: firstNameError
+            error: firstNameError,
+            type: 'text'
         },
 
         {
@@ -47,7 +49,8 @@ function RegisterPage() {
             iconName: "bi bi-battery-full",
             placeholder: "Last Name",
             setValue: setLastName,
-            error: lastNameError
+            error: lastNameError,
+            type: 'text'
         },
 
         {
@@ -56,7 +59,8 @@ function RegisterPage() {
             iconName: "bi bi-shield-lock",
             placeholder: "Password",
             setValue: setPassword,
-            error: passwordError
+            error: passwordError,
+            type: 'text'
         },
 
         {
@@ -65,7 +69,8 @@ function RegisterPage() {
             iconName: "bi bi-shield-check",
             placeholder: "Verify Password",
             setValue: setVerifyPassword,
-            error: verifyPasswordError
+            error: verifyPasswordError,
+            type: 'text'
         },
 
         {
@@ -74,7 +79,8 @@ function RegisterPage() {
             iconName: "bi bi-calendar",
             placeholder: "Year Of Study",
             setValue: setYear,
-            error: yearError
+            error: yearError,
+            type: 'text'
         },
 
         {
@@ -83,7 +89,8 @@ function RegisterPage() {
             iconName: "bi bi-envelope-at",
             placeholder: "Email Address",
             setValue: setEmail,
-            error: emailError
+            error: emailError,
+            type: 'text'
         }
     ];
     const infoInputList = neededInfo.map((data, key) => {
@@ -252,7 +259,7 @@ function RegisterPage() {
 
                         {infoInputList}
 
-                        <button type="submit" class="sign-in-btn" style={{marginBottom: '20px'}}>Register</button>
+                        <button type="submit" class="sign-in-btn" style={{ marginBottom: '20px' }}>Register</button>
                         {error &&
                             <span className="alert alert-danger w-50" role="alert">
                                 {error}

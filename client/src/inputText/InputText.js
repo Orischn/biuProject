@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-function InputText({ title, iconTitle, iconName, placeholder, setValue, error }) {
+function InputText({ title, iconTitle, iconName, placeholder, setValue, error, type }) {
     var input = useRef('');
 
     function handleChange(e) {
@@ -9,7 +9,7 @@ function InputText({ title, iconTitle, iconName, placeholder, setValue, error })
     return (
         <>
             <div class="input-field">
-                <input ref={input} type="text" className="form-control input" placeholder={placeholder} id={title} onChange={(e) => handleChange(e)} required />
+                <input ref={input} type={type} className="form-control input" placeholder={placeholder} id={title} onChange={(e) => handleChange(e)} required />
                 <i id={iconTitle} className={iconName} />
             </div>
             <div>

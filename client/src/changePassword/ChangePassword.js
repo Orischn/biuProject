@@ -31,13 +31,16 @@ function ChangePassword({ token, userId }) {
     const change = async function (e) {
 
         e.preventDefault();
-        setError('');
         const currentPassword = currentPassBar.current.value.trim();
         const newPassword = newPassBar.current.value.trim();
         const newPasswordConfirmation = newPassBarCon.current.value.trim(); //needs to be validated
 
+        if (currentPassword === '' || newPassword === '' || newPasswordConfirmation === '') {
+            setError('You must fill all fields');
+            return;
+        }
         if (newPasswordConfirmation !== newPassword) {
-            alert('The passwords aren\'t matching')
+            setError('The passwords don\'t match')
             return;
         }
 
@@ -56,7 +59,7 @@ function ChangePassword({ token, userId }) {
 
         if (res.status !== 200) { //error
             await res.text().then((errorMessage) => {
-                alert(errorMessage);
+                setError(errorMessage)
             })
             setIsSuccessful(false);
             return;
@@ -84,10 +87,10 @@ function ChangePassword({ token, userId }) {
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
-                            <div className="modal-header text-white">
+                            <div className="modal-header">
                                 <h5 className="modal-title">Change your Password</h5>
                                 <button type="button" className="btn-close"
-                                    onClick={handleCancel}></button>
+                                    onClick={handleCancel} style={{color: 'white'}}></button>
                             </div>
                             <form onSubmit={change}>
                                 <div className="modal-body">
@@ -97,19 +100,18 @@ function ChangePassword({ token, userId }) {
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
-                                        <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                            {error}
-                                        </span>}
-                                    <button type="button" onClick={handleCancel}
-                                        className="btn btn-secondary">Cancel</button>
-                                    <button type="submit" className="btn btn-primary">Save new Password</button>
+                                    <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+                                        {error}
+                                    </span>}
+                                    <button type="button" className="btn btn-secondary" onClick={handleCancel}>Close</button>
+                                    <button type="submit" className="btn btn-primary">Save password</button>
                                 </div>
-                            </form>        
+                            </form>
                         </div>
                     </div>
                 </div>
             )}
-        </>   
+        </>
     );
 
 }
@@ -178,7 +180,7 @@ export default ChangePassword;
 //                                         <button type="button" onClick={handleCancel} className="btn btn-secondary">Cancel</button>
 //                                         <button type="submit" className="btn btn-primary">Save new Password</button>
 //                                     </div>
-//                                 </form>        
+//                                 </form>
 //                             </div>
 //                         </div>
 //                     </div>
