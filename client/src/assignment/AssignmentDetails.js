@@ -49,6 +49,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                 "taskName": taskName,
                 "newTaskName": newTaskName,
                 "newEndDate": convertTimestampToDate(new Date(newEndDate).getTime()),
+                "year": yearOption.current.value
             })
 
         })

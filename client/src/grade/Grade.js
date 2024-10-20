@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Feedback from "../feedback/Feedback";
 
-function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback, setNewGrade, isActive, refreshData }) {
+function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback,
+     setNewGrade, isActive, refreshData, year }) {
 
     var input = useRef(null);
 
@@ -53,7 +54,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             'body': JSON.stringify({
                 "userId": selectedStudent.userId,
                 "chatId": chatId,
-                "newGrade": gradeValue
+                "newGrade": gradeValue,
             })
         })
         if (res === 500) {
@@ -102,7 +103,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                             </span>
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
                             <Feedback token={token} chatId={chatId} feedback={feedback}
-                                selectedStudent={selectedStudent} refreshData={refreshData} />
+                                selectedStudent={selectedStudent} refreshData={refreshData} 
+                                year={year}/>
                         </div>
                     </>
                 ) : (

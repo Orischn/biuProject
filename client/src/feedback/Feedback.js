@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 
-function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
+function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year }) {
 
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
@@ -19,7 +19,8 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
             'body': JSON.stringify({
                 "userId": selectedStudent.userId,
                 "chatId": chatId,
-                "feedback": feedback
+                "feedback": feedback,
+                "year": year
             })
         })
 

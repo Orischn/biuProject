@@ -35,7 +35,8 @@ function StudentStats({ token, selectedStudent }) {
                                 chatId={practice.chatId} grade={practice.grade}
                                 feedback={practice.feedback}
                                 key={key} setGrades={setGrades} setNewGrade={setNewGrade}
-                                isActive={practice.active} refreshData={refreshData}/>
+                                isActive={practice.active} refreshData={refreshData}
+                                yearOption={practice.year}/>
                     }))
                 })
             } else {

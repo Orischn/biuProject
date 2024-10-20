@@ -266,7 +266,7 @@ function RegisterPage() {
                             </span>}
                     </form>
                     <br />
-                    Already have an accpunt <Link to="/loginPage">Click here</Link> to login
+                    Already have an account? <Link to="/loginPage">Click here</Link> to login
                 </div>
             </div>
 

@@ -258,6 +258,11 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     }
 
     try {
+
+        const existingTask = await tasks.findOne({ taskName: taskName, year: year })
+        if (existingTask) {
+            return { status: 409, error: `This task already exists this year`}
+        }
         const submitList = users
             .filter(user => user.year === year)
             .map(user => ({
@@ -304,10 +309,10 @@ async function getSubmissionStatus(taskName, year) {
     }
 }
 
-async function postFeedback(userId, chatId, feedback) {
+async function postFeedback(userId, chatId, feedback, year) {
     try {
         await practices.updateOne(
-            { chatId: chatId, userId: userId, active: false },
+            { chatId: chatId, userId: userId, active: false, year: year },
             {
                 $set: {
                     feedback: feedback,
@@ -320,10 +325,10 @@ async function postFeedback(userId, chatId, feedback) {
     }
 }
 
-async function changeTask(taskName, newTaskName, newEndDate) {
+async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
         await tasks.updateOne(
-            { taskName: taskName },
+            { taskName: taskName, year: parseInt(year) },
             {
                 $set: {
                     taskName: newTaskName,
@@ -333,7 +338,7 @@ async function changeTask(taskName, newTaskName, newEndDate) {
         );
 
         await practices.updateMany(
-            { chatId: taskName },
+            { chatId: taskName, year: parseInt(year) },
             {
                 $set: {
                     chatId: newTaskName,

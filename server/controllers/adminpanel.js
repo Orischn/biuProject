@@ -41,7 +41,7 @@ const changeGrade = async (req, res) => {
 }
 
 const updateTask = async (req, res) => {
-    const result = await changeTask(req.body.taskName, req.body.newTaskName, req.body.newEndDate)
+    const result = await changeTask(req.body.taskName, req.body.newTaskName, req.body.newEndDate, req.body.year)
     return res.status(result.status).end(result.error);
 }
 
@@ -51,7 +51,7 @@ const deleteTask = async (req, res) => {
 }
 
 const createFeedback = async (req, res) => {
-    const result = await postFeedback(req.body.userId, req.body.chatId, req.body.feedback)
+    const result = await postFeedback(req.body.userId, req.body.chatId, req.body.feedback, req.body.year)
     return res.status(result.status).end(JSON.stringify(result.error));
 }
 
