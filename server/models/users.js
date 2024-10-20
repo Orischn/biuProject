@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 // Create a transporter
 const transporter = nodemailer.createTransport({
@@ -29,6 +30,17 @@ const sendEmail = (toEmail, subject, html) => {
     }
   });
 };
+
+let validIds = [];
+
+// Load valid IDs when the server starts
+fs.readFile('server/validIds.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error reading ID file', err);
+    } else {
+        validIds = data.split('\n').map(id => id.trim());
+    }
+});
 
 
 async function getUser(userId) {
@@ -89,6 +101,11 @@ async function postUser(user) {
     const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
       return { status: 409, error: "User already exists in the database." };
+    }
+
+    console.log(validIds);
+    if (!validIds.includes(user.userId)) {
+      return { status: 400, error: "User ID isn't registered to this course" }
     }
 
     sendEmail(`${user.email}`, 'Your password for first login',

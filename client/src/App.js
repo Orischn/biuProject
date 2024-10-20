@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import StudentFeed from './studentFeed/StudentFeed';
 import AdminFeed from './adminFeed/AdminFeed';
+import RegisterPage from './registerPage/RegisterPage';
 
 function App() {
     const [userId, setUserId] = useState(null);
@@ -13,6 +14,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<LoginPage setUserId={setUserId} setToken={setToken} />} />
                 <Route path='/loginPage' element={<LoginPage setUserId={setUserId} setToken={setToken} />} />
+                <Route path='/registerPage' element={<RegisterPage />} />
                 <Route path='/studentFeed' element={token ?
                     <StudentFeed token={token} userId={userId} /> :
                     <LoginPage setUserId={setUserId} setToken={setToken} />} />

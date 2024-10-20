@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import InputText from "../inputText/InputText";
+import { Link } from "react-router-dom";
 
 function LoginPage({ setToken, setUserId }) {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ function LoginPage({ setToken, setUserId }) {
     setError('');
     e.preventDefault();
     if (userId.trim() === '') {
-      setUserIdError('userId is required!');
+      setUserIdError('ID number is required!');
       return;
     }
 
@@ -65,7 +66,7 @@ function LoginPage({ setToken, setUserId }) {
       setPasswordError('Password is required!');
       return;
     }
-    
+
     const res = await fetch('https://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
@@ -76,7 +77,7 @@ function LoginPage({ setToken, setUserId }) {
         "password": password,
       })
     })
-  
+
     if (res.status !== 200) {
       await res.text().then((error) => {
         setError(error);
@@ -88,7 +89,7 @@ function LoginPage({ setToken, setUserId }) {
       setUserId(userId)
       navigateTo(token);
     });
-  
+
   }
   return (
     <>
@@ -111,12 +112,14 @@ function LoginPage({ setToken, setUserId }) {
 
             {infoInputList}
 
-            <button type="submit" class="sign-in-btn">Sign In</button>
+            <button type="submit" class="sign-in-btn" style={{marginBottom: '20px'}}>Sign In</button>
             {error &&
               <span className="alert alert-danger w-50" role="alert">
                 {error}
               </span>}
           </form>
+          <br />
+          New here? <Link to="/registerPage">Create an account</Link> to get started
         </div>
       </div>
 

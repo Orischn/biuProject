@@ -73,10 +73,11 @@ input {
 
 .input-field {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
-#personIcon, #shieldIcon {
+#personIcon, #shieldIcon, #shieldCheckIcon, #batteryHalfIcon, #batteryFullIcon, #calendarIcon, #envelopeIcon{
     position: absolute;
     left: -20px;
     top: 50%;
