@@ -326,7 +326,7 @@ async function changeTask(taskName, newTaskName, newEndDate) {
             {
                 $set: {
                     taskName: newTaskName,
-                    endDate: new Date(newEndDate),
+                    endDate: newEndDate,
                 },
             },
         );

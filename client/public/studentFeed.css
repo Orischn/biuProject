@@ -551,4 +551,23 @@ button > i {
     color: darkblue;
 }
 
+/* .editAssignmentInput::placeholder {
+    position: relative !important;
+    text-align: left !important;
+    left: 0;
+    padding-left: 0 !important;    
+    padding-top: 0 !important;     
+} */
+
+.editAssignmentInput {
+    padding-left: 0;  /* Remove extra padding from the left */
+    text-align: left; /* Ensure the text starts from the left */
+    padding-top: 2;   /* Ensure no vertical padding */
+}
+
+.editAssignmentInput::placeholder {
+    text-align: left; /* Placeholder starts from the left */
+}
+
+
 

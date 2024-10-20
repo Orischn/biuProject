@@ -21,6 +21,12 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
     const newTaskNameBar = useRef(null);
     const newEndDateBar = useRef(null)
 
+    const handleCancel = () => {
+        setIsEditing(false);
+        newTaskNameBar.current.value = "";
+        newEndDateBar.current.value = "";
+    }
+
     const editAssignment = async (e) => {
 
         if (!newTaskNameBar.current.value.trim() || !newEndDateBar.current.value.trim()) {
@@ -125,25 +131,31 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                         </div>
                     </ul>
 
-                    
+
                 </>
 
 
             ) : (
                 <ul>
                     <div className="row">
-                        <div className="col-2">
-                            <input ref={newTaskNameBar} type="text" placeholder="new name" style={{ width: "70%" }} />
+                        <div className="col-2" style={{ alignItems: 'left' }}>
+                            <input className="editAssignmentInput" ref={newTaskNameBar} type="text"
+                                placeholder="new name" style={{ width: "100%", paddingLeft: '10%' }} />
                         </div>
                         <div className="col-3">
                             {numOfSubmits} / {numOfAssigned} submitted
                         </div>
                         <div className="col-5">
                             {/* needs to be input so we could edit? like in grade? */}
-                            Submit until <input ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "50%" }} />
+                            Submit until <input className="editAssignmentInput" ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "45%" }} />
                         </div>
 
-                        <div className="col-2">
+                        <div className="col-1">
+
+                            <i className="bi bi-x-circle" onClick={handleCancel}></i>
+                        </div>
+
+                        <div className="col-1">
 
                             <button type="button" className="btn btn-danger" onClick={editAssignment}>save</button>
                         </div>
