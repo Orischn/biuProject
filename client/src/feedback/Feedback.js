@@ -69,7 +69,8 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
                                         className="form-control feedback-textarea"
                                         rows={3} // You can adjust this for height
                                     />
-                                    <b><u>Feedback Given:</u></b> <br />
+                                    {feedback ? 
+                                    <><b><u>Feedback Given:</u></b> <br /> </>: <></>}
                                     {feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
                                         <React.Fragment key={index}>
                                             {line}
@@ -79,7 +80,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData }) {
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" onClick={handleCancel}
-                                        className="btn btn-secondary">Cancel</button>
+                                        className="btn btn-secondary">Close</button>
                                     <button type="submit" className="btn btn-primary" >Send Feedback</button>
                                 </div>
                             </form>

@@ -36,13 +36,15 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
     const handleSubmit = (e) => {
         add(e);
-        userIdBar.current.value = '';
-        firstNameBar.current.value = '';
-        lastNameBar.current.value = '';
-        yearBar.current.value = '';
-        emailBar.current.value = '';
+        if (isSuccessful) {
+            userIdBar.current.value = '';
+            firstNameBar.current.value = '';
+            lastNameBar.current.value = '';
+            yearBar.current.value = '';
+            emailBar.current.value = '';
+        }
         refreshData();
-        setShowModal(false);
+        // setShowModal(false);
     };
 
     const handleCancel = () => {
@@ -66,6 +68,38 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         const password = generateRandomPassword();
         const email = emailBar.current.value.trim();
 
+        if (userId === '' || firstName === '' || lastName === '' ||
+            year === '' || email === '') {
+            setError('Must fill all fields!');
+            return;
+        }
+
+
+        const userIdRegex = new RegExp('^[0-9]+$')
+        if (!userIdRegex.test(userId)) {
+            setError('User ID must be digits only!');
+            return;
+        }
+
+        const nameRegex = new RegExp('^[a-zA-Z]+$')
+        if (!nameRegex.test(firstName)) {
+            setError('First name invalid!');
+            return;
+        }
+
+        if (!nameRegex.test(lastName)) {
+            setError('Last name invalid!');
+            return;
+        }
+
+        const yearRegex = new RegExp('^[0-9]+$')
+        if (!yearRegex.test(year)) {
+            setError('Year must be a number!');
+            return;
+        }
+
+        // need to check validity of the email!!!
+
 
         const res = await fetch('https://localhost:5000/api/createUser', {
             'method': 'post',
@@ -88,7 +122,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
         })
 
-        if (res.status !== 200) { //error
+        if (res.status !== 201) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);
             })
@@ -151,9 +185,9 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                                 <div className="modal-footer">
                                     {error &&
                                         <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                            {error}
+                                            <center>{error}</center>
                                         </span>}
-                                    <button type="button" className="btn btn-secondary" onClick={handleCancel} >Cancel</button>
+                                    <button type="button" className="btn btn-secondary" onClick={handleCancel}>Close</button>
                                     <button type="submit" className="btn btn-primary">Add Student</button>
                                 </div>
                             </form>

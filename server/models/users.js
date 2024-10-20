@@ -105,11 +105,12 @@ async function postUser(user) {
     const tasks = db.collection('tasks');
     const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
-      return { status: 409, error: "User already exists in the database." };
+      return { status: 409, error: "This user ID already exists!" };
+      // return { status: 409, error: "Cannot add already existing user" };
     }
 
     if (!validIds.includes(user.userId)) {
-      return { status: 400, error: "User ID isn't registered to this course" }
+      return { status: 400, error: "This ID number isn't allowed!" }
     }
 
     const cid = 'welcome@image';

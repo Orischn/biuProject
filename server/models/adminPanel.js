@@ -276,7 +276,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
             year: year,
             submitList: submitList,
         });
-        return { status: 200, error: "" };
+        return { status: 201, error: "" };
     } catch (error) {
         return { status: 500, error: error.message };
     }

@@ -17,8 +17,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
         nameBar.current.value = '';
         startDateBar.current.value = '';
         endDateBar.current.value = '';
-        durationHoursBar.current.value= '';
-        durationMinutesBar.current.value= '';
+        durationHoursBar.current.value = '';
+        durationMinutesBar.current.value = '';
     }
 
     const handleClick = () => {
@@ -27,7 +27,9 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
     const handleSubmit = async (e) => {
         await add(e);
-        cleanInput();
+        if (isSuccessful) {
+            cleanInput();
+        }
 
         // setTimeout(3000);
 
@@ -53,6 +55,22 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const durationHours = durationHoursBar.current.value.trim();
         const durationMinutes = durationMinutesBar.current.value.trim();
 
+        if (name === '' || startDate === '' || endDate === '' || durationHours === '' || durationMinutes === '') {
+            setError('Must fill all fields');
+            return;
+        }
+
+        const durationRegex = new RegExp('^[0-9]+$')
+        if (!durationRegex.test(durationHours) || !durationRegex.test(durationMinutes)) {
+            setError('Duration must be a number!');
+            return;
+        }
+
+        if (parseInt(durationMinutes) >= 60) {
+            setError('Minutes must be a less than 60!');
+            return;
+        }
+
         const res = await fetch('https://localhost:5000/api/createTask', {
             'method': 'post',
             'headers': {
@@ -70,16 +88,15 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
         })
 
-        if (res.status !== 200) { //error
+        if (res.status !== 201) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);
-                setIsSuccessful(false)
             })
+            setIsSuccessful(false)
             return;
         } else {
             setError("Added Successfully");
             setIsSuccessful(true)
-            cleanInput();
             refreshData();
         }
 
@@ -114,8 +131,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
             {/* Modal */}
             {showModal && (
                 // check first line for backdrop
-                <div className="modal show d-block modal-overlay"   tabIndex="-1" role="dialog">
-                    <div className="modal-dialog-custom" role="document" style={{margin: '0 auto'}}>
+                <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">CREATE ASSIGNMENT</h5>
@@ -124,18 +141,18 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
                             <form onSubmit={handleSubmit}>
                                 <div className="modal-body">
-                                    <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{width: '70%', margin: '0 auto'}}/>
-                                    <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{width: '70%', margin: '0 auto'}}/>
-                                    <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{width: '70%', margin: '0 auto'}}/>
+                                    <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
+                                    <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
+                                    <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
                                     <center>Assignemnt's duration: </center>
-                                    <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{width: '70%', margin: '0 auto'}}/>
-                                    <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{width: '70%', margin: '0 auto'}}/>
+                                    <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
+                                    <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
-                                    <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                        {error}
-                                    </span>}
+                                        <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
+                                            <center>{error}</center>
+                                        </span>}
                                     <button type="button" className="btn btn-secondary" onClick={handleCancel}>Close</button>
                                     <button type="submit" className="btn btn-primary">Create Assignemnt</button>
                                 </div>
