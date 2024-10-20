@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import DeleteAssignment from "../deleteAssignment/DeleteAssignment";
 
 
 function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask, yearOption }) {
@@ -114,16 +115,21 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             <div className="col-2">
                                 {taskName}
                             </div>
-                            <div className="col-3">
+                            <div className="col-2">
                                 {numOfSubmits} / {numOfAssigned} submitted
                             </div>
                             <div className="col-5">
                                 {/* maybe remove the T for design */}
-                                Submit until {endDate}
+                                Submit until {endDate.split('T')[0]}&nbsp;
+                                on {endDate.split('T')[1]}
                             </div>
 
                             <div className="col-1">
                                 <i className="bi bi-pencil" style={{ cursor: 'pointer' }} onClick={() => { setIsEditing(true) }} />
+                            </div>
+                            <div className="col-1">
+                                <DeleteAssignment token={token} taskName={taskName} 
+                                year={yearOption.current.value} refreshData={refreshData} />
                             </div>
                             <div className="col-1">
                                 <i className="bi bi-caret-right" style={{ cursor: 'pointer' }} onClick={handleExpand} />

@@ -35,8 +35,8 @@ function RegisterPage() {
 
         {
             title: "firstName",
-            iconTitle: "batteryHalfIcon",
-            iconName: "bi bi-battery-half",
+            iconTitle: "oneHandIcon",
+            iconName: "bi bi-person-raised-hand",
             placeholder: "First Name",
             setValue: setFirstName,
             error: firstNameError,
@@ -45,8 +45,8 @@ function RegisterPage() {
 
         {
             title: "lastName",
-            iconTitle: "batteryFullIcon",
-            iconName: "bi bi-battery-full",
+            iconTitle: "twoHandsIcon",
+            iconName: "bi bi-person-arms-up",
             placeholder: "Last Name",
             setValue: setLastName,
             error: lastNameError,

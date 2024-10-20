@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 
-function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
+function DeleteAssignment({ token, taskName, year, refreshData }) {
 
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
@@ -16,17 +16,16 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
         setShowModal(false);
     }
 
-
-    const deleteStudent = async function (e) {
-
-        const res = await fetch('https://localhost:5000/api/deleteUser', {
+    const deleteTask = async function (e) {
+        const res = await fetch('https://localhost:5000/api/deleteTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
             'body': JSON.stringify({
-                "userId": userId
+                "taskName": taskName,
+                "year": year
             })
 
         })
@@ -40,9 +39,7 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
         }
 
         else {
-            // setError("Deleted Successfully");
             setIsSuccessful(true);
-            // setIsChanged(userId);
             refreshData();
             setShowModal(false);
         }
@@ -51,10 +48,11 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
     return (
         <>
             {/* Button trigger modal */}
-            <button type="button" className="btn" onClick={handleClick}>
-                <i id="deleteStudentIcon" className="bi bi-person-x" style={{ color: 'black' }}></i>
+            {/* <button type="button" className="btn"  */}
+                <i id="deleteAssignmentIcon" className="bi bi-trash" 
+                style={{ color: 'black', cursor: 'pointer' }} onClick={handleClick}></i>
 
-            </button>
+            {/* </button> */}
 
             {/* Modal */}
             {showModal && (
@@ -63,11 +61,11 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
                     <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
-                                <h5 className="modal-title text-white">DELETE STUDENT</h5>
+                                <h5 className="modal-title text-white">DELETE ASSIGNMENT</h5>
                                 <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
                             </div>
                             <div className="modal-body">
-                                Are you sure you want to delete {fullName} from your course?
+                                Are you sure you want to delete the task named: <b>{taskName}</b> from your course?
                                 <br />
                                 <b>This action is irreversible!</b>
                             </div>
@@ -76,9 +74,9 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
                                     <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
                                         {error}
                                     </span>}
-                                <button type="button" className="btn btn-secondary"onClick={handleCancel}>No, cancel</button>
+                                <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, cancel</button>
                                 <button type="button" className="btn btn-danger"
-                                    onClick={() => deleteStudent()}>Yes, delete {fullName}</button>
+                                    onClick={() => deleteTask()}>Yes, delete</button>
                             </div>
                         </div>
                     </div>
@@ -88,4 +86,6 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
     );
 }
 
-export default AdminDeleteStudent;
+
+
+export default DeleteAssignment;

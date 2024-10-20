@@ -255,7 +255,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     if (!errors.isEmpty()) {
         return { status: 400, errors: errors.array() };
     }
-    
+
     try {
         const submitList = users
             .filter(user => user.year === year)
@@ -346,6 +346,16 @@ async function changeTask(taskName, newTaskName, newEndDate) {
     }
 }
 
+async function removeTask(taskName, year) {
+    try {
+        await tasks.deleteMany({ taskName: taskName, year: parseInt(year) });
+        await practices.deleteMany({ chatId: taskName, year: parseInt(year) });
+        return { status: 200, error: '' };
+    } catch (error) {
+        return { status: 500, error: error.message };
+    }
+}
+
 async function giveLateSubmit(taskName, userId) {
     try {
         await tasks.updateOne(
@@ -403,6 +413,7 @@ module.exports = {
     getSubmissionStatus,
     postFeedback,
     changeTask,
+    removeTask,
     giveLateSubmit,
     takeLateSubmit,
     validateTaskInputs, // Export validation middleware for use in routes
