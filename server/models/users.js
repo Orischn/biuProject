@@ -2,13 +2,15 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+require('dotenv').config();
+const MAIL_PASSWORD = process.env.MAIL_APP_PASSWORD;
 
 // Create a transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'some.new.mail1@gmail.com',
-    pass: 'hxqx grrl lieh urdw', // or use an app password for Gmail
+    pass: MAIL_PASSWORD,
   },
 });
 

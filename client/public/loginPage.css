@@ -77,7 +77,7 @@ input {
     margin-top: 10px;
 }
 
-#personIcon, #shieldIcon, #shieldCheckIcon, #batteryHalfIcon, #batteryFullIcon, #calendarIcon, #envelopeIcon{
+#personIcon, #shieldIcon, #shieldCheckIcon, #oneHandIcon, #twoHandsIcon, #calendarIcon, #envelopeIcon{
     position: absolute;
     left: -20px;
     top: 50%;

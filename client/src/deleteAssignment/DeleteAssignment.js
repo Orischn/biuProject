@@ -72,7 +72,7 @@ function DeleteAssignment({ token, taskName, year, refreshData }) {
                             <div className="modal-footer">
                                 {error &&
                                     <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert">
-                                        {error}
+                                        <center>{error}</center>
                                     </span>}
                                 <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, cancel</button>
                                 <button type="button" className="btn btn-danger"

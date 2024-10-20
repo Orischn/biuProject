@@ -124,7 +124,7 @@ function LoginPage({ setToken, setUserId }) {
             <button type="submit" class="sign-in-btn" style={{ marginBottom: '20px', marginTop: '10px' }}>Sign In</button>
             {error &&
               <span className="alert alert-danger w-50" role="alert">
-                {error}
+                <center>{error}</center>
               </span>}
           </form>
           <br />
