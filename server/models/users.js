@@ -12,12 +12,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = (toEmail, subject, html) => {
+const sendEmail = (toEmail, subject, html, cid) => {
   const mailOptions = {
     from: 'some.new.mail1@gmail.com',
     to: toEmail,
     subject: subject,
     html: html,
+    attachments: [{
+      filename: 'welcomePic.png',
+      path: 'server/welcomePic.png',
+      cid: cid // Use the same CID here
+    }]
   };
 
   // 
@@ -35,11 +40,11 @@ let validIds = [];
 
 // Load valid IDs when the server starts
 fs.readFile('server/validIds.txt', 'utf8', (err, data) => {
-    if (err) {
-        console.error('Error reading ID file', err);
-    } else {
-        validIds = data.split('\n').map(id => id.trim());
-    }
+  if (err) {
+    console.error('Error reading ID file', err);
+  } else {
+    validIds = data.split('\n').map(id => id.trim());
+  }
 });
 
 
@@ -103,15 +108,34 @@ async function postUser(user) {
       return { status: 409, error: "User already exists in the database." };
     }
 
-    console.log(validIds);
     if (!validIds.includes(user.userId)) {
       return { status: 400, error: "User ID isn't registered to this course" }
     }
 
-    sendEmail(`${user.email}`, 'Your password for first login',
-       `Hello ${user.firstName} ${user.lastName}, your password is: <b>${user.password}</b><br />
-       Use this password for your first login to the app.<br />
-       We strongly advise you to change this password after you logged in successfully`);
+    const cid = 'welcome@image';
+
+    if (user.isSelfRegistered) {
+      sendEmail(`${user.email}`, 'Register Confirmation',
+        `Hello ${user.firstName} ${user.lastName} (ID number: ${user.userId}), you successfully registered to the
+        medical history questioning practice system of the Department of Optometry, Bar Ilan university.<br />
+        Those are the details you provided in your registration: <br />
+        <b>full name: ${user.firstName} ${user.lastName}</b><br />
+        <b>ID number: ${user.userId}</b><br />
+        <b>password: ${user.password}</b><br />
+        We hope you will enjoy using our system, Good Luck! <br /><br />
+        <center><img src="cid:${cid}" /></center>`);
+    } else {
+      sendEmail(`${user.email}`, 'Your password for first login',
+        `Hello ${user.firstName} ${user.lastName} (ID number: ${user.userId}), you were successfully added to the
+        medical history questioning practice system of the Department of Optometry, Bar Ilan university.<br />
+        your password for the first login is: <b>${user.password}</b><br />
+        Use this password for your first login to the app.<br />
+        We strongly advise you to change this password after you logged in successfully <br />
+        We hope you will enjoy using our system, Good Luck! <br /><br />
+        <center><img src="cid:${cid}" /></center>`);
+    }
+
+
 
     //Hashing the user's password with salt
     const hashedPassword = await hashPassword(user.password);

@@ -67,6 +67,12 @@ function LoginPage({ setToken, setUserId }) {
       return;
     }
 
+    const userIdRegex = new RegExp('^[0-9]+$')
+    if (!userIdRegex.test(userId)) {
+      setUserIdError('User ID number must contain only digits');
+      return;
+    }
+
     const res = await fetch('https://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
@@ -81,6 +87,7 @@ function LoginPage({ setToken, setUserId }) {
     if (res.status !== 200) {
       await res.text().then((error) => {
         setError(error);
+
       });
       return;
     }
@@ -112,7 +119,7 @@ function LoginPage({ setToken, setUserId }) {
 
             {infoInputList}
 
-            <button type="submit" class="sign-in-btn" style={{marginBottom: '20px'}}>Sign In</button>
+            <button type="submit" class="sign-in-btn" style={{ marginBottom: '20px', marginTop: '10px' }}>Sign In</button>
             {error &&
               <span className="alert alert-danger w-50" role="alert">
                 {error}

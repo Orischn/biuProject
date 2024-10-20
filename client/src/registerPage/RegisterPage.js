@@ -137,10 +137,15 @@ function RegisterPage() {
             return;
         }
 
+        const userIdRegex = new RegExp('^[0-9]+$')
+        if (!userIdRegex.test(userId)) {
+            setUserIdError('User ID number must contain only digits');
+            return;
+        }
 
         const nameRegex = new RegExp('^[a-zA-Z]+$')
         if (!nameRegex.test(firstName)) {
-            setFirstNameError('First must contain only letters');
+            setFirstNameError('First name must contain only letters');
             return;
         }
 
@@ -195,7 +200,7 @@ function RegisterPage() {
 
         const yearRegex = new RegExp('^[0-9]+$')
         if (!yearRegex.test(year)) {
-            setFirstNameError('Year must be a valid number');
+            setYearError('Year must be a valid number');
             return;
         }
 
@@ -214,7 +219,8 @@ function RegisterPage() {
                     "lastName": lastName,
                     "userId": userId,
                     "year": year,
-                    "email": email
+                    "email": email,
+                    "isSelfRegistered": true
                 }
             })
         })

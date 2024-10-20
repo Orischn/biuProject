@@ -81,7 +81,8 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                     "lastName": lastName,
                     "userId": userId,
                     "year": year,
-                    "email": email
+                    "email": email,
+                    "isSelfRegistered": false
                 }
             })
 
