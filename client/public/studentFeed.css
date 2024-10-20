@@ -211,6 +211,7 @@ img {
     background-color: rgb(220, 251, 217);
     overflow-y: scroll;
     scroll-behavior: smooth;
+    
 }
 
 .practice-active {

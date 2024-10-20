@@ -133,7 +133,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         else {
 
             setError("Added Successfully");
-            // refreshData()
+            refreshData()
             setIsSuccessful(true);
             // setShowModal(false);
 

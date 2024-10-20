@@ -115,6 +115,8 @@ function LoginPage({ setToken, setUserId }) {
               <path fill="#004128" d="M114.5 3.015l.97.612.608-.988c.167-.27.085-.628-.183-.797-.268-.169-.621-.085-.788.186l-.608.987zM111.713 1.26l.971.612.607-.988c.167-.27.085-.628-.183-.797-.268-.168-.62-.085-.788.186l-.607.987zM106.23 12.365l-.972-.611-.607.987c-.167.271-.085.628.183.797.268.169.62.086.788-.185l.607-.988zM109.016 14.12l-.971-.612-.608.988c-.167.271-.084.628.184.797.268.169.62.086.787-.186l.608-.987z"></path>
             </g>
           </svg>
+          {/* abother option of logo... */}
+          {/* <img src="https://inbar.biu.ac.il/Live/Code/CustomHandlers/OLImageHandler.ashx?Bytes=true" /> */}
           <h2 className="login-title">LOGIN</h2>
           <p className="description">Medical history questioning practice - Department of Optometry</p>
           <form noValidate className="container-fluid" onSubmit={handleSubmit}>
@@ -124,7 +126,7 @@ function LoginPage({ setToken, setUserId }) {
             <button type="submit" class="sign-in-btn" style={{ marginBottom: '20px', marginTop: '10px' }}>Sign In</button>
             {error &&
               <span className="alert alert-danger w-50" role="alert">
-                <center>{error}</center>
+                {error}
               </span>}
           </form>
           <br />

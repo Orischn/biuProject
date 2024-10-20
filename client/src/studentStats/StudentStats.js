@@ -36,7 +36,7 @@ function StudentStats({ token, selectedStudent }) {
                                 feedback={practice.feedback}
                                 key={key} setGrades={setGrades} setNewGrade={setNewGrade}
                                 isActive={practice.active} refreshData={refreshData}
-                                yearOption={practice.year}/>
+                                year={practice.year}/>
                     }))
                 })
             } else {
