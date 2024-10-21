@@ -54,13 +54,19 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-        if (!tasks.findOne({ taskName: chatId, year: year })) {
+
+        const existingTask = await tasks.findOne({ taskName: chatId, year: year });
+        if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
+        
+        const user = existingTask.submitList.find(user => user.userId === userId);
+
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
+
 
         const practice = {
             userId: userId,
@@ -75,7 +81,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             durationMinutes: durationMinutes,
             year: year,
             active: true,
-            lateSubmit: false
+            lateSubmit: user ? user.canSubmitLate : false
         };
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
@@ -120,9 +126,9 @@ async function submitPractice(userId, chatId) {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-        if (dateTime > task.endDate) {
-            return { status: 403, error: "Submission date passed." };
-        }
+        // if (dateTime > task.endDate) {
+        //     return { status: 403, error: "Submission date passed." };
+        // }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
@@ -188,6 +194,7 @@ async function updateGrade(userId, chatId, newGrade) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
+        const tasks = db.collection('tasks');
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: false },
             {
@@ -196,6 +203,15 @@ async function updateGrade(userId, chatId, newGrade) {
                 },
             },
         );
+
+        await tasks.updateOne (
+            {taskName: chatId, "submitList.userId": userId},
+            {
+                $set: {
+                    "submitList.$.grade": newGrade
+                }
+            }
+        )
         return { status: 200, error: "" };
     } catch (error) {
         return { status: 500, error: error.message };

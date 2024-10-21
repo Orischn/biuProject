@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Feedback from "../feedback/Feedback";
 
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback,
-     setNewGrade, isActive, refreshData, year }) {
+    setNewGrade, isActive, refreshData, year }) {
 
     var input = useRef(null);
 
@@ -88,9 +88,17 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                 {!isEditing ? (
                     <>
                         <div className="grade-title">{chatId}</div>
-                        <div className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
-                            Click to check
-                        </div>
+                        {!isActive ? (
+
+                            <div className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
+                                Click to check
+                            </div>
+                        ) : (
+                            <div className="grade-content">
+                                Hasn't been sumitted yet
+                            </div>
+                        )}
+
                         <div className="grade-feedback">
                             <span className="grade-display">
                                 {grade ?
@@ -103,8 +111,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                             </span>
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
                             <Feedback token={token} chatId={chatId} feedback={feedback}
-                                selectedStudent={selectedStudent} refreshData={refreshData} 
-                                year={year}/>
+                                selectedStudent={selectedStudent} refreshData={refreshData}
+                                year={year} />
                         </div>
                     </>
                 ) : (

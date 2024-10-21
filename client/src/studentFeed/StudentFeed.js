@@ -29,6 +29,7 @@ function StudentFeed({ token, userId }) {
                 'chatId': selectedPractice.chatId,
             }),
         });
+        console.log(selectedPractice.chatId)
         setSelectedTask(null);
         setSelectedPractice(null);
     }
@@ -55,8 +56,7 @@ function StudentFeed({ token, userId }) {
                                 selectedTask={selectedTask}
                                 setSelectedTask={setSelectedTask}
                                 setSelectedPractice={setSelectedPractice} token={token}
-                                refreshData={refreshData}
-                            />
+                                refreshData={refreshData} />
                         }
                     }));
                 });
@@ -83,7 +83,6 @@ function StudentFeed({ token, userId }) {
         fetchMyName();
         fetchTasks();
     }, [selectedTask, token, userId, year, isChanged])
-
 
 
     return (

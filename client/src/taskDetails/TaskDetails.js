@@ -1,6 +1,6 @@
 
 
-function TaskDetails({ taskName, didSubmit, canSubmitLate }) {
+function TaskDetails({ taskName, didSubmit, canSubmitLate, grade }) {
     return (
         <>
             <ul>
@@ -31,11 +31,14 @@ function TaskDetails({ taskName, didSubmit, canSubmitLate }) {
                         </div>
 
                     ) : (
-                        <div className="col-1" style={{ color: 'red' }}>
+                        <div className="col-2" style={{ color: 'red' }}>
                             {/* Can't submit late */}
                             <i className="bi bi-x-square" />
                         </div>
                     )}
+                    <div className="col-3">
+                        {grade}
+                    </div>
                 </div>
             </ul>
         </>

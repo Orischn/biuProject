@@ -20,12 +20,10 @@ function StudentStatus({token, selectedStudent}) {
                 await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).map((task, key) => {
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
-                        console.log(user);
                         return <TaskDetails taskName={task.taskName} 
                         didSubmit={user.didSubmit} 
-                        canSubmitLate={user.canSubmitLate}/>
-                        //  didSubmit={user ? user.didSubmit : false}
-                        // canSubmitLate={user ? user.canSubmitLate : false}
+                        canSubmitLate={user.canSubmitLate}
+                        grade={user.grade ? user.grade : ''}/>
                     }))
                 });
             } else {

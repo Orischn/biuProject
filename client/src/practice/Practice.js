@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
 
-function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice, setSelectedPractice, refreshData }) {
+function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice, refreshData }) {
+
+    const hasTimePassed = function (targetDate) {
+        const [datePart, timePart] = targetDate.split('T');
+        const [day, month, year] = datePart.split('-');
+        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
+        const inputDate = new Date(formattedDateString);
+        const currentDate = new Date();
+        return inputDate < currentDate;
+    }
+
+
     const [isCreated, setIsCreated] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [isEndDatePassed, setIsEndDatePassed] = useState(false);
+    const [isEndDatePassed, setIsEndDatePassed] = useState(hasTimePassed(task.endDate));
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false);
 
@@ -72,15 +83,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
         return `${day}-${month}-${year}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
     };
 
-    const hasTimePassed = function (targetDate) {
-        const [datePart, timePart] = targetDate.split('T');
-        const [day, month, year] = datePart.split('-');
-        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
-        const inputDate = new Date(formattedDateString);
-        const currentDate = new Date();
-        return inputDate < currentDate;
-    }
-
     useEffect(() => {
         const fetchPractice = async function () {
             const res = await fetch(`https://localhost:5000/api/getPractice/${task.taskName}`, {
@@ -99,8 +101,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                     setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
                     setIsLateSubmitAllowed(practice.lateSubmit);
                     setIsTimeUp(hasTimePassed(addTimeToDateString(practice.startDate,
-                         practice.durationHours, practice.durationMinutes)));
-                        setIsEndDatePassed(hasTimePassed(practice.endDate));
+                        practice.durationHours, practice.durationMinutes)));
+                    setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
@@ -135,21 +137,24 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                     ${''}`}
                 onClick={handleTaskClick}
             >
-                
+
                 isTimeUp ? {String(isTimeUp)}
                 <br />
                 isEndDatePassed ? {String(isEndDatePassed)}
+                <br />
+                isLateSubmitAllowed ? {String(isLateSubmitAllowed)}
                 <div className="row">
                     <div>
-                        <b className="text-black w-100">Task: {task.taskName}</b>
+                        <b className="text-black w-100">{task.taskName}</b>
                         <span className="text-black badge date">
-                            {(isEndDatePassed && !isFinished) ?
+                            {(isEndDatePassed && !isFinished && !isLateSubmitAllowed) ?
                                 'Can\'t submit' :
-                                !isCreated
-                                    ? 'Click to start'
-                                    : !isFinished
-                                        ? 'Task in progress...'
-                                        : 'Finished'}
+                                isTimeUp ? 'Time\'s up!' :
+                                    !isCreated
+                                        ? 'Click to start'
+                                        : !isFinished
+                                            ? 'Task in progress...'
+                                            : 'Finished'}
                         </span>
                         <br />
                     </div>
@@ -163,22 +168,34 @@ function Practice({ task, selectedTask, setSelectedTask, token, selectedPractice
                         <>
                             Waiting for checking
                         </>
-                    ) : isEndDatePassed ? (
+                    ) : (isEndDatePassed && !isLateSubmitAllowed) ? (
                         <>
                             Submission date has passed!
                         </>
-                    ) :
-                        isCreated ? (
-                            <>
-                                Started
-                            </>
-                        ) : (
-                            <>
-                                submission until {task.endDate.split('T')[0]}
-                                <br />
-                                at {task.endDate.split('T')[1].slice(0, -3)}
-                            </>
-                        )
+                    ) : isEndDatePassed ? (
+                        <>
+                            Late submission is allowed
+                        </>
+                    ) : isTimeUp ? (
+                        <>
+                            Please submit your progress <br />
+                            Last submission until {task.endDate.split('T')[0]}
+                            <br />
+                            at {task.endDate.split('T')[1].slice(0, -3)}
+                        </>
+                    ) : isCreated ? (
+                        <>
+                            submission until {task.endDate.split('T')[0]}
+                            <br />
+                            at {task.endDate.split('T')[1].slice(0, -3)}
+                        </>
+                    ) : (
+                        <>
+                            submission until {task.endDate.split('T')[0]}
+                            <br />
+                            at {task.endDate.split('T')[1].slice(0, -3)}
+                        </>
+                    )
                     }
                 </div>
             </li >

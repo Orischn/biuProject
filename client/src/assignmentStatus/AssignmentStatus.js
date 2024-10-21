@@ -25,8 +25,6 @@ function AssignemntStatus({ token, taskName, yearOption }) {
 
             if (res.status === 200) {
                 await res.text().then((submissionList) => {
-                    console.log(submissionList)
-                    console.log(yearOption.current.value);
                     const filteredUsers = JSON.parse(submissionList)
                         .filter((user) => {
                             if (filter !== '') {

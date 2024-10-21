@@ -3,7 +3,7 @@
 function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, taskName, refreshData }) {
 
     const allowLateSubmit = async function (userId, taskName) {
-        const res = await fetch('http://localhost:5000/api/allowLateSubmit', {
+        const res = await fetch('https://localhost:5000/api/allowLateSubmit', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
     }
 
     const cancelLateSubmit = async function (userId, taskName) {
-        const res = await fetch('http://localhost:5000/api/cancelLateSubmit', {
+        const res = await fetch('https://localhost:5000/api/cancelLateSubmit', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

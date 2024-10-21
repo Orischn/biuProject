@@ -118,20 +118,24 @@ async function postUser(user) {
     const cid = 'welcome@image';
 
     if (user.isSelfRegistered) {
-      sendEmail(`${user.email}`, 'Register Confirmation',
-        `Hello ${user.firstName} ${user.lastName} (ID number: ${user.userId}), you successfully registered to the
-        medical history questioning practice system of the Department of Optometry, Bar Ilan university.<br />
+      sendEmail(`${user.email}`, 'Registration Completed Successfully',
+        `Hello ${user.firstName} ${user.lastName}! <br />
+        You successfully registered to the medical history questioning practice system 
+        of the Department of Optometry, Bar Ilan university.<br />
         Those are the details you provided in your registration: <br />
         <b>full name: ${user.firstName} ${user.lastName}</b><br />
         <b>ID number: ${user.userId}</b><br />
-        <b>password: ${user.password}</b><br />
         We hope you will enjoy using our system, Good Luck! <br /><br />
         <center><img src="cid:${cid}" /></center>`);
     } else {
       sendEmail(`${user.email}`, 'Your password for first login',
-        `Hello ${user.firstName} ${user.lastName} (ID number: ${user.userId}), you were successfully added to the
-        medical history questioning practice system of the Department of Optometry, Bar Ilan university.<br />
-        your password for the first login is: <b>${user.password}</b><br />
+        `Hello ${user.firstName} ${user.lastName}! <br />
+        You were successfully added to the medical history questioning practice system 
+        of the Department of Optometry, Bar Ilan university.<br />
+        Those are the details provided in the registration: <br />
+        <b>full name: ${user.firstName} ${user.lastName}</b><br />
+        <b>ID number: ${user.userId}</b><br />
+        <h2>your password for the first login is: <b>${user.password}</b></h2><br />
         Use this password for your first login to the app.<br />
         We strongly advise you to change this password after you logged in successfully <br />
         We hope you will enjoy using our system, Good Luck! <br /><br />

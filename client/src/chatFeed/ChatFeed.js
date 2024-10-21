@@ -5,7 +5,7 @@ import StudentMessage from "../studentMessage/StudentMessage";
 
 const { useState, useEffect, useRef, useCallback } = require("react");
 
-function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage, 
+function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage,
     isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed }) {
     const [messages, setMessages] = useState([]);
     const [grade, setGrade] = useState(null);
@@ -54,12 +54,12 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
         fetchMessages();
     }, [selectedPractice, token, latestMessage])
 
-    const handleSeeFeedbackClick = useCallback(() => {
-        alert(`Maybe this should be in a modal, but for now...\n
-            your grade is: ${selectedPractice.grade}\n
-            And the feedback of the teacher is: \n 
-            ${selectedPractice.feedback}`);
-    }, []);
+    // const handleSeeFeedbackClick = useCallback(() => {
+    //     alert(`Maybe this should be in a modal, but for now...\n
+    //         your grade is: ${selectedPractice.grade}\n
+    //         And the feedback of the teacher is: \n 
+    //         ${selectedPractice.feedback}`);
+    // }, []);
 
     const handleTimerClick = () => {
         setShowTimer(!showTimer)
@@ -104,8 +104,27 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                     (
                                         <>
                                             <span id="feedback-link" class="hyperlink">
-                                                click <span id="click-here" onClick={handleSeeFeedbackClick}>here</span> to see the grade and the teacher's feedback
-                                            </span>
+                                                click <span id="click-here" data-bs-toggle="modal" data-bs-target="#feedbackModal">here</span>
+                                                {' '}to see the grade and the teacher's feedback</span>
+
+                                            {/* Feedback Modal */}
+                                            <div className="modal fade" id="feedbackModal" tabIndex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header text-white">
+                                                            <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
+                                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div className="modal-body text-black">
+                                                            <div>grade: {selectedPractice.grade}</div>
+                                                            <div>feedback: {selectedPractice.feedback}</div>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </>
                                     )
                                     : (<></>)}
@@ -114,38 +133,38 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                         <Countdown targetDate={changeEndDateFormat(selectedPractice.endDate)}
                                             setIsTimeUp={setIsTimeUp}
                                             setIsEndDatePassed={setIsEndDatePassed}
-                                            purpose={'date'} 
-                                            />
+                                            purpose={'date'}
+                                        />
 
                                         {!isEndDatePassed ? (
                                             <>
-                                            {showTimer ? (
-                                            <>
-                                                <Countdown targetDate={addTimeToDateString(
-                                                    selectedPractice.startDate, selectedPractice.durationHours,
-                                                    selectedPractice.durationMinutes)}
-                                                    setIsTimeUp={setIsTimeUp}
-                                                    purpose={'timer'} />
+                                                {showTimer ? (
+                                                    <>
+                                                        <Countdown targetDate={addTimeToDateString(
+                                                            selectedPractice.startDate, selectedPractice.durationHours,
+                                                            selectedPractice.durationMinutes)}
+                                                            setIsTimeUp={setIsTimeUp}
+                                                            purpose={'timer'} />
 
-                                                <button type="button"
-                                                    className="btn btn-primary"
-                                                    style={{ height: '5vh', text: 'center' }}
-                                                    onClick={handleTimerClick}>
-                                                    Hide Time
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <button type="button"
-                                                className="btn btn-primary"
-                                                onClick={handleTimerClick}>
-                                                Show Time
-                                            </button>
-                                        )}
+                                                        <button type="button"
+                                                            className="btn btn-primary"
+                                                            style={{ height: '5vh', text: 'center' }}
+                                                            onClick={handleTimerClick}>
+                                                            Hide Time
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <button type="button"
+                                                        className="btn btn-primary"
+                                                        onClick={handleTimerClick}>
+                                                        Show Time
+                                                    </button>
+                                                )}
                                             </>
                                         ) : (
                                             <></>
                                         )}
-                                        
+
                                     </>
                                 ) : ('')}
                             </b>
