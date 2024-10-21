@@ -7,6 +7,7 @@ import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 import SearchStudent from "../searchStudent/SearchStudent";
+import ChangePassword from "../changePassword/ChangePassword";
 
 
 
@@ -95,7 +96,7 @@ function AdminFeed({ token, userId }) {
                 {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
                 <SettingsPage token={token} userId={userId} yearOption={yearOption} />
                 <div className="row">
-                    <div id="adminFeed" className="col-3">
+                    <div id="adminFeed" className="col-3" style={{ height: '100vh', overflowY: 'auto' }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
                             {/* <button onClick={handleShowModal} 
@@ -108,6 +109,7 @@ function AdminFeed({ token, userId }) {
                                 <option value="2022">2022</option>
                                 <option value="2021">2021</option>
                             </select>
+                            <ChangePassword token={token} user={userId} />
 
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
@@ -117,9 +119,9 @@ function AdminFeed({ token, userId }) {
                         <div className="d-flex align-items-center">
                             <br />
                         </div>
-                        
-                            <SearchStudent filter={filter} setFilter={setFilter} />
-                        {studentList}
+
+                        <SearchStudent filter={filter} setFilter={setFilter} />
+                            {studentList}
                     </div>
                     <div id="gradesChatBlock" className="col-9">
                         {selectedStudent ?

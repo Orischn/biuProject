@@ -121,7 +121,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             </div>
                             <div className="col-4">
                                 {/* maybe remove the T for design */}
-                                {endDate.split('T')[0]}&nbsp;
+                                {endDate.split('T')[0]}{' '}
                                 on {endDate.split('T')[1]}
                             </div>
 

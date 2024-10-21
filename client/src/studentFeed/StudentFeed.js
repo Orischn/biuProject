@@ -90,7 +90,7 @@ function StudentFeed({ token, userId }) {
         <>
             <div id="window" className="container">
                 <div className="row">
-                    <div id="practiceFeed" className="col-3" style={{ overflowY: "auto" }}>
+                    <div id="practiceFeed" className="col-3" style={{ height: '100vh', overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
 

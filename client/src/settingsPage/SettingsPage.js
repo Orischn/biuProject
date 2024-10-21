@@ -23,10 +23,10 @@ function SettingsPage({ token, userId, yearOption }) {
                             <div className="col-2">
                                 {/* trying something */}
                                 <ul className="list-group mt-3">
-                                    <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
+                                    {/* <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
                                         onClick={() => setSelectedSettings(0)}>
                                         <i className="bi bi-gear"></i> &nbsp; General
-                                    </li>
+                                    </li> */}
                                     <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
                                         onClick={() => setSelectedSettings(1)}>
                                         <i className="bi bi-ui-checks"></i> &nbsp; Assignments

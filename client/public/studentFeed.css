@@ -194,6 +194,10 @@ img {
     display: none;
 }
 
+#studentList::-webkit-scrollbar {
+    display: none;
+}
+
 #chatFeed {
     /* second from right - off white */
     /* background-color: rgb(220, 251, 217);  */
