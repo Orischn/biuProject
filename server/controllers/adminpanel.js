@@ -1,4 +1,4 @@
-const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, getSubmissionStatusByYear, removeTask } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, getSubmissionStatusByYear, removeTask, adminViewTasks } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const { getId } = require('../models/token');
 const { getUser, getStudents } = require('../models/users');
@@ -33,6 +33,11 @@ const viewSubmissionStatus = async (req, res) => {
 const getStudentPractices = async (req, res) => {
     const result = await getPractices(req.params.userId);
     return res.status(result.status).end(JSON.stringify(result.practices));
+}
+
+const adminGetTasks = async (req, res) => {
+    const result = await adminViewTasks(req.params.userId);
+    return res.status(result.status).end(JSON.stringify(result.tasks))
 }
 
 const changeGrade = async (req, res) => {
@@ -71,6 +76,7 @@ module.exports = {
     createTask,
     viewSubmissionStatus,
     getStudentPractices,
+    adminGetTasks,
     changeGrade,
     createFeedback,
     updateTask,

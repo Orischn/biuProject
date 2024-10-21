@@ -116,12 +116,12 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             <div className="col-2">
                                 {taskName}
                             </div>
-                            <div className="col-2">
+                            <div className="col-3">
                                 {numOfSubmits} / {numOfAssigned} submitted
                             </div>
-                            <div className="col-5">
+                            <div className="col-4">
                                 {/* maybe remove the T for design */}
-                                Submit until {endDate.split('T')[0]}&nbsp;
+                                {endDate.split('T')[0]}&nbsp;
                                 on {endDate.split('T')[1]}
                             </div>
 
@@ -152,9 +152,9 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                         <div className="col-3">
                             {numOfSubmits} / {numOfAssigned} submitted
                         </div>
-                        <div className="col-5">
+                        <div className="col-3">
                             {/* needs to be input so we could edit? like in grade? */}
-                            Submit until <input className="editAssignmentInput" ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "45%" }} />
+                            <input className="editAssignmentInput" ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "80%" }} />
                         </div>
 
                         <div className="col-1">

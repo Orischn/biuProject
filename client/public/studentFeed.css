@@ -552,6 +552,15 @@ button > i {
     color: darkblue;
 }
 
+#click-here2 {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#click-here2:hover {
+    color: blue;
+}
+
 /* .editAssignmentInput::placeholder {
     position: relative !important;
     text-align: left !important;

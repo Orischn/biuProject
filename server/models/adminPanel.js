@@ -297,6 +297,15 @@ async function getTasks() {
     }
 }
 
+async function adminViewTasks() {
+    try {
+        const taskList = await tasks.find({}).toArray();
+        return { status: 200, tasks: taskList };
+    } catch (error) {
+        return { status: 500, tasks: error.message };
+    }
+}
+
 async function getSubmissionStatus(taskName, year) {
     try {
         const task = await tasks.findOne({ taskName: taskName, year: parseInt(year, 10) });
@@ -416,6 +425,7 @@ module.exports = {
     uploadFile,
     makeTask,
     getTasks,
+    adminViewTasks,
     getSubmissionStatus,
     postFeedback,
     changeTask,
