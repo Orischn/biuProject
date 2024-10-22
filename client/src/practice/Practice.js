@@ -96,6 +96,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
             if (res.status === 200) {
                 const practice = await res.json(); // parse the response as JSON
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
+                    console.log(practice, practice.chatId, task.taskName);
                     setIsCreated(true);
                     setIsFinished(!practice.active);
                     setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
@@ -104,6 +105,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         practice.durationHours, practice.durationMinutes)));
                     setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
+                    console.log(2);
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
             }
@@ -138,18 +140,17 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 onClick={handleTaskClick}
             >
 
-                isTimeUp ? {String(isTimeUp)}
-                <br />
-                isEndDatePassed ? {String(isEndDatePassed)}
-                <br />
-                isLateSubmitAllowed ? {String(isLateSubmitAllowed)}
+                {/* <br /> */}
+                {/* isEndDatePassed ? {String(isEndDatePassed)} */}
+                {/* <br /> */}
+                {/* isLateSubmitAllowed ? {String(isLateSubmitAllowed)} */}
                 <div className="row">
                     <div>
                         <b className="text-black w-100">{task.taskName}</b>
                         <span className="text-black badge date">
                             {(isEndDatePassed && !isFinished && !isLateSubmitAllowed) ?
                                 'Can\'t submit' :
-                                isTimeUp ? 'Time\'s up!' :
+                                (isTimeUp && !isFinished)? 'Time\'s up!' :
                                     !isCreated
                                         ? 'Click to start'
                                         : !isFinished
@@ -178,8 +179,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </>
                     ) : isTimeUp ? (
                         <>
-                            Please submit your progress <br />
-                            Last submission until {task.endDate.split('T')[0]}
+                            submission until {task.endDate.split('T')[0]}
                             <br />
                             at {task.endDate.split('T')[1].slice(0, -3)}
                         </>

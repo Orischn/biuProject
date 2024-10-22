@@ -29,7 +29,6 @@ function StudentFeed({ token, userId }) {
                 'chatId': selectedPractice.chatId,
             }),
         });
-        console.log(selectedPractice.chatId)
         setSelectedTask(null);
         setSelectedPractice(null);
     }
@@ -110,7 +109,8 @@ function StudentFeed({ token, userId }) {
                                 finishPractice={finishPractice} latestMessage={latestMessage}
                                 setLatestMessage={setLatestMessage} isTimeUp={isTimeUp}
                                 setIsTimeUp={setIsTimeUp} isEndDatePassed={isEndDatePassed} 
-                                setIsEndDatePassed={setIsEndDatePassed}
+                                setIsEndDatePassed={setIsEndDatePassed} 
+                                setSelectedPractice={setSelectedPractice} setSelectedTask={setSelectedTask}
                                 />
                         </>
                     ) : (

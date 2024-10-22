@@ -49,7 +49,9 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
                         (isEndDatePassed && !selectedPractice.lateSubmit)
                     ) ? 'custom-disabled' : ''}`}
                     placeholder="Type a message"
-                    disabled={!selectedPractice.active || isTimeUp}/>
+                    disabled={!selectedPractice.active || isTimeUp ||
+                        (isEndDatePassed && !selectedPractice.lateSubmit)
+                    }/>
                     <button id="sendButton" type="submit" 
                     className={`btn ${(!selectedPractice.active || isTimeUp)? 'custom-disabled' : ''}`}
                     disabled={!selectedPractice.active || isTimeUp || 

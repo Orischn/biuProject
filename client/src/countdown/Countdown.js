@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Countdown = ({ targetDate, setIsTimeUp, setIsEndDatePassed, purpose }) => {
+const Countdown = ({ targetDate, setIsTimeUp, setIsEndDatePassed, purpose, setShowModal }) => {
     const calculateTimeLeft = () => {
         const difference = +new Date(targetDate) - +new Date();
         let timeLeft = {};
@@ -58,12 +58,14 @@ const Countdown = ({ targetDate, setIsTimeUp, setIsEndDatePassed, purpose }) => 
                                 {setIsTimeUp(true)}
                                 {timerComponents}
                                 <span>Time's up!</span>
+                                {setShowModal(true)}
                             </>
                         ) : (
                             <>
                                 {setIsEndDatePassed(true)}
                                 {/* {timerComponents} */}
                                 Submission date has passed
+                                {setShowModal(true)}
                             </>
                         )}
                     </>
