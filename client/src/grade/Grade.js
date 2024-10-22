@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Feedback from "../feedback/Feedback";
 
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback,
-    setNewGrade, isActive, refreshData, year }) {
+    setNewGrade, isActive, refreshData, year, isStarted }) {
 
     var input = useRef(null);
 
@@ -94,9 +94,17 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                 Click to check
                             </div>
                         ) : (
-                            <div className="grade-content">
-                                Hasn't been sumitted yet
-                            </div>
+                            <>
+                                {isStarted ? (
+                                    <div style={{ color: 'red' }}>
+                                        Hasn't been sumitted yet
+                                    </div>
+                                ) : (
+                                    <div style={{ color: 'red' }}>
+                                        Wasn't started by the student
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <div className="grade-feedback">
@@ -109,10 +117,15 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     ) :
                                     ('')}
                             </span>
-                            <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
-                            <Feedback token={token} chatId={chatId} feedback={feedback}
-                                selectedStudent={selectedStudent} refreshData={refreshData}
-                                year={year} />
+                            {!isStarted ? (<>Cannot grade assignment</>) : (
+                                <>
+                                    <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
+                                    <Feedback token={token} chatId={chatId} feedback={feedback}
+                                        selectedStudent={selectedStudent} refreshData={refreshData}
+                                        year={year} />
+                                </>
+                            )}
+
                         </div>
                     </>
                 ) : (

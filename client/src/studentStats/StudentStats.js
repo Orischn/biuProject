@@ -10,13 +10,15 @@ function StudentStats({ token, selectedStudent }) {
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
     const [isChanged, setIsChanged] = useState(false);
+    const [practiceList, setPracticeList] = useState([]);
 
     const refreshData = () => {
         setIsChanged(!isChanged);
     }
 
+
     useEffect(() => {
-        const fetchGrades = async () => {
+        const fetchPractices = async () => {
             const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
                 {
                     method: 'get',
@@ -27,16 +29,39 @@ function StudentStats({ token, selectedStudent }) {
                 }
             )
             if (res.status === 200) {
-                await res.text().then((practices) => {
-                    setGrades(JSON.parse(practices).reverse().map((practice, key) => {
-                            return <Grade selectedGradeId={selectedGradeId}
-                                setSelectedGradeId={setSelectedGradeId}
-                                token={token} selectedStudent={selectedStudent}
-                                chatId={practice.chatId} grade={practice.grade}
-                                feedback={practice.feedback}
-                                key={key} setGrades={setGrades} setNewGrade={setNewGrade}
-                                isActive={practice.active} refreshData={refreshData}
-                                year={practice.year}/>
+                const practices = await res.json();
+                setPracticeList(practices);  // Update the practice list state
+                return practices;  // Return the practices for immediate use
+            }
+            return [];
+        }
+
+
+        const fetchGrades = async (practices) => {
+            const res = await fetch(`https://localhost:5000/api/getTasks`,
+                {
+                    method: 'get',
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+            )
+            if (res.status === 200) {
+                await res.text().then((tasks) => {
+                    setGrades(JSON.parse(tasks).reverse().map((task, key) => {
+                        const practice = practices.find(practice => practice.chatId === task.taskName);
+                        return <Grade selectedGradeId={selectedGradeId}
+                            setSelectedGradeId={setSelectedGradeId}
+                            token={token} selectedStudent={selectedStudent}
+                            chatId={practice ? practice.chatId : task.taskName}
+                            grade={practice ? practice.grade : null}
+                            feedback={practice ? practice.feedback : ''}
+                            key={key} setGrades={setGrades} setNewGrade={setNewGrade}
+                            isActive={practice ? practice.active : true}
+                            refreshData={refreshData} year={practice? practice.year : task.year} 
+                            isStarted={practice ? true : false}/>
+
                     }))
                 })
             } else {
@@ -45,9 +70,71 @@ function StudentStats({ token, selectedStudent }) {
                 })
             }
         }
-        fetchGrades()
+
+
+        const loadStudentData = async () => {
+            const practices = await fetchPractices();
+            fetchGrades(practices); 
+        };
+        loadStudentData();
         setSelectedGradeId('');
     }, [selectedStudent, token, newGrade, isChanged])
+
+    // useEffect(() => {
+    //     const fetchTasks = async () =>{
+    //         const res = await fetch(`https://localhost:5000/api/getTasks/`,
+    //             {
+    //                 method: 'get',
+    //                 headers: {
+    //                     'accept': 'application/json',
+    //                     'Authorization': `Bearer ${token}`,
+    //                 }
+    //             }
+    //         )
+    //         if (res.status === 200) {
+    //             await res.text().then((tasks) => {
+    //                 setTaskList(JSON.parse(tasks).map((task, key) => {
+    //                     return task;
+    //                 }))
+    //             })
+    //         }
+    //     }
+
+
+    //     const fetchGrades = async () => {
+    //         const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
+    //             {
+    //                 method: 'get',
+    //                 headers: {
+    //                     'accept': 'application/json',
+    //                     'Authorization': `Bearer ${token}`,
+    //                 }
+    //             }
+    //         )
+    //         if (res.status === 200) {
+    //             await res.text().then((practices) => {
+    //                 console.log('1');
+    //                 setGrades(JSON.parse(practices).reverse().map((practice, key) => {
+    //                         return <Grade selectedGradeId={selectedGradeId}
+    //                             setSelectedGradeId={setSelectedGradeId}
+    //                             token={token} selectedStudent={selectedStudent}
+    //                             chatId={practice.chatId} grade={practice.grade}
+    //                             feedback={practice.feedback}
+    //                             key={key} setGrades={setGrades} setNewGrade={setNewGrade}
+    //                             isActive={practice.active} refreshData={refreshData}
+    //                             year={practice.year}/>
+    //                 }))
+    //             })
+    //         } else {
+    //             await res.text().then((error) => {
+    //                 alert(error);
+    //             })
+    //         }
+    //     }
+    //     fetchTasks();
+    //     fetchGrades()
+    //     setSelectedGradeId('');
+    // }, [selectedStudent, token, newGrade, isChanged])
     return (
         <>
             {/* <div id="studentDetails" className="d-flex align-items-center w-100">
