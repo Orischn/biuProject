@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import StudentDetails from "../studentDetails/StudentDetails";
+import { useRef, useState } from "react";
 
 
 function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {

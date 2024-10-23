@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 
 function AdminDeleteStudent({ token, userId, fullName, refreshData }) {

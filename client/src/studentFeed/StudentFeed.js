@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import AddPractice from "../addPractice/AddPractice";
 import ChatFeed from "../chatFeed/ChatFeed";
 import Practice from "../practice/Practice";
 import ChangePassword from "../changePassword/ChangePassword";
-import biulogo3 from "./biulogo3.png"
 
 
 function StudentFeed({ token, userId }) {

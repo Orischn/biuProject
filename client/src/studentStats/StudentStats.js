@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import Practice from "../practice/Practice";
 import Grade from "../grade/Grade";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
-import Feedback from "../feedback/Feedback";
 
 
 function StudentStats({ token, selectedStudent }) {

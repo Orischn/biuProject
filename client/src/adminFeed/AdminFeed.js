@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Student from "../student/Student";
 import StudentStats from "../studentStats/StudentStats";
-import ChatsHistory from "../chatsHistory/ChatsHistory";
 import SettingsPage from "../settingsPage/SettingsPage";
-import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
-import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage";
-import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 import SearchStudent from "../searchStudent/SearchStudent";
 import ChangePassword from "../changePassword/ChangePassword";
 
