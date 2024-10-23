@@ -89,13 +89,15 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                     <>
                         <div className="grade-title">{chatId}</div>
                         {!isActive ? (
-
-                            <div className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
-                                Click to check
-                            </div>
+                            <>
+                                <span style={{color: 'green'}}>Submitted!&nbsp;</span>
+                                <span className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
+                                    Click to check
+                                </span>
+                            </>
                         ) : (
                             <>
-                                {isStarted ? (
+                                {/* {isStarted ? (
                                     <div style={{ color: 'red' }}>
                                         Hasn't been sumitted yet
                                     </div>
@@ -103,13 +105,16 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     <div style={{ color: 'red' }}>
                                         Wasn't started by the student
                                     </div>
-                                )}
+                                )} */}
+                                <div style={{ color: 'red' }}>
+                                    Hasn't been sumitted yet
+                                </div>
                             </>
                         )}
 
                         <div className="grade-feedback">
                             <span className="grade-display">
-                                {grade ?
+                                {grade !== null ?
                                     (
                                         <>
                                             Grade: {grade}
@@ -117,14 +122,20 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     ) :
                                     ('')}
                             </span>
-                            {!isStarted ? (<>Cannot grade assignment</>) : (
+
+                            <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
+                            <Feedback token={token} chatId={chatId} feedback={feedback}
+                                selectedStudent={selectedStudent} refreshData={refreshData}
+                                year={year} />
+
+                            {/* {!isStarted ? (<>Cannot grade assignment</>) : (
                                 <>
                                     <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
                                     <Feedback token={token} chatId={chatId} feedback={feedback}
                                         selectedStudent={selectedStudent} refreshData={refreshData}
                                         year={year} />
                                 </>
-                            )}
+                            )} */}
 
                         </div>
                     </>

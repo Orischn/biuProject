@@ -53,12 +53,13 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 lastName: user.lastName,
                 didSubmit: false,
                 canSubmitLate: false,
-                grade: null
+                grade: null,
+                feedback: ''
             }));
 
         await tasks.insertOne({
             taskName: taskName,
-            startDate: startingDate, // Use Date objects for date fields
+            startDate: startingDate,
             endDate: endingDate,
             durationHours: parseInt(durationHours, 10),
             durationMinutes: parseInt(durationMinutes, 10),
@@ -104,10 +105,19 @@ async function getSubmissionStatus(taskName, year) {
 async function postFeedback(userId, chatId, feedback, year) {
     try {
         await practices.updateOne(
-            { chatId: chatId, userId: userId, active: false, year: year },
+            { chatId: chatId, userId: userId, year: year },
             {
                 $set: {
                     feedback: feedback,
+                },
+            },
+        );
+
+        await tasks.updateOne(
+            { taskName: chatId, year: year, 'submitList.userId': userId },
+            {
+                $set: {
+                    'submitList.$.feedback': feedback
                 },
             },
         );

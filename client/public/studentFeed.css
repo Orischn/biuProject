@@ -286,9 +286,9 @@ img {
     overflow-y: auto;
   }
   
-  #grades::-webkit-scrollbar {
+  /* #grades::-webkit-scrollbar {
     display: none;
-  }
+  } */
   
   .grades-grid {
     display: grid;

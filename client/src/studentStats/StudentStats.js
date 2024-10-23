@@ -36,7 +36,7 @@ function StudentStats({ token, selectedStudent }) {
 
 
         const fetchGrades = async (practices) => {
-            const res = await fetch(`https://localhost:5000/api/getTasks`,
+            const res = await fetch(`https://localhost:5000/api/adminGetTasks`,
                 {
                     method: 'get',
                     headers: {
@@ -49,15 +49,17 @@ function StudentStats({ token, selectedStudent }) {
                 await res.text().then((tasks) => {
                     setGrades(JSON.parse(tasks).reverse().map((task, key) => {
                         const practice = practices.find(practice => practice.chatId === task.taskName);
+                        const user = task.submitList.find(user => user.userId === selectedStudent.userId)
+                        console.log(user)
                         return <Grade selectedGradeId={selectedGradeId}
                             setSelectedGradeId={setSelectedGradeId}
                             token={token} selectedStudent={selectedStudent}
-                            chatId={practice ? practice.chatId : task.taskName}
-                            grade={practice ? practice.grade : null}
-                            feedback={practice ? practice.feedback : ''}
+                            chatId={task.taskName}
+                            grade={user.grade}
+                            feedback={user.feedback}
                             key={key} setGrades={setGrades} setNewGrade={setNewGrade}
                             isActive={practice ? practice.active : true}
-                            refreshData={refreshData} year={practice? practice.year : task.year} 
+                            refreshData={refreshData} year={task.year} 
                             isStarted={practice ? true : false}/>
 
                     }))
@@ -135,9 +137,6 @@ function StudentStats({ token, selectedStudent }) {
     // }, [selectedStudent, token, newGrade, isChanged])
     return (
         <>
-            {/* <div id="studentDetails" className="d-flex align-items-center w-100">
-                <b className="ms-2 text-black-50">{selectedStudent.firstName} {selectedStudent.lastName}</b>
-            </div> */}
 
             <div id="grades" className="w-100 mt-3">
                 {grades.length > 0 ? (

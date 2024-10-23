@@ -105,7 +105,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                         {/*  */}
                         <div className="d-flex align-items-center">
                             <b className="ms-2">
-                                {(selectedPractice.grade && selectedPractice.feedback !== '') ?
+                                {(selectedPractice.grade !== null && selectedPractice.feedback !== '' && !selectedPractice.active) ?
                                     (
                                         <>
                                             <span id="feedback-link" class="hyperlink">
