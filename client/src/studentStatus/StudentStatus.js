@@ -5,6 +5,16 @@ import TaskDetails from "../taskDetails/TaskDetails";
 function StudentStatus({token, selectedStudent}) {
 
     const [taskList, setTaskList] = useState([]);
+    const [average, setAverage] = useState(0);
+
+    const calculateAverage = (gradeList) => {
+        if (gradeList.length === 0) {
+            setAverage(0);
+            return;
+        }
+        const sum = gradeList.reduce((acc, grade) => acc + grade, 0);
+        setAverage(sum / gradeList.length);
+    };
 
     useEffect(() => {
         const fetchStudentsAssignments = async function () {
@@ -17,7 +27,7 @@ function StudentStatus({token, selectedStudent}) {
             });
 
             if (res.status === 200) {
-                await res.text().then((tasks) => {
+                const gradeList = await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).map((task, key) => {
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
                         return <TaskDetails taskName={task.taskName} 
@@ -25,15 +35,26 @@ function StudentStatus({token, selectedStudent}) {
                         canSubmitLate={user.canSubmitLate}
                         grade={user.grade ? user.grade : ''}/>
                     }))
+                    return JSON.parse(tasks).map((task, key) => {
+                        let user = task.submitList.find(user => user.userId === selectedStudent.userId);
+                        return user.grade;
+                    }).filter((grade) => grade !== undefined && grade !== null);
                 });
+                return gradeList;
             } else {
                 await res.text().then((error) => {
                     console.log(error)
                 })
+                return [];
             }
             
         }
-        fetchStudentsAssignments();
+
+        const loadAverage = async () => {
+            const gradeList = await fetchStudentsAssignments();
+            calculateAverage(gradeList);
+        }
+        loadAverage();
     }, [token])
 
 
@@ -42,11 +63,8 @@ function StudentStatus({token, selectedStudent}) {
             <h2 className="settings-title">
                 {selectedStudent.firstName +' '+ selectedStudent.lastName}
                 {' '}assignments details</h2>
-            {/* <div className="settings-container"> */}
-
-            {/* <ul className="setting-item">
-                <SearchStudent filter={filter} setFilter={setFilter} />
-            </ul> */}
+                average (of submitted assignments): {average}
+                <ul></ul>
 
             <ul>
                 <div className="row">

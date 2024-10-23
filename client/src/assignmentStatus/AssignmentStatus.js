@@ -75,14 +75,12 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     console.log(error)
                 })
             }
-            // console.log(res.status)
             return [];
 
         }
 
         const loadAverage = async () => {
             const gradeList = await fetchSubmissionStatus(taskName, yearOption.current.value)
-            // console.log(gradeList)
             calculateAverage(gradeList)
         }
         loadAverage();
