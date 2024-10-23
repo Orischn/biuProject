@@ -4,7 +4,7 @@ import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import SearchStudent from "../searchStudent/SearchStudent";
 import StudentStatus from "../studentStatus/StudentStatus";
 
-function StudentSettingsPage({ token, yearOption }) {
+function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
@@ -19,6 +19,7 @@ function StudentSettingsPage({ token, yearOption }) {
 
     const refreshData = () => {
         setIsChanged(!isChanged);
+        refreshDataInFeed()
     }
 
 

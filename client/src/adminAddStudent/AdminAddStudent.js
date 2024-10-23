@@ -42,8 +42,8 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
             lastNameBar.current.value = '';
             yearBar.current.value = '';
             emailBar.current.value = '';
+            // refreshData();
         }
-        refreshData();
         // setShowModal(false);
     };
 
@@ -54,7 +54,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         yearBar.current.value = '';
         emailBar.current.value = '';
         setShowModal(false);
-        // setError('');
+        setError('');
 
     };
 
@@ -133,8 +133,8 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         else {
 
             setError("Added Successfully");
-            refreshData()
             setIsSuccessful(true);
+            refreshData()
             // setShowModal(false);
 
             // userIdBar.current.value = "";

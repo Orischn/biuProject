@@ -16,9 +16,14 @@ function AdminFeed({ token, userId }) {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
     const [isChanged, setIsChanged] = useState(null);
+    const [isAddedOrDeleted, setIsAddedOrDeleted] = useState(false)
     const [filter, setFilter] = useState('');
 
     const yearOption = useRef(null);
+
+    const refreshDataInFeed = () => {
+        setIsAddedOrDeleted(!isAddedOrDeleted);
+    }
 
     // const [showModal, setShowModal] = useState(false);
     // const handleShowModal = () => setShowModal(true);
@@ -88,13 +93,14 @@ function AdminFeed({ token, userId }) {
 
         fetchName()
         fetchStudents();
-    }, [selectedStudent, token, userId, isChanged, filter])
+    }, [selectedStudent, token, userId, isChanged, filter, isAddedOrDeleted])
 
     return (
         <>
             <div id="window" className="container">
                 {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
-                <SettingsPage token={token} userId={userId} yearOption={yearOption} />
+                <SettingsPage token={token} userId={userId} yearOption={yearOption} 
+                refreshDataInFeed={refreshDataInFeed}/>
                 <div className="row">
                     <div id="adminFeed" className="col-3" style={{ height: '100vh', overflowY: 'auto' }}>
                         <div id="me" className="d-flex align-items-center w-100">

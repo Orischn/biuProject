@@ -3,11 +3,13 @@ import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, userId, yearOption }) {
+function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
-    const settingsOptions = [<GeneralSettingsPage token={token} userId={userId} />,
-    <AssignmentsSettingsPage token={token} yearOption={yearOption}/>,
-    <StudentSettingsPage token={token} yearOption={yearOption} />];
+    const settingsOptions = [
+    <AssignmentsSettingsPage token={token} yearOption={yearOption} />,
+    <StudentSettingsPage token={token} yearOption={yearOption} 
+    refreshDataInFeed={refreshDataInFeed}/>,
+    <GeneralSettingsPage token={token} userId={userId} />];
 
     return (
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
@@ -23,16 +25,16 @@ function SettingsPage({ token, userId, yearOption }) {
                             <div className="col-2">
                                 {/* trying something */}
                                 <ul className="list-group mt-3">
-                                    {/* <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(0)}>
+                                    {/* <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(2)}>
                                         <i className="bi bi-gear"></i> &nbsp; General
                                     </li> */}
-                                    <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(1)}>
+                                    <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(0)}>
                                         <i className="bi bi-ui-checks"></i> &nbsp; Assignments
                                     </li>
-                                    <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(2)}>
+                                    <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
+                                        onClick={() => setSelectedSettings(1)}>
                                         <i className="bi bi-people"></i> &nbsp; Students
                                     </li>
                                 </ul>
