@@ -37,13 +37,18 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         //     alert('must enter a valid grade');
         //     return;
         // }
-
-        const gradeValue = Number(input.current.value.trim());
-
-        if (isNaN(gradeValue) || gradeValue < 0 && gradeValue > 100) {
-            alert('grade must be a number between 0 to 100')
-            return;
+        let gradeValue;
+        if (input.current.value.trim() !== '') {
+            gradeValue = Number(input.current.value.trim());
+            
+            if (isNaN(gradeValue) || gradeValue < 0 && gradeValue > 100) {
+                alert('grade must be a number between 0 to 100')
+                return;
+            }
+        } else {
+            gradeValue = null;
         }
+        console.log(gradeValue)
 
         const res = await fetch('https://localhost:5000/api/updateGrade/', {
             'method': 'post',
