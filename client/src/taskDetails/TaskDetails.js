@@ -25,7 +25,7 @@ function TaskDetails({ taskName, didSubmit, canSubmitLate, grade }) {
                     )}
 
                     {canSubmitLate ? (
-                        <div className="col-1" style={{ color: 'green' }}>
+                        <div className="col-2" style={{ color: 'green' }}>
                             {/* Can Submit late */}
                             <i className="bi bi-check-square" />
                         </div>
@@ -37,7 +37,7 @@ function TaskDetails({ taskName, didSubmit, canSubmitLate, grade }) {
                         </div>
                     )}
                     <div className="col-3">
-                        {grade}
+                        {grade ? grade : 'no grade given'}
                     </div>
                 </div>
             </ul>

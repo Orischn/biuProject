@@ -160,7 +160,8 @@ async function postUser(user) {
       { year: parseInt(user.year) },
       {
         $push: {
-          submitList: { userId: user.userId, firstName: user.firstName, lastName: user.lastName, didSubmit: false, canSubmitLate: false },
+          submitList: { userId: user.userId, firstName: user.firstName, lastName: user.lastName, 
+            didSubmit: false, canSubmitLate: false, grade: null },
         },
       },
     )

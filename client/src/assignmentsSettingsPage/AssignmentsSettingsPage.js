@@ -56,7 +56,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
             <div className="settings-container">
                 {!expand ? (
                     <>
-                        
+
                         <AddAssignment token={token} refreshData={refreshData} yearOption={yearOption} />
                         <ul>
                             <div className="row">
@@ -77,7 +77,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
                     <>
                         <div>
                             <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
-                            go back
+                            &nbsp; go back
                         </div>
                         <AssignemntStatus token={token} taskName={selectedTask} yearOption={yearOption} />
 

@@ -1,6 +1,7 @@
 
 
-function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, taskName, refreshData }) {
+function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, taskName,
+    refreshData, grade }) {
 
     const allowLateSubmit = async function (userId, taskName) {
         const res = await fetch('https://localhost:5000/api/allowLateSubmit', {
@@ -69,6 +70,17 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
                             <i className="bi bi-x-square" />
                         </div>
                     )}
+                    {grade ? (
+                        <div className="col-2">
+                            grade: {grade}
+                        </div>
+                    ) : (
+                        <div className="col-2">
+                            no grade given
+                        </div>
+                    )}
+
+
 
                     <div className="col-5">
                         {didSubmit ? ('') : (
@@ -82,11 +94,6 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
                             )
                         )}
                     </div>
-
-
-                    {/* <div className="col-2">
-                    grade: {grade}
-                </div> */}
 
                 </div>
             </ul>

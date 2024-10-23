@@ -105,7 +105,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         practice.durationHours, practice.durationMinutes)));
                     setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
-                    console.log(2);
                     setIsCreated(false); // make sure it's false when no matching practice is found
                 }
             }
