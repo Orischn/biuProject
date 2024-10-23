@@ -96,7 +96,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
             if (res.status === 200) {
                 const practice = await res.json(); // parse the response as JSON
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
-                    console.log(practice, practice.chatId, task.taskName);
                     setIsCreated(true);
                     setIsFinished(!practice.active);
                     setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));

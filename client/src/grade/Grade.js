@@ -29,7 +29,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         if (input.current) {
             input.current.value = grade;
         }
-    }, [grade]);
+        setIsEditing(false);
+    }, [grade, selectedStudent]);
 
     const changeGrade = async () => {
 
@@ -48,7 +49,6 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         } else {
             gradeValue = null;
         }
-        console.log(gradeValue)
 
         const res = await fetch('https://localhost:5000/api/updateGrade/', {
             'method': 'post',

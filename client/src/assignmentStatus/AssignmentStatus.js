@@ -65,7 +65,6 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     const gradeList = sortedUsers
                         .map((student) => student.grade)  // Extract the grade from each student
                         .filter((grade) => grade !== undefined && grade !== null);
-                    console.log(gradeList)
                     return gradeList;
                 });
                 return gradeList;

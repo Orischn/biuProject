@@ -33,6 +33,16 @@ async function uploadFile(fileName, fileContent) {
     return error ? { status: 500, error: error.message } : { status: 200 };
 }
 
+async function uploadIdFile(fileName, fileContent) {
+    let error = null;
+    try {
+        fs.writeFileSync(fileName, fileContent);
+    } catch (err) {
+        error = err;
+    }
+    return error ? { status: 500, error: error.message } : { status: 200 };
+}
+
 async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, users) {
     const errors = validationResult(users); // Assuming `users` is coming from the request body
     if (!errors.isEmpty()) {
@@ -216,6 +226,7 @@ async function takeLateSubmit(taskName, userId) {
 
 module.exports = {
     uploadFile,
+    uploadIdFile,
     makeTask,
     getTasks,
     adminViewTasks,

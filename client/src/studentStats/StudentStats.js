@@ -50,7 +50,6 @@ function StudentStats({ token, selectedStudent }) {
                     setGrades(JSON.parse(tasks).reverse().map((task, key) => {
                         const practice = practices.find(practice => practice.chatId === task.taskName);
                         const user = task.submitList.find(user => user.userId === selectedStudent.userId)
-                        console.log(user)
                         return <Grade selectedGradeId={selectedGradeId}
                             setSelectedGradeId={setSelectedGradeId}
                             token={token} selectedStudent={selectedStudent}

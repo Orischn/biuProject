@@ -1,10 +1,15 @@
-const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, getSubmissionStatusByYear, removeTask, adminViewTasks } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, getSubmissionStatusByYear, removeTask, adminViewTasks, uploadIdFile } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const { getId } = require('../models/token');
 const { getUser, getStudents } = require('../models/users');
 
 const uploadCSVTree = async (req, res) => {
     const result = await uploadFile(req.body.fileName, req.body.CSVTree);
+    return res.status(result.status).end(result.error);
+}
+
+const uploadValidIdFile = async (req, res) => {
+    const result = await uploadIdFile(req.body.fileName, req.body.fileContent);
     return res.status(result.status).end(result.error);
 }
 
@@ -72,6 +77,7 @@ const cancelLateSubmit = async (req, res) => {
 
 module.exports = {
     uploadCSVTree,
+    uploadValidIdFile,
     checkAdmin,
     createTask,
     viewSubmissionStatus,

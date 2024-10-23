@@ -76,9 +76,11 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
                     <>
                         <ul className="setting-item">
                             <SearchStudent filter={filter} setFilter={setFilter} />
+                            ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
                             Add Student
                             <AdminAddStudent token={token} studentList={studentList}
                                 setStudentList={setStudentList} refreshData={refreshData} />
+                                
                         </ul>
                         {studentList.length > 0 ? (
                             <>
