@@ -5,7 +5,7 @@ function InputFile({ title, setFileName, setFileContent, error }) {
 
     function handleChange(e) {
         const file = e.target.files[0];
-        if (file && file.type === "text/csv") {
+        // if (file && file.type === "text/csv") {
             setFileName(file.name);
             const reader = new FileReader();
             reader.onload = () => {
@@ -13,14 +13,15 @@ function InputFile({ title, setFileName, setFileContent, error }) {
               setFileContent(fileContent);
             };
             reader.readAsText(file);
-        } else {
-            alert("Please upload a valid CSV file.");
-        }
+            input.current.valueOf('')
+        // } else {
+        //     alert("Please upload a valid CSV file.");
+        // }
     }
 
     return (
         <>
-            <div className="justify-content-md-center">
+            <div className="justify-content-md-center" style={{marginBottom: '10px'}}>
                 {/* <div className="col-2 text-black">
                     {title}
                 </div> */}
@@ -35,7 +36,7 @@ function InputFile({ title, setFileName, setFileContent, error }) {
                     <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} required />
                 </div>
             </div>
-            <br />
+            {/* <br /> */}
         </>
     );
 }

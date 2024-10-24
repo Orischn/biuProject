@@ -38,16 +38,7 @@ const sendEmail = (toEmail, subject, html, cid) => {
   });
 };
 
-let validIds = [];
 
-// Load valid IDs when the server starts
-fs.readFile('server/validIds.txt', 'utf8', (err, data) => {
-  if (err) {
-    console.error('Error reading ID file', err);
-  } else {
-    validIds = data.split('\n').map(id => id.trim());
-  }
-});
 
 
 async function getUser(userId) {
@@ -99,6 +90,17 @@ async function hashPassword(plainPassword) {
 }
 
 async function postUser(user) {
+  let validIds = [];
+
+  // Load valid IDs when the server starts
+  fs.readFile('server/validIds.txt', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading ID file', err);
+    } else {
+      validIds = data.split('\n').map(id => id.trim());
+    }
+  });
+
   const client = new MongoClient("mongodb://127.0.0.1:27017");
   try {
     await client.connect();
@@ -160,8 +162,10 @@ async function postUser(user) {
       { year: parseInt(user.year) },
       {
         $push: {
-          submitList: { userId: user.userId, firstName: user.firstName, lastName: user.lastName, 
-            didSubmit: false, canSubmitLate: false, grade: null },
+          submitList: {
+            userId: user.userId, firstName: user.firstName, lastName: user.lastName,
+            didSubmit: false, canSubmitLate: false, grade: null
+          },
         },
       },
     )

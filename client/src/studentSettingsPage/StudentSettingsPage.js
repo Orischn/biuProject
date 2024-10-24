@@ -3,6 +3,7 @@ import StudentDetails from "../studentDetails/StudentDetails"
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import SearchStudent from "../searchStudent/SearchStudent";
 import StudentStatus from "../studentStatus/StudentStatus";
+import InputFile from "../inputFile/InputFile";
 
 function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
 
@@ -11,6 +12,9 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
     const [isChanged, setIsChanged] = useState(false);
     const [expand, setExpand] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [fileContent, setFileContent] = useState('');
+    const [fileError, setFileError] = useState('');
 
     const handleUnexpand = () => {
         setExpand(false)
@@ -20,6 +24,29 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
     const refreshData = () => {
         setIsChanged(!isChanged);
         refreshDataInFeed()
+    }
+
+    const save = async (e) => {
+        const uploadIds = async () => {
+            const res = await fetch(`https://localhost:5000/api/uploadValidIdFile/`, {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                'body': JSON.stringify({
+                    'fileName': 'validIds.txt',
+                    "fileContent": fileContent,
+                })
+            })
+            if (res === 500) {
+                await res.text().then((errorText) => alert(errorText))
+            } else if (res === 400) {
+                await res.text.then((errorText) => setFileError(errorText))
+            }
+        }
+        e.preventDefault();
+        uploadIds()
     }
 
 
@@ -76,11 +103,22 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
                     <>
                         <ul className="setting-item">
                             <SearchStudent filter={filter} setFilter={setFilter} />
-                            ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-                            Add Student
+                            <div  style={{width: '100%'}}>
+                            
+                                <label htmlFor="files">Upload valid id's numbers</label>
+                                <form noValidate onSubmit={save} >
+                                    {/* &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; */}
+                                    <InputFile title={'valid ID\'s: '} setFileName={setFileName} setFileContent={setFileContent} error={fileError} />
+                                    <input type="submit" className="btn btn-primary submit" value="Upload"
+                                     />
+                                </form>
+                                {/* &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; */}
+                            </div>
+                            &emsp;&emsp;&emsp;
+                            <label htmlFor="addStudent">Add Student</label>
                             <AdminAddStudent token={token} studentList={studentList}
                                 setStudentList={setStudentList} refreshData={refreshData} />
-                                
+
                         </ul>
                         {studentList.length > 0 ? (
                             <>

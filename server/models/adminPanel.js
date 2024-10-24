@@ -36,7 +36,7 @@ async function uploadFile(fileName, fileContent) {
 async function uploadIdFile(fileName, fileContent) {
     let error = null;
     try {
-        fs.writeFileSync(fileName, fileContent);
+        fs.writeFileSync(`server/${fileName}`, fileContent);
     } catch (err) {
         error = err;
     }
