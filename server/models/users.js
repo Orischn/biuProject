@@ -22,7 +22,7 @@ const sendEmail = (toEmail, subject, html, cid) => {
     html: html,
     attachments: [{
       filename: 'welcomePic.png',
-      path: 'server/welcomePic.png',
+      path: 'welcomePic.png',
       cid: cid // Use the same CID here
     }]
   };
@@ -93,7 +93,7 @@ async function postUser(user) {
   let validIds = [];
 
   // Load valid IDs when the server starts
-  fs.readFile('server/validIds.txt', 'utf8', (err, data) => {
+  fs.readFile('validIds.txt', 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading ID file', err);
     } else {
@@ -110,7 +110,6 @@ async function postUser(user) {
     const existingUser = await users.findOne({ userId: user.userId });
     if (existingUser) {
       return { status: 409, error: "This user ID already exists!" };
-      // return { status: 409, error: "Cannot add already existing user" };
     }
 
     if (!validIds.includes(user.userId)) {

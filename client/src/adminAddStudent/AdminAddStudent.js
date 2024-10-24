@@ -33,18 +33,9 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         // }
     };
 
-    const handleSubmit = (e) => {
-        add(e);
-        if (isSuccessful) {
-            userIdBar.current.value = '';
-            firstNameBar.current.value = '';
-            lastNameBar.current.value = '';
-            yearBar.current.value = '';
-            emailBar.current.value = '';
-            // refreshData();
-        }
-        // setShowModal(false);
-    };
+    // const handleSubmit = async (e) => {
+    //     await add(e);
+    // };
 
     const handleCancel = () => {
         userIdBar.current.value = '';
@@ -70,6 +61,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         if (userId === '' || firstName === '' || lastName === '' ||
             year === '' || email === '') {
             setError('Must fill all fields!');
+            setIsSuccessful(false);
             return;
         }
 
@@ -77,29 +69,34 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         const userIdRegex = new RegExp('^[0-9]+$')
         if (!userIdRegex.test(userId)) {
             setError('User ID must be digits only!');
+            setIsSuccessful(false);
             return;
         }
 
         const nameRegex = new RegExp('^[a-zA-Z]+$')
         if (!nameRegex.test(firstName)) {
             setError('First name invalid!');
+            setIsSuccessful(false);
             return;
         }
 
         if (!nameRegex.test(lastName)) {
             setError('Last name invalid!');
+            setIsSuccessful(false);
             return;
         }
 
         const yearRegex = new RegExp('^[0-9]+$')
         if (!yearRegex.test(year)) {
             setError('Year must be a number!');
+            setIsSuccessful(false);
             return;
         }
 
         const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
         if(!emailRegex.test(email)) {
             setError('Invalid email address');
+            setIsSuccessful(false);
             return;
         }
 
@@ -135,24 +132,14 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         }
 
         else {
-
             setError("Added Successfully");
             setIsSuccessful(true);
             refreshData()
-            // setShowModal(false);
-
-            // userIdBar.current.value = "";
-            // firstNameBar.current.value = "";
-            // lastNameBar.current.value = "";
-            // yearBar.current.value = "";
-            // emailBar.current.value = "";
-
-            // setStudentList([...studentList, <StudentDetails token={token}
-            //     fullName={firstName + ' ' + lastName}
-            //     userId={userId} year={year} /> ])
-
-            // setIsChanged(userId + firstName); //probably there is a better way to do so...
-
+            userIdBar.current.value = '';
+            firstNameBar.current.value = '';
+            lastNameBar.current.value = '';
+            yearBar.current.value = '';
+            emailBar.current.value = '';
         }
     }
 
@@ -177,7 +164,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                             </div>
 
 
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={add}>
                                 <div className="modal-body">
                                     <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
                                     <input type="text" ref={firstNameBar} className="form-control" placeholder="Student's first name" />
