@@ -108,7 +108,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                 {(selectedPractice.grade !== null && selectedPractice.feedback !== '' && !selectedPractice.active) ?
                                     (
                                         <>
-                                            <span id="feedback-link" class="hyperlink">
+                                            <span id="feedback-link" className="hyperlink">
                                                 click <span id="click-here" data-bs-toggle="modal" data-bs-target="#feedbackModal">here</span>
                                                 {' '}to see the grade and the teacher's feedback</span>
 

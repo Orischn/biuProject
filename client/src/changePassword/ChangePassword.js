@@ -80,7 +80,7 @@ function ChangePassword({ token, userId }) {
 
         <>
             <button type="button" className="btn" onClick={handleButtonClick}>
-                <a href="#" class="tooltip-test" title="change password"><i id="openChangePassword" className="bi bi-shield-lock" style={{ color: 'white' }} /></a>
+                <a href="#" className="tooltip-test" title="change password"><i id="openChangePassword" className="bi bi-shield-lock" style={{ color: 'white' }} /></a>
             </button>
 
             {showModal && (
