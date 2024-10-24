@@ -8,7 +8,7 @@ function InputText({ title, iconTitle, iconName, placeholder, setValue, error, t
     }
     return (
         <>
-            <div class="input-field">
+            <div className="input-field">
                 <input ref={input} type={type} className="form-control input" placeholder={placeholder} id={title} onChange={(e) => handleChange(e)} required />
                 <i id={iconTitle} className={iconName} />
             </div>

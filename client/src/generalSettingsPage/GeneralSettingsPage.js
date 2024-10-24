@@ -58,8 +58,8 @@ function GeneralSettingsPage({ token, userId }) {
                     <div>123</div>
                 </div>
 
-                {/* <div class="setting-item">
-                <button class="save-button">Save Changes</button>
+                {/* <div className="setting-item">
+                <button className="save-button">Save Changes</button>
             </div> */}
             </div>
 
