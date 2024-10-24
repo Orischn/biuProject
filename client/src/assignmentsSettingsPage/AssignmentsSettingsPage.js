@@ -3,11 +3,11 @@ import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
-function AssignmentsSettingsPage({ token, yearOption }) {
+function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed }) {
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
-    const [expand, setExpand] = useState(false);
+    // const [expand, setExpand] = useState(false);
     const [selectedTask, setSelectedTask] = useState('');
 
     const handleUnexpand = () => {
@@ -17,6 +17,7 @@ function AssignmentsSettingsPage({ token, yearOption }) {
 
     const refreshData = () => {
         setIsChanged(!isChanged)
+        refreshDataInFeed()
     }
 
 

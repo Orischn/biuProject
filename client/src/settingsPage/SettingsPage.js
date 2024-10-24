@@ -5,11 +5,14 @@ import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSetti
 
 function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
+    const [expand, setExpand] = useState(false);
+
     const settingsOptions = [
-    <AssignmentsSettingsPage token={token} yearOption={yearOption} />,
-    <StudentSettingsPage token={token} yearOption={yearOption} 
-    refreshDataInFeed={refreshDataInFeed}/>,
-    <GeneralSettingsPage token={token} userId={userId} />];
+        <AssignmentsSettingsPage token={token} yearOption={yearOption}
+            expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}/>,
+        <StudentSettingsPage token={token} yearOption={yearOption}
+            refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand} />,
+        <GeneralSettingsPage token={token} userId={userId} />];
 
     return (
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
@@ -18,7 +21,10 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
                     <div className="modal-header text-white" >
                         <h1 className="modal-title fs-5" id="staticBackdropLabel">SETTINGS</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                            onClick={() => setSelectedSettings(0)}></button>
+                            onClick={() => {
+                                setSelectedSettings(0)
+                                setExpand(false)
+                            }}></button>
                     </div>
                     <div className="modal-body">
                         <div className="row">
@@ -30,11 +36,17 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
                                         <i className="bi bi-gear"></i> &nbsp; General
                                     </li> */}
                                     <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(0)}>
+                                        onClick={() => {
+                                            setSelectedSettings(0)
+                                            setExpand(false)
+                                        }}>
                                         <i className="bi bi-ui-checks"></i> &nbsp; Assignments
                                     </li>
                                     <li className={`list-group-item settingType ${selectedSettings === 1 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(1)}>
+                                        onClick={() => {
+                                            setSelectedSettings(1)
+                                            setExpand(false)
+                                        }}>
                                         <i className="bi bi-people"></i> &nbsp; Students
                                     </li>
                                 </ul>

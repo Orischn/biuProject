@@ -6,7 +6,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     var input = useRef(null);
 
-    const [inputGrade, setInputGrade] = useState(null);
+    const [inputGrade, setInputGrade] = useState(grade);
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -25,12 +25,16 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     const [isEditing, setIsEditing] = useState(false);
 
+    // useEffect(() => {
+    //     // if (input.current) {
+    //     //     input.current.value = grade;
+    //     // }
+    //     setIsEditing(false);
+    // }, [grade, selectedStudent]);
+
     useEffect(() => {
-        if (input.current) {
-            input.current.value = grade;
-        }
         setIsEditing(false);
-    }, [grade, selectedStudent]);
+    }, [selectedStudent]);
 
     const changeGrade = async () => {
 
@@ -41,7 +45,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         let gradeValue;
         if (input.current.value.trim() !== '') {
             gradeValue = Number(input.current.value.trim());
-            
+
             if (isNaN(gradeValue) || gradeValue < 0 && gradeValue > 100) {
                 alert('grade must be a number between 0 to 100')
                 return;
@@ -95,7 +99,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                         <div className="grade-title">{chatId}</div>
                         {!isActive ? (
                             <>
-                                <span style={{color: 'green'}}>Submitted!&nbsp;</span>
+                                <span style={{ color: 'green' }}>Submitted!&nbsp;</span>
                                 <span className="grade-content" onClick={() => setSelectedGradeId(chatId)}>
                                     Click to check
                                 </span>
@@ -157,7 +161,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                 min="0"
                                 max="100"
                                 ref={input}
-                                value={inputGrade}
+                                // value={inputGrade}
                                 onChange={handleChange} />
                             <button className="save-btn" onClick={changeGrade}>
                                 Save

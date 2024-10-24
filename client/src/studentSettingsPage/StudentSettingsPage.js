@@ -5,12 +5,12 @@ import SearchStudent from "../searchStudent/SearchStudent";
 import StudentStatus from "../studentStatus/StudentStatus";
 import InputFile from "../inputFile/InputFile";
 
-function StudentSettingsPage({ token, yearOption, refreshDataInFeed }) {
+function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
     const [isChanged, setIsChanged] = useState(false);
-    const [expand, setExpand] = useState(false);
+    // const [expand, setExpand] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState('');
     const [fileName, setFileName] = useState('');
     const [fileContent, setFileContent] = useState('');

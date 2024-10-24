@@ -3,7 +3,7 @@ import Grade from "../grade/Grade";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 
 
-function StudentStats({ token, selectedStudent }) {
+function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
@@ -70,14 +70,13 @@ function StudentStats({ token, selectedStudent }) {
             }
         }
 
-
         const loadStudentData = async () => {
             const practices = await fetchPractices();
             fetchGrades(practices); 
         };
         loadStudentData();
         setSelectedGradeId('');
-    }, [selectedStudent, token, newGrade, isChanged])
+    }, [selectedStudent, token, newGrade, isChanged, isAddedOrDeleted])
 
     // useEffect(() => {
     //     const fetchTasks = async () =>{

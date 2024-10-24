@@ -128,7 +128,8 @@ function AdminFeed({ token, userId }) {
                     <div id="gradesChatBlock" className="col-9">
                         {selectedStudent ?
                             <>
-                                <StudentStats token={token} selectedStudent={selectedStudent} />
+                                <StudentStats token={token} selectedStudent={selectedStudent}
+                                isAddedOrDeleted={isAddedOrDeleted} />
                             </> :
                             <>
                                 {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}
