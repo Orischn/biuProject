@@ -97,7 +97,12 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
             return;
         }
 
-        // need to check validity of the email!!!
+        const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        if(!emailRegex.test(email)) {
+            setError('Invalid email address');
+            return;
+        }
+
 
 
         const res = await fetch('https://localhost:5000/api/createUser', {

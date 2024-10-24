@@ -211,6 +211,12 @@ function RegisterPage() {
             return;
         }
 
+        const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        if (!emailRegex.test(email)) {
+            setEmailError('Invalid email address');
+            return;
+        }
+
         // need to check validity of the email!!!
 
         const res = await fetch('https://localhost:5000/api/Users', {
