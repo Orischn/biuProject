@@ -98,6 +98,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
+                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic} />
                             <b className="ms-2">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
