@@ -24,4 +24,4 @@ while True:
     prompt = input()
     chat_id = input()
     user_id = input()
-    print(f'{chat_id}\n{user_id}\n{answer_question(prompt)}')
+    print(f'{chat_id}\n{user_id}\n{answer_question(prompt)}', end='')
