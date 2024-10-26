@@ -98,7 +98,7 @@ function AdminFeed({ token, userId }) {
                 <SettingsPage token={token} userId={userId} yearOption={yearOption} 
                 refreshDataInFeed={refreshDataInFeed}/>
                 <div className="row">
-                    <div id="adminFeed" className="col-3" style={{ height: '100vh', overflowY: 'auto' }}>
+                    <div id="adminFeed" className="col-3" style={{ height: '100%', overflowY: 'auto' }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
                             {/* <button onClick={handleShowModal} 

@@ -184,7 +184,7 @@ img {
 #chat {
     overflow-y: scroll;
     scroll-behavior: smooth;
-    height: 75vh;
+    height: 75%;
 
 }
 
@@ -250,7 +250,7 @@ img {
 .custom-modal .modal-dialog {
     width: 90% !important;
     max-width: 90% !important;
-    height: 90vh !important;
+    height: 90% !important;
     overflow-y: auto;
     border-radius: 12px; 
 }
@@ -282,7 +282,7 @@ img {
 }
 
 #grades {
-    height: 26vh;
+    height: 26%;
     overflow-y: auto;
   }
   
@@ -367,7 +367,7 @@ img {
 
 #chatHistory {
     overflow-y: auto;
-    height: 66vh;
+    height: 66%;
 }
 
 #chatHistory::-webkit-scrollbar {
@@ -507,7 +507,7 @@ button > i {
     left: 100;
     width: 50% !important;
     max-width: 50% !important;
-    height: 90vh !important;
+    height: 90% !important;
     overflow-y: auto;
     border-radius: 12px;
     align-self: center;
@@ -574,13 +574,13 @@ button > i {
 } */
 
 .editAssignmentInput {
-    padding-left: 0;  /* Remove extra padding from the left */
-    text-align: left; /* Ensure the text starts from the left */
-    padding-top: 2;   /* Ensure no vertical padding */
+    padding-left: 0;  
+    text-align: left; 
+    padding-top: 2;   
 }
 
 .editAssignmentInput::placeholder {
-    text-align: left; /* Placeholder starts from the left */
+    text-align: left; 
 }
 
 
