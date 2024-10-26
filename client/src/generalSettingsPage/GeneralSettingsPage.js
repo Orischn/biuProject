@@ -10,7 +10,7 @@ function GeneralSettingsPage({ token, userId }) {
 
     const save = async (e) => {
         const updateCSV = async () => {
-            const res = await fetch(`https://localhost:5000/api/uploadDecisionTree/`, {
+            const res = await fetch(`http://localhost:5000/api/uploadDecisionTree/`, {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',

@@ -39,7 +39,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
-        const res = await fetch('https://localhost:5000/api/updateTask', {
+        const res = await fetch('http://localhost:5000/api/updateTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
-            const res = await fetch(`https://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

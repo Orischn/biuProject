@@ -28,7 +28,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
             if (!selectedPractice) {
                 return;
             }
-            const res = await fetch(`https://localhost:5000/api/getPractice/${selectedPractice.chatId}`, {
+            const res = await fetch(`http://localhost:5000/api/getPractice/${selectedPractice.chatId}`, {
                 'method': 'get',
                 'headers': {
                     'accept': 'application/json',

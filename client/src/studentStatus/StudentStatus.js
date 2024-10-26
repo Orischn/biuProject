@@ -18,7 +18,7 @@ function StudentStatus({token, selectedStudent}) {
 
     useEffect(() => {
         const fetchStudentsAssignments = async function () {
-            const res = await fetch(`https://localhost:5000/api/adminGetTasks/`, {
+            const res = await fetch(`http://localhost:5000/api/adminGetTasks/`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

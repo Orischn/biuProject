@@ -19,7 +19,7 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
 
     const deleteStudent = async function (e) {
 
-        const res = await fetch('https://localhost:5000/api/deleteUser', {
+        const res = await fetch('http://localhost:5000/api/deleteUser', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ function DeleteAssignment({ token, taskName, year, refreshData }) {
     }
 
     const deleteTask = async function (e) {
-        const res = await fetch('https://localhost:5000/api/deleteTask', {
+        const res = await fetch('http://localhost:5000/api/deleteTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',

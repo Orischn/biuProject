@@ -31,7 +31,7 @@ function AdminFeed({ token, userId }) {
             const year = parseInt(yearOption.current.value);
             // const year = 2024;
 
-            const res = await fetch('https://localhost:5000/api/getStudents', {
+            const res = await fetch('http://localhost:5000/api/getStudents', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -73,7 +73,7 @@ function AdminFeed({ token, userId }) {
 
         }
         const fetchName = async () => {
-            const res = await fetch(`https://localhost:5000/api/getStudent/${userId}`, {
+            const res = await fetch(`http://localhost:5000/api/getStudent/${userId}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

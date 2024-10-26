@@ -28,7 +28,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
 
     const save = async (e) => {
         const uploadIds = async () => {
-            const res = await fetch(`https://localhost:5000/api/uploadValidIdFile/`, {
+            const res = await fetch(`http://localhost:5000/api/uploadValidIdFile/`, {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
 
     useEffect(() => {
         const fetchStudents = async (filter) => {
-            const res = await fetch('https://localhost:5000/api/getStudents', {
+            const res = await fetch('http://localhost:5000/api/getStudents', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

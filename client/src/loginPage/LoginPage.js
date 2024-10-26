@@ -36,7 +36,7 @@ function LoginPage({ setToken, setUserId }) {
   })
 
   const navigateTo = async (token) => {
-    const res = await fetch('https://localhost:5000/api/student/', {
+    const res = await fetch('http://localhost:5000/api/student/', {
       method: 'get',
       headers: {
         'accept': 'application/json',
@@ -75,7 +75,7 @@ function LoginPage({ setToken, setUserId }) {
       return;
     }
 
-    const res = await fetch('https://localhost:5000/api/login', {
+    const res = await fetch('http://localhost:5000/api/login', {
       'method': 'post',
       'headers': {
         'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ function LoginPage({ setToken, setUserId }) {
             </g>
           </svg>
           {/* abother option of logo... */}
-          {/* <img src="https://inbar.biu.ac.il/Live/Code/CustomHandlers/OLImageHandler.ashx?Bytes=true" /> */}
+          {/* <img src="http://inbar.biu.ac.il/Live/Code/CustomHandlers/OLImageHandler.ashx?Bytes=true" /> */}
           <h2 className="login-title">LOGIN</h2>
           <p className="description">Medical history questioning practice - Department of Optometry</p>
           <form noValidate className="container-fluid" onSubmit={handleSubmit}>
@@ -134,7 +134,7 @@ function LoginPage({ setToken, setUserId }) {
         </div>
       </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script>
+      <script src="http://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script>
     </>
   );
 }

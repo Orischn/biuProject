@@ -16,7 +16,7 @@ function StudentFeed({ token, userId }) {
     const [isChanged, setIsChanged] = useState(false);
 
     const finishPractice = async () => {
-        const res = await fetch('https://localhost:5000/api/finishPractice/', {
+        const res = await fetch('http://localhost:5000/api/finishPractice/', {
             'method': 'post',
             'headers': {
                 'accept': 'application/json',
@@ -38,7 +38,7 @@ function StudentFeed({ token, userId }) {
     useEffect(() => {
 
         const fetchTasks = async () => {
-            const res = await fetch('https://localhost:5000/api/getTasks', {
+            const res = await fetch('http://localhost:5000/api/getTasks', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -62,7 +62,7 @@ function StudentFeed({ token, userId }) {
 
 
         const fetchMyName = async () => {
-            const res = await fetch(`https://localhost:5000/api/student`, {
+            const res = await fetch(`http://localhost:5000/api/student`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',

@@ -25,7 +25,7 @@ function AssignemntStatus({ token, taskName, yearOption }) {
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
-            const res = await fetch(`https://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
