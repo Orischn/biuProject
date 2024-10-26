@@ -25,17 +25,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
         setShowModal(true)
     };
 
-    const handleSubmit = async (e) => {
-        await add(e);
-        if (isSuccessful) {
-            cleanInput();
-        }
-
-        // setTimeout(3000);
-
-        // setShowModal(false);
-    };
-
     const handleCancel = () => {
         cleanInput();
         setError('');
@@ -97,6 +86,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         } else {
             setError("Added Successfully");
             setIsSuccessful(true)
+            cleanInput();
             refreshData();
         }
 
@@ -139,7 +129,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                 <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={add}>
                                 <div className="modal-body">
                                     <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
