@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import JsonTableInput from "../jsonTableInput/JsonTableInput";
+import InputFile from "../inputFile/InputFile";
 
 
 function AddAssignment({ token, refreshData, yearOption }) {
@@ -6,12 +8,15 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
+    const [questions, setQuestions] = useState({})
+    const [fileContent, setFileContent] = useState("")
 
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
     const endDateBar = useRef(null);
     const durationHoursBar = useRef(null);
     const durationMinutesBar = useRef(null);
+    const formatBar = useRef(null)
 
     const cleanInput = () => {
         nameBar.current.value = '';
@@ -19,6 +24,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
         endDateBar.current.value = '';
         durationHoursBar.current.value = '';
         durationMinutesBar.current.value = '';
+        setQuestions({})
+        setFileContent("")
     }
 
     const handleClick = () => {
@@ -54,8 +61,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const endDate = endDateBar.current.value.trim();
         const durationHours = durationHoursBar.current.value.trim();
         const durationMinutes = durationMinutesBar.current.value.trim();
+        const format = formatBar.current.value.trim();
 
-        if (name === '' || startDate === '' || endDate === '' || durationHours === '' || durationMinutes === '') {
+        if (name === '' || startDate === '' || endDate === '' || durationHours === ''
+            || durationMinutes === '' || format === '' || questions === '') {
             setError('Must fill all fields');
             return;
         }
@@ -83,7 +92,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 "endDate": convertTimestampToDate(new Date(endDate).getTime()),
                 "durationHours": durationHours,
                 "durationMinutes": durationMinutes,
-                "year": parseInt(yearOption.current.value)
+                "year": parseInt(yearOption.current.value),
+                "format": format,
+                "questions": JSON.stringify(questions),
+                "botPic": fileContent
             })
 
         })
@@ -147,6 +159,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <center>Assignemnt's duration: </center>
                                     <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
+                                    <JsonTableInput outputJson={questions} setOutputJson={setQuestions} />
+                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent}/>
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
