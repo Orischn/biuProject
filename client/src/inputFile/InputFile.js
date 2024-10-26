@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-function InputFile({ title, setFileContent }) {
+function InputFile({ title, setFileContent, isBase64 }) {
     var input = useRef('');
 
     function handleChange(e) {
@@ -10,7 +10,11 @@ function InputFile({ title, setFileContent }) {
               const fileContent = reader.result;
               setFileContent(fileContent);
             };
-            reader.readAsDataURL(file);
+            if (isBase64) {
+                reader.readAsDataURL(file);
+            } else {
+                reader.readAsText(file);
+            }
             input.current.valueOf('')
     }
 

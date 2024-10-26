@@ -159,8 +159,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <center>Assignemnt's duration: </center>
                                     <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
-                                    <JsonTableInput outputJson={questions} setOutputJson={setQuestions} />
-                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent}/>
+                                    <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} />
+                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent} isBase64={true}/>
                                 </div>
                                 <div className="modal-footer">
                                     {error &&

@@ -1,11 +1,12 @@
 {
    "questions": [
-    {"question": "whats your age", "context": null, "context_questions": null, "answer": "12"},
-    {"question": "where are you from", "context": null, "context_questions": null, "answer": "from your mom"},
-    {"question": "does your eye hurts", "context": "Whats your problem", "context_questions": [
-        {"question": "how long", "context": null, "context_questions": null, "answer": "for two days"}
-    ], "answer": "yes it does"},
-    {"question": "fuck you", "context": null, "context_questions": null, "answer": "fuck you too"}
+    {"question": "whats your age", "answer": ["12", "18", "31"]},
+    {"question": "where are you from", "answer": "from your mom"},
+    {"question": "does your eye hurts", "answer": "yes it does"},
+    {"question": "how long does your eye hurt", "answer": "two days"},
+    {"question": "fuck you", "answer": "fuck you too"}
+   ],
+   "answers": [
+    [12, 18]
    ]
 }
-
