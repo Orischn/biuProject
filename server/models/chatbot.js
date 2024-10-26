@@ -7,6 +7,10 @@ const db = client.db(dbName);
 const tasks = db.collection('tasks');
 const practices = db.collection('practices');
 
+const { spawn } = require('child_process');
+const { cwd, argv } = require('process');
+const { time } = require('console');
+
 const validateTaskInputs = [
     check('taskName').isString().trim().escape(),
     check('startingDate').isISO8601(),
@@ -67,7 +71,9 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
 
-
+        let botProcess = spawn('python3 ../bot.py', [existingTask.format, existingTask.questions], {
+            stdio: ['pipe', 'pipe', 'pipe']
+        }, cwd='../')
         const practice = {
             userId: userId,
             chatId: chatId,
@@ -81,12 +87,21 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             durationMinutes: durationMinutes,
             year: year,
             active: true,
-            lateSubmit: user ? user.canSubmitLate : false
+            lateSubmit: user ? user.canSubmitLate : false,
+            botProcess: botProcess,
+            botStdoutBuffer: "",
         };
         await practices.insertOne(practice);
+        botProcess.stdout.on('data', async (data) => {
+            const db = client.db('ChatBot')
+            const practices = db.collection('practices');
+            practices.updateOne({botProcess: botProcess}, {
+                $set: {botStdoutBuffer: data.toString()}
+            })
+        })
         return { status: 200, practice: practice };
     } catch (error) {
-        return { status: 500, practice: error.message };
+        return { status: 500, practice: `${error.message}\nPlease inform an admin immediately` };
     } finally {
         await client.close();
     }
@@ -129,15 +144,21 @@ async function submitPractice(userId, chatId) {
         // if (dateTime > task.endDate) {
         //     return { status: 403, error: "Submission date passed." };
         // }
+        const practice = await practices.findOne({ chatId: chatId, userId: userId, active: true })
+        if (practice.botProcess) {
+            practice.botProcess.kill('SIGKILL');
+        }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
                 $set: {
                     active: false,
                     submissionDate: dateTime,
+                    botProcess: null,
                 },
             },
         );
+        
         await tasks.updateOne(
             { taskName: chatId, 'submitList.userId': userId },
             {
@@ -169,17 +190,28 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
+        let practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
+        if (practice.botProcess && practice.botProcess.stdin.writable) {
+            practice.botProcess.stdin.write(`${content}\n`)
+        }
+        while (!practice.botStdoutBuffer) {
+            practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
+        }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
                 $push: {
                     messages: {
-                        $each: [{ content: content, isBot: isBot }],
+                        $each: [{ content: content, isBot: isBot }, {content: practice.botStdoutBuffer}],
                         $position: 0
                     }
+                },
+                $set: {
+                   botStdoutBuffer: ""
                 }
             }
         );
+
         return { status: 200, error: "" };
     } catch (error) {
         return { status: 500, error: error.message };

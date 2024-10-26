@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const { check, validationResult } = require('express-validator');
+const { format } = require('path');
 require('dotenv').config();
 
 
@@ -43,7 +44,7 @@ async function uploadIdFile(fileName, fileContent) {
     return error ? { status: 500, error: error.message } : { status: 200 };
 }
 
-async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, users) {
+async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, format, questions, botPic, users) {
     const errors = validationResult(users); // Assuming `users` is coming from the request body
     if (!errors.isEmpty()) {
         return { status: 400, errors: errors.array() };
@@ -71,9 +72,12 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
             taskName: taskName,
             startDate: startingDate,
             endDate: endingDate,
+            format: format,
+            questions: JSON.parse(questions),
             durationHours: parseInt(durationHours, 10),
             durationMinutes: parseInt(durationMinutes, 10),
             year: year,
+            botPic: botPic,
             submitList: submitList,
         });
         return { status: 201, error: "" };
