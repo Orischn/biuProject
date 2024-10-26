@@ -1,64 +1,55 @@
-const { getUser, getUsers, postUser, deleteUser, changeAdminPermissions } = require('../models/users.js');
+const { getId } = require('../models/token.js');
+const { getUser, postUser, deleteUser, changeAdminPermissions, getStudents, changeUserPassword } = require('../models/users.js');
 
 const receiveUser = async (req, res) => {
-    const user = await getUser(req.header.username);
-    if (user === 401) {
-        return res.status(401).end();
-    } else {
-        return res.status(200).end(JSON.stringify(user));
-    }
+    const result = await getUser(req.params.userId);
+    return res.status(result.status).end(JSON.stringify(result.user));
 }
 
-const receiveAllUsers = async (req, res) => {
-    const users = await getUsers();
-    if (users === 401) {
-        return res.status(401).end();
-    } else {
-        return res.status(200).end(JSON.stringify(users));
-    }
+const getMe = async (req, res) => {
+    const userId = await getId(req.headers.authorization);
+    const result = await getUser(userId);
+    return res.status(result.status).end(JSON.stringify(result.user));
+}
+
+const receiveAllStudents = async (req, res) => {
+    const result = await getStudents();
+    return res.status(result.status).end(JSON.stringify(result.students));
 }
 
 const createUser = async (req, res) => {
-    const ret = await postUser(req.body.username);
-    res.status(ret);
-    if (ret == 409) {
-        res.end('Creation of user failed (User already exists).');
-    } else if (ret == 500) {
-        res.end('Creation of user failed (Internal server error). Please contact the server administrator.');
-    }
-    return res;
+    const result = await postUser(req.body.user);
+    return res.status(result.status).end(result.error);
 }
 
 const removeUser = async (req, res) => {
-    const user = getUser(req.body.username)
-    if (user == 404) {
-        res.end('Deletion of user failed (User doesn\'t exists).');
-    }
-    const ret = await deleteUser(user);
-    res.status(ret);
-    if (ret == 500) {
-        res.end('Deletion of user failed (Internal server error). Please contact the server administrator.');
-    }
-    return res;
+    const user = await getUser(req.body.userId)
+    const result = await deleteUser(user.user);
+    return res.status(result.status).end(result.error);
 }
 
 const changePermissions = async (req, res) => {
-    const user = getUser(req.body.username)
-    if (user == 404) {
-        res.end('Deletion of user failed (User doesn\'t exists).');
+    const result = await changeAdminPermissions(user, req.body.permissions);
+    return res.status(result.status).end(result.error);
+}
+
+const changePassword = async (req, res) => {
+    const userId = await getId(req.headers.authorization);
+    const result = await getUser(userId);
+    if (result.status !== 200) {
+        return res.status(result.status).end(JSON.stringify(result.user));
     }
-    const ret = await changeAdminPermissions(user, req.body.permissions);
-    res.status(ret);
-    if (ret == 500) {
-        res.end('Deletion of user failed (Internal server error). Please contact the server administrator.');
-    }
-    return res;
+    const changeResult = await changeUserPassword(result.user, req.body.oldPassword, req.body.newPassword)
+    return res.status(changeResult.status).end(JSON.stringify(changeResult.error));
+
 }
 
 module.exports = {
     receiveUser,
+    getMe,
     createUser,
-    receiveAllUsers,
+    receiveAllStudents,
     removeUser,
     changePermissions,
-}
+    changePassword,
+};

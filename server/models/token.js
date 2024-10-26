@@ -1,19 +1,20 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
-const key = "Sara shara shir sameihah shir sameihah shara Sara";
-const { getUser } = require('./users');
+const bcrypt = require('bcrypt');
+const key = process.env.SECRET_TOKEN;
+
 
 const checkToken = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            jwt.verify(token, key);
-            return 200;
+            await jwt.verify(token, key);
+            return { status: 200, error: "" };
         } catch (err) {
-            return 401;
+            return { status: 401, error: err };
         }
     } else {
-        return 401;
+        return { status: 401, error: "No authorization token provided." };
     }
 }
 
@@ -23,40 +24,38 @@ const postToken = async (user) => {
         await client.connect();
         const db = client.db('ChatBot');
         const users = db.collection('users');
-        const existingUser = await users.findOne({username: user.username, password: user.password});
-        if (!existingUser || existingUser == 404) {
-            return 404;
+
+        const existingUser = await users.findOne({ userId: user.userId });
+        if (!existingUser) {
+            return { status: 404, token: "User doesn't exist." };
         }
 
-        if (existingUser == 500) {
-            return 500;
+        // Compare the input password with the stored hashed password
+        const passwordMatch = await bcrypt.compare(user.password, existingUser.password);
+        if (!passwordMatch) {
+            return { status: 401, token: "Password is incorrect." };
         }
-        
-        const token = await jwt.sign(user, key);
-        return token;
+        const token = jwt.sign(user.userId, key);
+        return { status: 200, token: token };
     } catch (error) {
-        return 500;
+        return { status: 500, token: error.message };
     } finally {
         await client.close();
     }
 }
 
-const getData = async (authorization) => {
-    if (authorization) {
+const getId = async (authorization) => {
+    try {
         const token = authorization.split(" ")[1];
-        try {
-            const data = jwt.verify(token, key);
-            return data;
-        } catch (err) {
-            return 401;
-        }
-    } else {
-        return 403;
+        const data = await jwt.verify(token, key);
+        return data;
+    } catch (err) {
+        return null;
     }
 }
 
 module.exports = {
     postToken,
     checkToken,
-    getData,
-}
+    getId,
+};

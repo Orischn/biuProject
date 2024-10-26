@@ -2,7 +2,7 @@ import { useRef } from "react";
 import BotMessage from "../botMessage/BotMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
+function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage, isTimeUp, isEndDatePassed }) {
 
     const typeBar = useRef(null);
     const send = async (e) => {
@@ -15,7 +15,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         const message = {content: content}
         setMessages(messages => [...messages, <StudentMessage message={message} />]);
         typeBar.current.value = '';
-        const res = await fetch(`http://localhost:5000/api/sendMessage/`, {
+        const res = await fetch(`https://localhost:5000/api/sendMessage/`, {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -31,10 +31,11 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         }
 
         if (res.status === 200) {
-            res.text().then((message) => {
+            await res.text().then((message) => {
                 setMessages(messages => [...messages, <BotMessage message={JSON.parse(message)} />]);
             })
         }
+        setLatestMessage(message);
         
     }
     
@@ -43,9 +44,20 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages }) {
         <div className="d-flex">
             <span id="messageBar" className="input-group">
                 <form onSubmit={send} className="input-group">
-                    <input ref={typeBar} className="form-control inputText" placeholder="Type a message" />
-                    <button id="sendButton" type="submit" className="btn">
-                        <i className="bi bi-send" />
+                    <input ref={typeBar} 
+                    className={`form-control input ${(!selectedPractice.active || isTimeUp ||
+                        (isEndDatePassed && !selectedPractice.lateSubmit)
+                    ) ? 'custom-disabled' : ''}`}
+                    placeholder="Type a message"
+                    disabled={!selectedPractice.active || isTimeUp ||
+                        (isEndDatePassed && !selectedPractice.lateSubmit)
+                    }/>
+                    <button id="sendButton" type="submit" 
+                    className={`btn ${(!selectedPractice.active || isTimeUp)? 'custom-disabled' : ''}`}
+                    disabled={!selectedPractice.active || isTimeUp || 
+                        (isEndDatePassed && !selectedPractice.lateSubmit)
+                    }>
+                        <i className="bi bi-send" style={{color: 'black'}}/>
                     </button>
                 </form>
             </span>

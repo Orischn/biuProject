@@ -1,33 +1,68 @@
+#window {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.list-group-item.active {
+    background-color: #0d6efd;
+}
+
+.row {
+    height: 100%;
+}
+
+
+.settingType:hover {
+    background-color: lightblue;
+    cursor: pointer;
+}  */
+
+
 img {
     height: 45px;
     width: 45px;
+    border-radius: 50%; 
 }
 
 .practice {
-    background-color: rgb(240, 240, 240);
-    border-color: lightgray;
+    /* background-color: rgb(240, 240, 240); */
+    /* background-color:   rgb(50, 138, 50); */
+    background-color: rgb(220, 251, 217);
+    /* background-color: white; */
+    /* border-color: lightgray; */
     height: 10%;
+    border-radius: 12px; 
+    padding: 10px;
+    /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);  */
 }
 
 .practice:hover {
-    background-color: lightblue;
+    /* background-color: lightblue; */
+    /* background-color: rgb(220, 251, 217); */
+    background-color: white;
     cursor: pointer;
 }
 
-.inputText{
+.input {
+    color: black;
+    border-radius: 6px; 
+    padding: 5px; 
+}
+
+.input:focus {
+    color: black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    outline: none; 
+}
+
+.input::placeholder {
     color: black;
 }
 
-.inputText:focus {
-    color: black;
-    box-shadow: none;
-}
-
-.inputText::placeholder {
-    color: black;
-}
-
-.inputText:focus::placeholder {
+.input:focus::placeholder {
     color: transparent;
 }
 
@@ -36,7 +71,7 @@ img {
     top: 20px;
     left: 20px;
     border-radius: 10px;
-    background-color: rgb(210, 210, 210);
+    background-color: rgb(233, 219, 194);
     color: black;
     width: fit-content;
     max-width: 300px;
@@ -49,7 +84,7 @@ img {
     top: 20px;
     right: 20px;
     border-radius: 10px;
-    background-color: rgb(143, 163, 244);
+    background-color: rgb(173, 216, 230);
     color: black;
     width: fit-content;
     max-width: 300px;
@@ -59,21 +94,31 @@ img {
 
 .date {
     float: right;
+    font-size: 0.85rem; 
 }
 
 #me {
-    background-color: rgb(230, 230, 230);
+    /* background-color: rgb(230, 230, 230); */
+    /* background-color: rgb(0, 100, 0); */
+    background-color: darkgreen;
+    color: white !important;
     height: 10%;
+    border-radius: 12px;
+    padding: 10px;
 }
 
 #searchBar > input {
     background-color: rgb(230, 230, 230);
     border: none;
     margin-right: 3px;
+    padding: 8px; 
+    border-radius: 8px; 
 }
 
 #searchBar > input:focus {
     background-color: rgb(230, 230, 230);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 #searchBar > span {
@@ -92,23 +137,29 @@ img {
 #messageBar > input {
     background-color: rgb(240, 240, 240);
     border-color: lightgray;
-    border-radius: 7px;
+    border-radius: 10px; 
     margin-right: 5px;
+    padding: 10px; 
 }
 
 #messageBar > input:focus {
     background-color: rgb(240, 240, 240);
     border-color: lightgray;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 #messageBar > button {
     background-color: rgb(220, 220, 230);
     color: black;
     border: none;
+    border-radius: 8px; 
+    padding: 10px 15px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 #messageBar > button:focus {
-    border: none;
+    outline: none;
 }
 
 #messageBar {
@@ -123,18 +174,60 @@ img {
     color: black;
 }
 
-#chat {
+/* #chat {
     background-color: white;
     height: 79%;
-    
+    border-radius: 12px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); 
+} */
+
+#chat {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    height: 75%;
+
+}
+
+
+
+#chat::-webkit-scrollbar {
+    display: none;
+}
+
+#studentList::-webkit-scrollbar {
+    display: none;
 }
 
 #chatFeed {
-    background-color: rgb(220, 220, 230);
+    /* second from right - off white */
+    /* background-color: rgb(220, 251, 217);  */
+    border-radius: 0px; 
 }
 
 #practiceFeed {
-    background-color: rgb(240, 240, 240);
+    /* background-color: rgb(50, 138, 50); */
+    background-color: rgb(220, 251, 217); ;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+#adminFeed {
+    background-color: rgb(220, 251, 217);
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    
+}
+
+.practice-active {
+    background-color: rgb(173, 216, 230) !important;
+}
+
+#practiceFeed::-webkit-scrollbar {
+    display: none;
+}
+
+#adminFeed::-webkit-scrollbar {
+    display: none;
 }
 
 #window {
@@ -144,11 +237,351 @@ img {
     width: 100%;
     height: 100%;
 }
-
+/* 
 .list-group-item.active {
     background-color: #0d6efd;
-}
+    border-radius: 10px; 
+} */
 
 .row {
     height: 100%;
 }
+
+.custom-modal .modal-dialog {
+    width: 90% !important;
+    max-width: 90% !important;
+    height: 90% !important;
+    overflow-y: auto;
+    border-radius: 12px; 
+}
+
+.modal-dialog::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-header {
+    background-color: darkgreen;
+}
+
+.settingType:hover {
+    background-color: lightblue;
+    cursor: pointer;
+}
+
+.settingType.active:hover {
+    background-color: #007bff;
+    cursor: auto;
+}
+
+.custom-disabled {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #6c757d; /* Muted text color */
+    border-color: #f0f0f0;
+    cursor: not-allowed; /* Show a "no entry" cursor */
+    opacity: 0.6; /* Make it look faded */
+}
+
+#grades {
+    height: 26%;
+    overflow-y: auto;
+  }
+  
+  /* #grades::-webkit-scrollbar {
+    display: none;
+  } */
+  
+  .grades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(28%, 1fr));
+    gap: 5%;
+  }
+
+  /* ------------------------------------grade1------------------------------------------ */
+  
+   .grade-container {
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.grade-title {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    font-weight: bold;
+    text-align: center;
+  }
+  /*
+  
+  .grade-input {
+    width: 60px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+  }
+
+  .grade-status {
+    margin-left: 10px; 
+    font-size: 0.9em; 
+    color: #666; 
+} */
+
+/* -----------------------------------grade2--------------------------- */
+
+
+
+  .grade-content {
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .grade-content:hover {
+    text-decoration: underline;
+  }
+
+  .grade-feedback {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .grade-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grade-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 2px 5px rgba(0, 123, 255, 0.3);
+  }
+  
+
+#chatHistory {
+    overflow-y: auto;
+    height: 66%;
+}
+
+#chatHistory::-webkit-scrollbar {
+    display: none;
+}
+/* ------------------------------------------------------------ */
+
+#addStudent {
+    color: gray;
+}
+
+.settings-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.settings-container::-webkit-scrollbar {
+    display: none;
+}
+
+.settings-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-item:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+.setting-item label {
+    font-size: 16px;
+    color: #555;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.save-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #1976D2;
+}
+
+button > i {
+    color: white;
+}
+
+  /* -------------------------------other modal------------------------------ */
+
+  /* Modal Overlay */
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 100;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Darker overlay */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    z-index: 1050;
+    /* Remove or set padding-top to 0 if it's currently affecting position */
+}
+
+.modal-dialog-custom {
+    position: relative;
+    left: 100;
+    width: 50% !important;
+    max-width: 50% !important;
+    height: 90% !important;
+    overflow-y: auto;
+    border-radius: 12px;
+    align-self: center;
+}
+
+
+.modal-dialog-custom::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Modal Content */
+.modal-content {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.5s ease forwards; /* Animation effect */
+    margin-top: 20px; /* Adjust this value to position the modal higher */
+    /* You can use margin-top: 0; for a higher placement */
+}
+
+/* Animation */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px); /* Start slightly above its final position */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* End at its final position */
+    }
+}
+
+/* ---------------------------------------------------------- */
+
+.hyperlink {
+    color: white;
+    cursor: default;
+}
+
+#click-here {
+    color: rgb(154, 210, 229);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#click-here:hover {
+    color: darkblue;
+}
+
+#click-here2 {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#click-here2:hover {
+    color: blue;
+}
+
+/* .editAssignmentInput::placeholder {
+    position: relative !important;
+    text-align: left !important;
+    left: 0;
+    padding-left: 0 !important;    
+    padding-top: 0 !important;     
+} */
+
+.editAssignmentInput {
+    padding-left: 0;  
+    text-align: left; 
+    padding-top: 2;   
+}
+
+.editAssignmentInput::placeholder {
+    text-align: left; 
+}
+
+
+
