@@ -5,7 +5,6 @@ const { format } = require('path');
 require('dotenv').config();
 
 
-
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 // const client = new MongoClient("mongodb://appUser:}]zpT3r^b|z@127.0.0.1:27017/ChatBot");
 
@@ -91,6 +90,15 @@ async function getTasks() {
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };
+    }
+}
+
+async function getTask(taskName, year) {
+    try {
+        const task = await tasks.findOne({taskName: taskName, year: year});
+        return { status: 200, task: task };
+    } catch (error) {
+        return { status: 500, task: error.message };
     }
 }
 
@@ -232,6 +240,7 @@ module.exports = {
     uploadIdFile,
     makeTask,
     getTasks,
+    getTask,
     adminViewTasks,
     getSubmissionStatus,
     postFeedback,

@@ -1,10 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 import json
 from sys import argv
-import socket, threading
-
-HOST = "127.0.0.1"
-PORT = 65432
 
 # class Context():
 #     def __init__(self, context):
@@ -12,7 +8,9 @@ PORT = 65432
 #         self.NESTED_CONTEXT = None
 
 # context = Context(None)
-data = {}
+with open('./csvFiles/decisionTree.json') as file:
+    data = json.load(file)
+
 model = SentenceTransformer('all-mpnet-base-v2')
 
 def get_questions(questions):
@@ -60,20 +58,6 @@ def answer_question(user_input):
     score = similarities[0][best_match_idx].item()
     if score < 0.5:
             return "Failed to understand the question"
-    return best_question[best_match_idx]["answer"]
+    return best_question["answer"]
 
-
-def on_new_client(conn):
-    data = conn.recv(1024)
-    data = json.loads(data)
-    while True:
-            data = conn.recv(1024)
-            answer = answer_question(data)
-            conn.sendall(answer)
-
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen(300)
-    while True:
-        conn, addr = s.accept()
-        threading.Thread(target=on_new_client, args=[conn])  
+print(answer_question(argv[3]))

@@ -1,33 +1,43 @@
-const { getTasks } = require("../models/adminPanel");
+const { getTasks, getTask } = require("../models/adminPanel");
 const { postPractice, getPractice, getPractices, addMessage, getMessages, submitPractice } = require("../models/chatbot");
 const { getId } = require("../models/token");
+const { exec } = require('child_process');
 
-const decipherQuestion = async (req, res, next) => {
+
+const decipherQuestion = async (req, res) => {
     const userId = await getId(req.headers.authorization);
-    const practice = await getPractice(userId, req.body.chatId)
-    if (botClients[practice.botPid] && botClients[practice.botPid].writable) {
-        botClients[practice.botPid].write(`${content}\n`);
-    }
-    await new Promise(r => setTimeout(r,1000));
-    const result = await addMessage(userId, req.body.chatId, req.body.msg, false);
+    const taskResult = await getTask(req.body.chatId, req.body.year);
+    let result = await addMessage(userId, req.body.chatId, req.body.msg, false);
     if (result.status !== 200) {
         return res.status(result.status).end(result.error);
     }
-    console.log(result)
-    return next();
-}
-
-const answerQuestion = async (req, res) => {
-    const userId = await getId(req.headers.authorization);
-    let result = await getMessages(req.body.chatId, userId);
+    const answer = await callExec(req.body.msg);
+    result = await addMessage(userId, req.body.chatId, answer, true);
+    if (result.status !== 200) {
+        return res.status(result.status).end(result.error);
+    }
+    result = await getMessages(req.body.chatId, userId);
     return res.status(result.status).json(result.messages[0]);
 }
+
+const callExec = async (msg) => {
+    return new Promise((resolve, reject) => {
+        exec(`python3 ./bot.py 0 0 '${msg}'`,
+            (error, stdout, stderr) => {
+                resolve(stdout)
+            });
+    })
+}
+
+
+
+
 
 const addPractice = async (req, res) => {
     const userId = await getId(req.headers.authorization);
     const existingPractice = await getPractice(req.body.chatId, userId);
     if (!existingPractice.practice) {
-        const result = await postPractice(userId, req.body.chatId, req.body.durationHours, 
+        const result = await postPractice(userId, req.body.chatId, req.body.durationHours,
             req.body.durationMinutes, req.body.endDate, req.body.year);
         return res.status(result.status).end(JSON.stringify(result.practice));
     }
@@ -59,7 +69,6 @@ const viewTasks = async (req, res) => {
 
 module.exports = {
     decipherQuestion,
-    answerQuestion,
     addPractice,
     recvPractices,
     recvPractice,

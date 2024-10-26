@@ -7,10 +7,7 @@ const db = client.db(dbName);
 const tasks = db.collection('tasks');
 const practices = db.collection('practices');
 
-var net = require('net')
 
-
-let botClients = {};
 
 const validateTaskInputs = [
     check('taskName').isString().trim().escape(),
@@ -71,12 +68,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-        var botClient = new net.Socket()
-        botClient.connect(65432, '127.0.0.1')
-        botClient.write(existingTask.questions)
-        botClients[botClient.fd] = botClient;
-
-
+      
         const practice = {
             userId: userId,
             chatId: chatId,
@@ -91,34 +83,10 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             year: year,
             active: true,
             lateSubmit: user ? user.canSubmitLate : false,
-            botPid: botClient.fd,
-            botStdoutBuffer: "",
 
         };
 
-        botClient.on('close', async (e) => {
-            console.log(e)
-
-        })
-
         await practices.insertOne(practice);
-        botClient.on('data', async (data) => {
-            const client = new MongoClient("mongodb://127.0.0.1:27017");
-            try {
-                await client.connect();
-                const db = client.db('ChatBot')
-                const practices = db.collection('practices');
-                console.log(data)
-
-                practices.updateOne({ botClient: botClient.fd }, {
-                    $set: { botStdoutBuffer: data.toString() }
-                })
-            } catch (error) {
-                console.log(error.message)
-            } finally {
-                await client.close();
-            }
-        })
         return { status: 200, practice: practice };
     } catch (error) {
         console.log(error.message)
@@ -165,18 +133,13 @@ async function submitPractice(userId, chatId) {
         // if (dateTime > task.endDate) {
         //     return { status: 403, error: "Submission date passed." };
         // }
-        const practice = await practices.findOne({ chatId: chatId, userId: userId, active: true })
-        if (botClients[practice.fd]) {
-            botClients[practice.fd].destroy();
-            delete botClients[practice.fd]
-        }
+      
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
                 $set: {
                     active: false,
                     submissionDate: dateTime,
-                    botProcess: null,
                 },
             },
         );
@@ -212,21 +175,16 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        let practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
-        console.log(1)
 
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
                 $push: {
                     messages: {
-                        $each: [{ content: content, isBot: isBot }, { content: practice.botStdoutBuffer, isBot: true }],
+                        $each: [{ content: content, isBot: isBot }],
                         $position: 0
                     }
                 },
-                $set: {
-                    botStdoutBuffer: ""
-                }
             }
         );
 
