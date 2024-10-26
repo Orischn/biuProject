@@ -61,10 +61,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const endDate = endDateBar.current.value.trim();
         const durationHours = durationHoursBar.current.value.trim();
         const durationMinutes = durationMinutesBar.current.value.trim();
-        const format = formatBar.current.value.trim();
+        // const format = formatBar.current.value.trim();
 
         if (name === '' || startDate === '' || endDate === '' || durationHours === ''
-            || durationMinutes === '' || format === '' || questions === '') {
+            || durationMinutes === '' || questions === '') {
             setError('Must fill all fields');
             return;
         }
@@ -93,7 +93,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 "durationHours": durationHours,
                 "durationMinutes": durationMinutes,
                 "year": parseInt(yearOption.current.value),
-                "format": format,
+                "format": 'txt',
                 "questions": JSON.stringify(questions),
                 "botPic": fileContent
             })

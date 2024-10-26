@@ -5,9 +5,10 @@ const { getId } = require("../models/token");
 const decipherQuestion = async (req, res, next) => {
     const userId = await getId(req.headers.authorization);
     const result = await addMessage(userId, req.body.chatId, req.body.msg, false);
-    if (result.status != 200) {
+    if (result.status !== 200) {
         return res.status(result.status).end(result.error);
     }
+    console.log(result)
     return next();
 }
 

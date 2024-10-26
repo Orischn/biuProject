@@ -102,7 +102,8 @@ const JsonTableInput = ({ outputJson, setOutputJson }) => {
             <button onClick={generateJSON}>Generate JSON</button>
 
             <h3>Output JSON:</h3>
-            <pre>{outputJson}</pre>
+            {/* <pre>{outputJson}</pre> */}
+            {/* {outputJson} */}
         </div>
     );
 };

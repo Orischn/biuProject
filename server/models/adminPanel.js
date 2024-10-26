@@ -51,7 +51,6 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     }
 
     try {
-
         const existingTask = await tasks.findOne({ taskName: taskName, year: year })
         if (existingTask) {
             return { status: 409, error: `This task already exists this year`}

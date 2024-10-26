@@ -8,8 +8,11 @@ from sys import argv
 #         self.NESTED_CONTEXT = None
 
 # context = Context(None)
-with open('./csvFiles/decisionTree.json', 'r') as file:
-    data = json.load(file)
+try:
+    print(argv)
+    data = json.loads(argv[2])
+except:
+    exit(500)
 
 
 model = SentenceTransformer('all-mpnet-base-v2')
