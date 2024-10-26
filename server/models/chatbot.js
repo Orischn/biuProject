@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const { check, validationResult } = require('express-validator');
+const { spawn } = require('child_process');
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 const dbName = 'ChatBot';
@@ -7,7 +8,7 @@ const db = client.db(dbName);
 const tasks = db.collection('tasks');
 const practices = db.collection('practices');
 
-
+let botProcesses = []
 
 const validateTaskInputs = [
     check('taskName').isString().trim().escape(),
@@ -56,19 +57,29 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-
+        
         const existingTask = await tasks.findOne({ taskName: chatId, year: year });
         if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
-
+        
         const user = existingTask.submitList.find(user => user.userId === userId);
-
+        
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-      
+        
+        let botProcess = spawn('python3', ['./bot.py', 0, existingTask.questions])
+        botProcess.id = chatId + userId
+        botProcess.dataRead = false
+        botProcess.stdout.on('data', async (data) => {
+            const data = data.split('\n');
+            await addMessage(data[1], data[0], data[2], true);
+            botProcess.dataRead = true;
+        })
+        botProcesses[botProcess.id] = botProcess
+        
         const practice = {
             userId: userId,
             chatId: chatId,
@@ -83,9 +94,9 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             year: year,
             active: true,
             lateSubmit: user ? user.canSubmitLate : false,
-
+            
         };
-
+        
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
     } catch (error) {
@@ -133,7 +144,8 @@ async function submitPractice(userId, chatId) {
         // if (dateTime > task.endDate) {
         //     return { status: 403, error: "Submission date passed." };
         // }
-      
+        botProcesses[chatId + userId].kill('SIGKILL');
+        delete botProcesses[chatId + userId];
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
@@ -143,7 +155,7 @@ async function submitPractice(userId, chatId) {
                 },
             },
         );
-
+        
         await tasks.updateOne(
             { taskName: chatId, 'submitList.userId': userId },
             {
@@ -175,7 +187,7 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-
+        
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
@@ -187,7 +199,7 @@ async function addMessage(userId, chatId, content, isBot) {
                 },
             }
         );
-
+        
         return { status: 200, error: "" };
     } catch (error) {
         console.log(error.message)
@@ -212,7 +224,7 @@ async function updateGrade(userId, chatId, newGrade) {
                 },
             },
         );
-
+        
         await tasks.updateOne(
             { taskName: chatId, "submitList.userId": userId },
             {
@@ -238,4 +250,5 @@ module.exports = {
     addMessage,
     getMessages,
     updateGrade,
+    botProcesses,
 };
