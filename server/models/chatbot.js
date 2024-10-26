@@ -72,13 +72,15 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         
         let botProcess = spawn('python3', ['./bot.py', 0, existingTask.questions])
         botProcess.id = chatId + userId
-        botProcess.dataRead = false
-        botProcess.stdout.on('data', async (data) => {
-            const data = data.split('\n');
-            await addMessage(data[1], data[0], data[2], true);
-            botProcesses[data[0] + data[1]].dataRead = true;
+        botProcess.stdout.on('data', (data) => {
+            messageData = data.toString().split('\r\n');
+            const result = addMessage(messageData[1], messageData[0], messageData[2], true);
         })
         botProcesses[botProcess.id] = botProcess
+
+        await new Promise((resolve) => {
+            setTimeout(resolve, 15000);
+        });
         
         const practice = {
             userId: userId,
@@ -94,7 +96,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             year: year,
             active: true,
             lateSubmit: user ? user.canSubmitLate : false,
-            botImg: existingTask.botImg
+            botPic: existingTask.botPic
         };
         
         await practices.insertOne(practice);
@@ -187,7 +189,6 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {

@@ -8,8 +8,11 @@ const decipherQuestion = async (req, res) => {
     if (result.status !== 200) {
         return res.status(result.status).end(result.error);
     }
-    botProcesses[req.body.chatId + userId].write(`${req.body.msg}\n${req.body.chatId}\n${req.body.userId}\n`);
-    while (!botProcesses[req.body.chatId + userId].dataRead);
+    botProcesses[req.body.chatId + userId].stdin.write(`${req.body.msg}\n${req.body.chatId}\n${userId}\n`);
+    // while (!botProcesses[req.body.chatId + userId].dataRead);
+    await new Promise((resolve) => {
+        setTimeout(resolve, 2000);
+    });
     result = await getMessages(req.body.chatId, userId);
     return res.status(result.status).json(result.messages[0]);
 }
