@@ -12,7 +12,7 @@ function UploadIdFile({ token, title }) {
     const save = async (e) => {
         e.preventDefault();
 
-        if(!fileContent) {
+        if (!fileContent) {
             setError('No file selected');
             setFileUploadedSuccessfully(false);
             return;
@@ -82,10 +82,10 @@ function UploadIdFile({ token, title }) {
                                     style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>
                                     {error}
                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <i className="bi bi-x-lg" style={{cursor: 'pointer'}}
-                                    onClick={() => setError('')}/>
+                                    <i className="bi bi-x-lg" style={{ cursor: 'pointer' }}
+                                        onClick={() => setError('')} />
                                 </span>}
-                                
+
                         </div>
                     </div>
 
