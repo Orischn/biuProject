@@ -73,6 +73,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         var dateTime = date + ' ' + time;
         var botClient = new net.Socket()
         botClient.connect(65432, '127.0.0.1')
+        botClient.write(existingTask.questions)
         botClients[botClient.fd] = botClient;
 
 

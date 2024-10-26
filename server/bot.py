@@ -12,11 +12,7 @@ PORT = 65432
 #         self.NESTED_CONTEXT = None
 
 # context = Context(None)
-try:
-    data = json.load(argv[2])
-except:
-    exit(500)
-
+data = {}
 model = SentenceTransformer('all-mpnet-base-v2')
 
 def get_questions(questions):
@@ -68,6 +64,8 @@ def answer_question(user_input):
 
 
 def on_new_client(conn):
+    data = conn.recv(1024)
+    data = json.loads(data)
     while True:
             data = conn.recv(1024)
             answer = answer_question(data)
