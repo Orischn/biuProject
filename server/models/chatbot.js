@@ -76,7 +76,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         botProcess.stdout.on('data', async (data) => {
             const data = data.split('\n');
             await addMessage(data[1], data[0], data[2], true);
-            botProcess.dataRead = true;
+            botProcesses[data[0] + data[1]].dataRead = true;
         })
         botProcesses[botProcess.id] = botProcess
         
