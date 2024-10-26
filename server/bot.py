@@ -1,6 +1,10 @@
 from sentence_transformers import SentenceTransformer, util
 import json
 from sys import argv
+import socket, threading
+
+HOST = "127.0.0.1"
+PORT = 65432
 
 # class Context():
 #     def __init__(self, context):
@@ -9,11 +13,9 @@ from sys import argv
 
 # context = Context(None)
 try:
-    print(argv)
-    data = json.loads(argv[2])
+    data = json.load(argv[2])
 except:
     exit(500)
-
 
 model = SentenceTransformer('all-mpnet-base-v2')
 
@@ -62,12 +64,18 @@ def answer_question(user_input):
     score = similarities[0][best_match_idx].item()
     if score < 0.5:
             return "Failed to understand the question"
-    return best_question["answer"]
+    return best_question[best_match_idx]["answer"]
 
 
-# Example user input
+def on_new_client(conn):
+    while True:
+            data = conn.recv(1024)
+            answer = answer_question(data)
+            conn.sendall(answer)
 
-while 1:
-    question = input("Your question: ")
-    answer = answer_question(question)
-    print(answer)  # Output: "1 year"
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))
+    s.listen(300)
+    while True:
+        conn, addr = s.accept()
+        threading.Thread(target=on_new_client, args=[conn])  

@@ -4,6 +4,11 @@ const { getId } = require("../models/token");
 
 const decipherQuestion = async (req, res, next) => {
     const userId = await getId(req.headers.authorization);
+    const practice = await getPractice(userId, req.body.chatId)
+    if (botClients[practice.botPid] && botClients[practice.botPid].writable) {
+        botClients[practice.botPid].write(`${content}\n`);
+    }
+    await new Promise(r => setTimeout(r,1000));
     const result = await addMessage(userId, req.body.chatId, req.body.msg, false);
     if (result.status !== 200) {
         return res.status(result.status).end(result.error);
