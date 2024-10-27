@@ -1,6 +1,8 @@
 const { MongoClient } = require('mongodb');
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const { spawn } = require('child_process');
+const { os } = require('os');
+const { randomInt } = require('crypto');
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 const dbName = 'ChatBot';
@@ -69,11 +71,16 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-        
+        answers = existingTask.questions.answers
+        answerIdx = randomInt(answers.length);
+        for (let i in existingTask.questions) {
+            existingTask.questions[i]['answer'] = answers[answerIdx]["answer"][i];
+        }
+        let questions = { "questions": existingTask.questions }
         let botProcess = spawn('python3', ['./bot.py', 0, existingTask.questions])
         botProcess.id = chatId + userId
         botProcess.stdout.on('data', (data) => {
-            messageData = data.toString().split('\r\n');
+            messageData = data.toString().split(os.EOL);
             const result = addMessage(messageData[1], messageData[0], messageData[2], true);
         })
         botProcesses[botProcess.id] = botProcess
@@ -103,7 +110,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         return { status: 200, practice: practice };
     } catch (error) {
         console.log(error.message)
-        return { status: 500, practice: `${error.message}\nPlease inform an admin immediately` };
+        return { status: 500, practice: `${error.message}${os.EOL}Please inform an admin immediately` };
     } finally {
         await client.close();
     }
