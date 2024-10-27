@@ -65,13 +65,12 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 grade: null,
                 feedback: ''
             }));
-
         await tasks.insertOne({
             taskName: taskName,
             startDate: startingDate,
             endDate: endingDate,
             format: format,
-            questions: JSON.parse(questions),
+            questions: questions,
             durationHours: parseInt(durationHours, 10),
             durationMinutes: parseInt(durationMinutes, 10),
             year: year,

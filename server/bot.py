@@ -43,8 +43,9 @@ def answer_question(user_input):
     return best_question["answer"]
 
 data = json.loads(argv[2])
+print(data)
 while True:
     prompt = input()
     chat_id = input()
     user_id = input()
-    print(f'{chat_id}{linesep}{user_id}{linesep}{answer_question(prompt)}', end='')
+    print(f'{chat_id}|{user_id}|{answer_question(prompt)}', end='')
