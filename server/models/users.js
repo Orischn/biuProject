@@ -2,6 +2,7 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+const os = require('os');
 require('dotenv').config();
 const MAIL_PASSWORD = process.env.MAIL_APP_PASSWORD;
 
@@ -97,7 +98,7 @@ async function postUser(user) {
     if (err) {
       console.error('Error reading ID file', err);
     } else {
-      validIds = data.split('\n').map(id => id.trim());
+      validIds = data.split(os.EOL).map(id => id.trim());
     }
   });
 
