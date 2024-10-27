@@ -1,27 +1,50 @@
-from sentence_transformers import SentenceTransformer, util
+from transformers import AutoTokenizer, AutoModel
+import torch
+from sentence_transformers import util
 import json
 from sys import argv
+from os import linesep
 
-model = SentenceTransformer('all-mpnet-base-v2')
+model_name = "onlplab/alephbert-base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
+
+def encodeText(text):
+    inputs = tokenizer(text, return_tensors="pt")
+    outputs = model(**inputs)
+    embeddings = outputs.last_hidden_state
+    sentence_embedding = embeddings.mean(dim=1)
+    return sentence_embedding
+
+def encodeList(listOfSentences):
+    inputs = tokenizer(listOfSentences, padding=True, truncation=True, return_tensors="pt")
+    outputs = model(**inputs)
+    embeddings = outputs.last_hidden_state
+    sentence_embedding = embeddings.mean(dim=1)
+    return sentence_embedding
 
 def get_questions(questions):
     return [item["question"] for item in questions]
 
 def answer_question(user_input):
     current_questions = data["questions"]
-    user_input_embedding = model.encode(user_input)
-    questions_embedding = model.encode(get_questions(current_questions))
+    user_input_embedding = encodeText(user_input)
+    questions_embedding = encodeList(get_questions(current_questions))
     similarities = util.pytorch_cos_sim(user_input_embedding, questions_embedding)
     best_match_idx = similarities.argmax().item()
-    best_question = current_questions[best_match_idx]
     score = similarities[0][best_match_idx].item()
-    if score < 0.45:
+    if score < 0.5:
             return "Failed to understand the question"
+    values, _ = torch.topk(similarities, 2)
+    if values.max().item() - values.min().item() < 0.15:
+        return f"Question could have multiple meanings.{linesep}Please be more specific."
+    best_question = current_questions[best_match_idx]
     return best_question["answer"]
+
 
 data = json.loads(argv[2])
 while True:
     prompt = input()
     chat_id = input()
     user_id = input()
-    print(f'{chat_id}\n{user_id}\n{answer_question(prompt)}', end='')
+    print(f'{chat_id}{linesep}{user_id}{linesep}{answer_question(prompt)}', end='')
