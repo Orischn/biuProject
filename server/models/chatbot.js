@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 const { check } = require('express-validator');
 const { spawn } = require('child_process');
-const { os } = require('os');
+const os  = require('os');
 const { randomInt } = require('crypto');
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -71,16 +71,19 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
+
         answers = existingTask.questions.answers
         answerIdx = randomInt(answers.length);
-        for (let i in existingTask.questions) {
-            existingTask.questions[i]['answer'] = answers[answerIdx]["answer"][i];
+        for (let i in existingTask.questions.questions) {
+            existingTask.questions.questions[i]['answer'] = answers[answerIdx]["answer"][i];
         }
-        let questions = { "questions": existingTask.questions }
-        let botProcess = spawn('python3', ['./bot.py', 0, existingTask.questions])
+        let questions = { "questions": existingTask.questions.questions }
+        let botProcess = spawn('python3', ['-X', 'utf8', './bot.py', 0, JSON.stringify(questions)], {
+            encoding: 'utf-8'
+        })
         botProcess.id = chatId + userId
         botProcess.stdout.on('data', (data) => {
-            messageData = data.toString().split(os.EOL);
+            messageData = data.toString().split('|');
             const result = addMessage(messageData[1], messageData[0], messageData[2], true);
         })
         botProcesses[botProcess.id] = botProcess

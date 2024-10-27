@@ -16,7 +16,7 @@ const uploadValidIdFile = async (req, res) => {
 }
 
 const parseQuestionsFile = (questions) => {
-    let lines = questions.split(os.EOL);
+    let lines = JSON.parse(questions).split(os.EOL);
     let questionsList = [];
     let answers = [];
     let part = 1
