@@ -3,15 +3,17 @@ import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
+function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChanged }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const [expand, setExpand] = useState(false);
 
     const settingsOptions = [
         <AssignmentsSettingsPage token={token} yearOption={yearOption}
-            expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}/>,
+            expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}
+            isYearChanged={isYearChanged}/>,
         <StudentSettingsPage token={token} yearOption={yearOption}
-            refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand} />,
+            refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand}
+            isYearChanged={isYearChanged} />,
         <GeneralSettingsPage token={token} userId={userId} />];
 
     return (

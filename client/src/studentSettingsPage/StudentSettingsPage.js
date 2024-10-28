@@ -6,7 +6,7 @@ import StudentStatus from "../studentStatus/StudentStatus";
 import InputFile from "../inputFile/InputFile";
 import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 
-function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand }) {
+function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand, isYearChanged }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
@@ -69,7 +69,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
             }
         }
         fetchStudents(filter);
-    }, [token, filter, isChanged])
+    }, [token, filter, isChanged, isYearChanged])
 
     return (
         <>

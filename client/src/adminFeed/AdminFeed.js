@@ -11,7 +11,7 @@ function AdminFeed({ token, userId }) {
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
-    const [isChanged, setIsChanged] = useState(null);
+    const [isYearChanged, setIsYearChanged] = useState(null);
     const [isAddedOrDeleted, setIsAddedOrDeleted] = useState(false)
     const [filter, setFilter] = useState('');
 
@@ -89,14 +89,15 @@ function AdminFeed({ token, userId }) {
 
         fetchName()
         fetchStudents();
-    }, [selectedStudent, token, userId, isChanged, filter, isAddedOrDeleted])
+    }, [selectedStudent, token, userId, isYearChanged, filter, isAddedOrDeleted])
 
     return (
         <>
             <div id="window" className="container">
                 {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
                 <SettingsPage token={token} userId={userId} yearOption={yearOption} 
-                refreshDataInFeed={refreshDataInFeed}/>
+                refreshDataInFeed={refreshDataInFeed}
+                isYearChanged={isYearChanged}/>
                 <div className="row">
                     <div id="adminFeed" className="col-3" style={{ height: '100vh', overflowY: 'auto' }}>
                         <div id="me" className="d-flex align-items-center w-100">
@@ -105,7 +106,10 @@ function AdminFeed({ token, userId }) {
                             style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
                             <i id="openSettings" className="bi bi-gear"></i>
                             </button> */}
-                            <select id="year" ref={yearOption} onChange={(e) => setIsChanged(e.target.value)}>
+                            <select id="year" ref={yearOption} onChange={(e) => {
+                                setIsYearChanged(e.target.value);
+                                setSelectedStudent(null);
+                                }}>
                                 <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                                 <option value="2022">2022</option>
@@ -129,7 +133,8 @@ function AdminFeed({ token, userId }) {
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent}
-                                isAddedOrDeleted={isAddedOrDeleted} yearOption={yearOption}/>
+                                isAddedOrDeleted={isAddedOrDeleted} yearOption={yearOption}
+                                isYearChanged={isYearChanged}/>
                             </> :
                             <>
                                 {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}

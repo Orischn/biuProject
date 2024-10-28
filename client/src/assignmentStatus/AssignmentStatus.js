@@ -101,7 +101,7 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     <div className="col-2">
                         <b><u>Name</u></b>
                     </div>
-                    <div className="col-1">
+                    <div className="col-2">
                         <b><u>Id Number</u></b>
                     </div>
                     <div className="col-3">

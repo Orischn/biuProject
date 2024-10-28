@@ -3,7 +3,7 @@ import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
-function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed }) {
+function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed, isYearChanged }) {
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
@@ -47,7 +47,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
         }
 
         fetchTasks()
-    }, [isChanged])
+    }, [isChanged, isYearChanged])
 
 
 
