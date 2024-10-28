@@ -3,7 +3,7 @@ import Grade from "../grade/Grade";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 
 
-function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
+function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
@@ -36,7 +36,7 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
 
 
         const fetchGrades = async (practices) => {
-            const res = await fetch(`http://localhost:5000/api/adminGetTasks`,
+            const res = await fetch(`http://localhost:5000/api/adminGetTasks/${yearOption.current.value}`,
                 {
                     method: 'get',
                     headers: {

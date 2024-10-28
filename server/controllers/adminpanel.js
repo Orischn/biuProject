@@ -67,7 +67,7 @@ const getStudentPractices = async (req, res) => {
 }
 
 const adminGetTasks = async (req, res) => {
-    const result = await adminViewTasks(req.params.userId);
+    const result = await adminViewTasks(req.params.year);
     return res.status(result.status).end(JSON.stringify(result.tasks))
 }
 

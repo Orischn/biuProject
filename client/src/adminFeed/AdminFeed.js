@@ -129,7 +129,7 @@ function AdminFeed({ token, userId }) {
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent}
-                                isAddedOrDeleted={isAddedOrDeleted} />
+                                isAddedOrDeleted={isAddedOrDeleted} yearOption={yearOption}/>
                             </> :
                             <>
                                 {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}

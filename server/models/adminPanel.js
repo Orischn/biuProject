@@ -52,7 +52,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     try {
         const existingTask = await tasks.findOne({ taskName: taskName, year: year })
         if (existingTask) {
-            return { status: 409, error: `This task already exists this year`}
+            return { status: 409, error: `This task already exists this year` }
         }
         const submitList = users
             .filter(user => user.year === year)
@@ -86,6 +86,9 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
 async function getTasks() {
     try {
         const taskList = await tasks.find({}, { projection: { submitList: 0 } }).toArray();
+        if (!taskList) {
+            return { status: 404, tasks: 'No existing tasks' }
+        }
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };
@@ -94,16 +97,19 @@ async function getTasks() {
 
 async function getTask(taskName, year) {
     try {
-        const task = await tasks.findOne({taskName: taskName, year: year});
+        const task = await tasks.findOne({ taskName: taskName, year: year });
         return { status: 200, task: task };
     } catch (error) {
         return { status: 500, task: error.message };
     }
 }
 
-async function adminViewTasks() {
+async function adminViewTasks(year) {
     try {
-        const taskList = await tasks.find({}).toArray();
+        const taskList = await tasks.find({year: parseInt(year)}).toArray();
+        if (!taskList) {
+            return { status: 404, tasks: 'No existing tasks' }
+        }
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };

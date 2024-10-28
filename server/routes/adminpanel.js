@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/api/getStudent/:userId', validateUser, checkAdmin, receiveUser);
 router.get('/api/getStudents/', validateUser, checkAdmin, receiveAllStudents);
 router.get('/api/studentPractices/:userId', validateUser, checkAdmin, getStudentPractices);
-router.get('/api/adminGetTasks/', validateUser, checkAdmin, adminGetTasks);
+router.get('/api/adminGetTasks/:year', validateUser, checkAdmin, adminGetTasks);
 router.get('/api/getSubmissionStatus/:taskName/:year', validateUser, checkAdmin, viewSubmissionStatus);
 router.post('/api/uploadDecisionTree/', validateUser, checkAdmin, uploadCSVTree);
 router.post('/api/uploadValidIdFile/', validateUser, checkAdmin, uploadValidIdFile)

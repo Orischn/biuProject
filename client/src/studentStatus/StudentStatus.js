@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TaskDetails from "../taskDetails/TaskDetails";
 
 
-function StudentStatus({token, selectedStudent}) {
+function StudentStatus({token, selectedStudent, yearOption}) {
 
     const [taskList, setTaskList] = useState([]);
     const [average, setAverage] = useState(0);
@@ -18,18 +18,19 @@ function StudentStatus({token, selectedStudent}) {
 
     useEffect(() => {
         const fetchStudentsAssignments = async function () {
-            const res = await fetch(`http://localhost:5000/api/adminGetTasks/`, {
+            const res = await fetch(`http://localhost:5000/api/adminGetTasks/${yearOption.current.value}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 }
             });
-
             if (res.status === 200) {
                 const gradeList = await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).map((task, key) => {
+                        console.log(task)
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
+                        console.log(user)
                         return <TaskDetails taskName={task.taskName} 
                         didSubmit={user.didSubmit} 
                         canSubmitLate={user.canSubmitLate}

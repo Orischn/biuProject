@@ -115,7 +115,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                             <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
                             go back
                         </div>
-                        <StudentStatus token={token} selectedStudent={selectedStudent} />
+                        <StudentStatus token={token} selectedStudent={selectedStudent} yearOption={yearOption}/>
                     </>
                 )}
 
