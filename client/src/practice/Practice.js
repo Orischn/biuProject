@@ -98,7 +98,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
                     setIsCreated(true);
                     setIsFinished(!practice.active);
-                    setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
+                    setIsFeedbackAvailable((practice.grade !== null && practice.feedback !== ''));
                     setIsLateSubmitAllowed(practice.lateSubmit);
                     setIsTimeUp(hasTimePassed(addTimeToDateString(practice.startDate,
                         practice.durationHours, practice.durationMinutes)));
