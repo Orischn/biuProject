@@ -99,13 +99,13 @@ function AssignemntStatus({ token, taskName, yearOption }) {
             <ul>
                 <div className="row">
                     <div className="col-2">
-                        <b><u>name</u></b>
+                        <b><u>Name</u></b>
                     </div>
                     <div className="col-1">
-                        <b><u>id</u></b>
+                        <b><u>Id Number</u></b>
                     </div>
                     <div className="col-3">
-                        <b><u>submission status</u></b>
+                        <b><u>Submission Status</u></b>
                     </div>
 
                 </div>

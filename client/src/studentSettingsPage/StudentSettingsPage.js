@@ -91,13 +91,13 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                                 <ul>
                                     <div className="row">
                                         <div className="col-2">
-                                            <b><u>year</u></b>
+                                            <b><u>Year</u></b>
                                         </div>
                                         <div className="col-2">
-                                            <b><u>name</u></b>
+                                            <b><u>Name</u></b>
                                         </div>
                                         <div className="col-2">
-                                            <b><u>id number</u></b>
+                                            <b><u>Id Number</u></b>
                                         </div>
                                     </div>
                                 </ul>

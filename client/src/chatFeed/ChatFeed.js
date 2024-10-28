@@ -122,9 +122,9 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                             <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
                                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div className="modal-body text-black">
-                                                            <div>grade: {selectedPractice.grade}</div>
-                                                            <div>feedback: {selectedPractice.feedback}</div>
+                                                        <div className="modal-body text-black" style={{fontWeight: 'normal'}}>
+                                                            <div><b>grade:</b> {selectedPractice.grade}</div>
+                                                            <div><b>feedback:</b> {selectedPractice.feedback}</div>
                                                         </div>
                                                         <div className="modal-footer">
                                                             <button type="button" className="btn btn-primary" data-bs-dismiss="modal">OK</button>

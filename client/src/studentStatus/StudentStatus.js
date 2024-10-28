@@ -71,13 +71,13 @@ function StudentStatus({token, selectedStudent}) {
             <ul>
                 <div className="row">
                     <div className="col-2">
-                        <b><u>name</u></b>
+                        <b><u>Name</u></b>
                     </div>
                     <div className="col-3">
                         <b><u>Submission Status</u></b>
                     </div>
                     <div className="col-3">
-                        <b><u>Late submission</u></b>
+                        <b><u>Late Submission</u></b>
                     </div>
                     <div className="col-3">
                         <b><u>Grade</u></b>

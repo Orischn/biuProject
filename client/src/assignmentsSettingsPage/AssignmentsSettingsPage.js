@@ -62,13 +62,13 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
                         <ul>
                             <div className="row">
                                 <div className="col-2">
-                                    <b><u>name</u></b>
+                                    <b><u>Name</u></b>
                                 </div>
                                 <div className="col-3">
-                                    <b><u>Submission status</u></b>
+                                    <b><u>Submission Status</u></b>
                                 </div>
                                 <div className="col-3">
-                                    <b><u>Submit until</u></b>
+                                    <b><u>Submit Until</u></b>
                                 </div>
                             </div>
                         </ul>
