@@ -37,8 +37,10 @@ function StudentStatus({token, selectedStudent}) {
                     }))
                     return JSON.parse(tasks).map((task, key) => {
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
-                        return user.grade;
-                    }).filter((grade) => grade !== undefined && grade !== null);
+                        // return user.grade;
+                        return (user.grade !== undefined && user.grade !== null) ? user.grade : 0;
+                    })
+                    // }).filter((grade) => grade !== undefined && grade !== null);
                 });
                 return gradeList;
             } else {
@@ -63,7 +65,7 @@ function StudentStatus({token, selectedStudent}) {
             <h2 className="settings-title">
                 {selectedStudent.firstName +' '+ selectedStudent.lastName}
                 {' '}assignments details</h2>
-                average (of submitted assignments): {average}
+                Average: {average}
                 <ul></ul>
 
             <ul>
