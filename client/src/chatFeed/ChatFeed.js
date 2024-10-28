@@ -5,7 +5,7 @@ import StudentMessage from "../studentMessage/StudentMessage";
 
 const { useState, useEffect, useRef, useCallback } = require("react");
 
-function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage,
+function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, latestMessage, setLatestMessage,
     isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed, setSelectedPractice, setSelectedTask }) {
     const [messages, setMessages] = useState([]);
     const [grade, setGrade] = useState(null);
@@ -52,7 +52,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
         chat.current.scrollTop = chat.current.scrollHeight;
         setLatestMessage(null);
         fetchMessages();
-    }, [selectedPractice, token, latestMessage])
+    }, [selectedPractice, selectedTask, token, latestMessage])
 
     const handleTimerClick = () => {
         setShowTimer(!showTimer)

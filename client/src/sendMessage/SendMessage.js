@@ -2,7 +2,7 @@ import { useRef } from "react";
 import BotMessage from "../botMessage/BotMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
 
-function SendMyMessage({ token, selectedPractice, messages, setMessages, setLatestMessage, isTimeUp, isEndDatePassed }) {
+function SendMessage({ token, selectedPractice, messages, setMessages, setLatestMessage, isTimeUp, isEndDatePassed }) {
 
     const typeBar = useRef(null);
     const send = async (e) => {
@@ -13,6 +13,7 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
         }
         const content = typeBar.current.value.trim();
         const message = {content: content}
+        setLatestMessage(message);
         setMessages(messages => [...messages, <StudentMessage message={message} />]);
         typeBar.current.value = '';
         const res = await fetch(`http://localhost:5000/api/sendMessage/`, {
@@ -66,4 +67,4 @@ function SendMyMessage({ token, selectedPractice, messages, setMessages, setLate
     );
 }
 
-export default SendMyMessage;
+export default SendMessage;

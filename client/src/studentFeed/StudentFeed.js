@@ -104,7 +104,7 @@ function StudentFeed({ token, userId }) {
                             {/* <AddPractice token={token} selectedTask={selectedTask}
                              setSelectedTask={setSelectedTask} /> */}
                             <ChatFeed token={token} selectedPractice={selectedPractice}
-                                finishPractice={finishPractice} latestMessage={latestMessage}
+                            selectedTask={selectedTask} finishPractice={finishPractice} latestMessage={latestMessage}
                                 setLatestMessage={setLatestMessage} isTimeUp={isTimeUp}
                                 setIsTimeUp={setIsTimeUp} isEndDatePassed={isEndDatePassed} 
                                 setIsEndDatePassed={setIsEndDatePassed} 
