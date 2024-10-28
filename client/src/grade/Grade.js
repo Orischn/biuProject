@@ -108,7 +108,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                             <>
                                 {/* {isStarted ? (
                                     <div style={{ color: 'red' }}>
-                                        Hasn't been sumitted yet
+                                        Hasn't been sumbitted yet
                                     </div>
                                 ) : (
                                     <div style={{ color: 'red' }}>
@@ -116,7 +116,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     </div>
                                 )} */}
                                 <div style={{ color: 'red' }}>
-                                    Hasn't been sumitted yet
+                                    Hasn't been sumbitted yet
                                 </div>
                             </>
                         )}
