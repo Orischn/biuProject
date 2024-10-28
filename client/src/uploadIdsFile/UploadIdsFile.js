@@ -17,7 +17,6 @@ function UploadIdFile({ token, title }) {
             setFileUploadedSuccessfully(false);
             return;
         }
-        console.log('1')
         const uploadIds = async () => {
             const res = await fetch(`http://localhost:5000/api/uploadValidIdFile/`, {
                 'method': 'post',

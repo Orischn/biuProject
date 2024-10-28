@@ -8,8 +8,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
-    const [questions, setQuestions] = useState({})
-    const [fileContent, setFileContent] = useState("")
+    const [questions, setQuestions] = useState({});
+    const [fileContent, setFileContent] = useState('');
+    const [questionsDataType, setQuestionsDataType] = useState('')
+    const [fileDataType, setFileDataType] = useState('');
 
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
@@ -30,17 +32,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
     const handleClick = () => {
         setShowModal(true)
-    };
-
-    const handleSubmit = async (e) => {
-        await add(e);
-        if (isSuccessful) {
-            cleanInput();
-        }
-
-        // setTimeout(3000);
-
-        // setShowModal(false);
     };
 
     const handleCancel = () => {
@@ -64,7 +55,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         // const format = formatBar.current.value.trim();
 
         if (name === '' || startDate === '' || endDate === '' || durationHours === ''
-            || durationMinutes === '' || questions === '') {
+            || durationMinutes === '' || !questions || !fileContent) {
             setError('Must fill all fields');
             return;
         }
@@ -77,6 +68,16 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
         if (parseInt(durationMinutes) >= 60) {
             setError('Minutes must be a less than 60!');
+            return;
+        }
+
+        if (questionsDataType !== 'text/csv') {
+            setError('Please Upload a CSV File!')
+            return;
+        }
+
+        if (fileDataType !== 'image/png' && questionsDataType !== 'image/jpeg') {
+            setError('Invalid Format for a Picture!')
             return;
         }
 
@@ -110,6 +111,13 @@ function AddAssignment({ token, refreshData, yearOption }) {
             setError("Added Successfully");
             setIsSuccessful(true)
             refreshData();
+            nameBar.current.value = '';
+            startDateBar.current.value = '';
+            endDateBar.current.value = '';
+            durationHoursBar.current.value = '';
+            durationMinutesBar.current.value = '';
+            setQuestions({})
+            setFileContent('')
         }
 
     }
@@ -137,7 +145,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             {/* Button to trigger modal */}
             <button type="button" className="btn" onClick={handleClick}>
                 <i className="bi bi-plus-circle" style={{ color: "black" }} />
-                &nbsp; Add new assignment
+                &nbsp; Add new Assignment
             </button>
 
             {/* Modal */}
@@ -151,16 +159,21 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                 <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={add}>
                                 <div className="modal-body">
+                                    <label>Assignment's Name:</label>
                                     <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label>Date of Start:</label>
                                     <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label>Date of Submission:</label>
                                     <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
-                                    <center>Assignemnt's duration: </center>
+                                    <label>Assignemnt's duration: </label>
                                     <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
-                                    <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} />
-                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent} isBase64={true}/>
+                                    <label>Upload CSV File:</label>
+                                    <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
+                                    <label>Upload Bot Picture:</label>
+                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent} isBase64={true} setDataType={setFileDataType} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
