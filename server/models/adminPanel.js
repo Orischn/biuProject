@@ -36,11 +36,11 @@ async function uploadFile(fileName, fileContent) {
 async function uploadIdFile(fileName, fileContent) {
     let error = null;
     try {
-        fs.writeFileSync({fileName}, fileContent);
+        fs.writeFileSync(fileName, fileContent);
     } catch (err) {
         error = err;
     }
-    return error ? { status: 500, error: error.message } : { status: 200 };
+    return error ? { status: 500, error: error.message } : { status: 200, error: '' };
 }
 
 async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, format, questions, botPic, users) {

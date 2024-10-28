@@ -118,7 +118,7 @@ function LoginPage({ setToken, setUserId }) {
           {/* abother option of logo... */}
           {/* <img src="http://inbar.biu.ac.il/Live/Code/CustomHandlers/OLImageHandler.ashx?Bytes=true" /> */}
           <h2 className="login-title">LOGIN</h2>
-          <p className="description">Medical history questioning practice - Department of Optometry</p>
+          <p className="description">Medical history questioning practice <br />School of Optometry and Vision Science</p>
           <form noValidate className="container-fluid" onSubmit={handleSubmit}>
 
             {infoInputList}
