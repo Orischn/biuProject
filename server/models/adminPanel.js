@@ -155,6 +155,11 @@ async function postFeedback(userId, chatId, feedback, year) {
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
+        const existingTask = await tasks.findOne({taskName: newTaskName, year: parseInt(year)});
+        if(existingTask) {
+            return { status: 403, error: 'A task with this name is already existing this year'}
+        }
+
         await tasks.updateOne(
             { taskName: taskName, year: parseInt(year) },
             {
