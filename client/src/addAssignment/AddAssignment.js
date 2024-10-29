@@ -9,9 +9,9 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
     const [questions, setQuestions] = useState({});
-    const [fileContent, setFileContent] = useState('');
+    const [image, setImage] = useState('');
     const [questionsDataType, setQuestionsDataType] = useState('')
-    const [fileDataType, setFileDataType] = useState('');
+    const [imageDataType, setImageDataType] = useState('');
 
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
@@ -27,7 +27,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         durationHoursBar.current.value = '';
         durationMinutesBar.current.value = '';
         setQuestions({})
-        setFileContent("")
+        setImage("")
     }
 
     const handleClick = () => {
@@ -55,7 +55,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         // const format = formatBar.current.value.trim();
 
         if (name === '' || startDate === '' || endDate === '' || durationHours === ''
-            || durationMinutes === '' || !questions || !fileContent) {
+            || durationMinutes === '' || !questions || !image) {
             setError('Must fill all fields');
             return;
         }
@@ -76,7 +76,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             return;
         }
 
-        if (fileDataType !== 'image/png' && questionsDataType !== 'image/jpeg') {
+        if (imageDataType !== 'image/png' && imageDataType !== 'image/jpeg') {
             setError('Invalid Format for a Picture!')
             return;
         }
@@ -96,7 +96,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 "year": parseInt(yearOption.current.value),
                 "format": 'txt',
                 "questions": JSON.stringify(questions),
-                "botPic": fileContent
+                "botPic": image
             })
 
         })
@@ -117,7 +117,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             durationHoursBar.current.value = '';
             durationMinutesBar.current.value = '';
             setQuestions({})
-            setFileContent('')
+            setImage('')
         }
 
     }
@@ -173,7 +173,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <label>Upload CSV File:</label>
                                     <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
                                     <label>Upload Bot Picture:</label>
-                                    <InputFile title={"Bot Profile Picture"} setFileContent={setFileContent} isBase64={true} setDataType={setFileDataType} />
+                                    <InputFile title={"Bot Profile Picture"} setFileContent={setImage} isBase64={true} setDataType={imageDataType} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
