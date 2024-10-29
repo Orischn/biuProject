@@ -112,7 +112,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                         <>
                                             <span id="feedback-link" className="hyperlink">
                                                 click <span id="click-here" data-bs-toggle="modal" data-bs-target="#feedbackModal">here</span>
-                                                {' '}to see the grade and the teacher's feedback</span>
+                                                {' '}to see the grade and the lecturer's feedback</span>
 
                                             {/* Feedback Modal */}
                                             <div className="modal fade" id="feedbackModal" tabIndex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
@@ -286,7 +286,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure you want to submit <b>{selectedPractice.chatId}</b>? This will send the result to the teacher, and no changes will be possible afterward.
+                            Are you sure you want to submit <b>{selectedPractice.chatId}</b>? This will send the result to the lecturer, and no changes will be possible afterward.
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
