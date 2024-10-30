@@ -22,7 +22,7 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChan
                 <div className="modal-content" >
                     <div className="modal-header text-white" >
                         <h1 className="modal-title fs-5" id="staticBackdropLabel">SETTINGS</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
                             onClick={() => {
                                 setSelectedSettings(0)
                                 setExpand(false)

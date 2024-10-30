@@ -160,7 +160,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">ADD STUDENT</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
 

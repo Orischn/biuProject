@@ -64,7 +64,7 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">DELETE STUDENT</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
                             <div className="modal-body">
                                 Are you sure you want to delete {fullName} from your course?

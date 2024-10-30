@@ -156,7 +156,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">CREATE ASSIGNMENT</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
                             <form onSubmit={add}>
@@ -173,7 +173,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <label>Upload CSV File:</label>
                                     <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
                                     <label>Upload Bot Picture:</label>
-                                    <InputFile title={"Bot Profile Picture"} setFileContent={setImage} isBase64={true} setDataType={imageDataType} />
+                                    <InputFile title={"Bot Profile Picture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&

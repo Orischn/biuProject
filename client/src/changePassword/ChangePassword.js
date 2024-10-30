@@ -89,7 +89,7 @@ function ChangePassword({ token, userId }) {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Change your Password</h5>
-                                <button type="button" className="btn-close"
+                                <button type="button" className="btn-close btn-close-white"
                                     onClick={handleCancel} style={{color: 'white'}}></button>
                             </div>
                             <form onSubmit={change}>

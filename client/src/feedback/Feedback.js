@@ -70,7 +70,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                         <div className="modal-content">
                             <div className="modal-header text-white">
                                 <h5 className="modal-title">Give Feedback</h5>
-                                <button type="button" className="btn-close"
+                                <button type="button" className="btn-close btn-close-white"
                                     onClick={handleCancel}></button>
                             </div>
                             <form onSubmit={createFeedback}>

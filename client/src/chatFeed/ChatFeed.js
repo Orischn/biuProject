@@ -121,7 +121,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                     <div className="modal-content">
                                                         <div className="modal-header text-white">
                                                             <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
-                                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div className="modal-body text-black" style={{fontWeight: 'normal'}}>
                                                             <div><b>grade:</b> {selectedPractice.grade}</div>
@@ -203,7 +203,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                     <div className="modal-content">
                                                         <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                                             <h5 className="modal-title text-white">Time's Up</h5>
-                                                            <button type="button" className="btn-close" aria-label="Close" onClick={handleCloseTimesUpModal}></button>
+                                                            <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseTimesUpModal}></button>
                                                         </div>
 
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
@@ -231,7 +231,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                     <div className="modal-content">
                                                         <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                                             <h5 className="modal-title text-white">Missed Submission</h5>
-                                                            <button type="button" className="btn-close" aria-label="Close" onClick={handleCloseEndDateModal}></button>
+                                                            <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseEndDateModal}></button>
                                                         </div>
 
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
@@ -284,7 +284,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                     <div className="modal-content">
                         <div className="modal-header text-white">
                             <h5 className="modal-title" id="confirmModalLabel">Confirm Submission</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             Are you sure you want to submit <b>{selectedPractice.chatId}</b>? This will send the result to the lecturer, and no changes will be possible afterward.
