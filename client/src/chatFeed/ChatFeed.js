@@ -58,7 +58,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         setShowTimer(!showTimer)
     }
 
-    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
+    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0, secondsToAdd = 0) => {
         const [datePart, timePart] = dateString.split(' ');
         const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
         const formattedTime = `${hours}:${minutes}:${seconds}`;
@@ -67,6 +67,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
 
         date.setHours(date.getHours() + hoursToAdd);
         date.setMinutes(date.getMinutes() + minutesToAdd);
+        date.setSeconds(date.getSeconds() + secondsToAdd);
 
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -153,7 +154,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                                 <>
                                                                     <Countdown targetDate={addTimeToDateString(
                                                                         selectedPractice.startDate, selectedPractice.durationHours,
-                                                                        selectedPractice.durationMinutes)}
+                                                                        selectedPractice.durationMinutes, 17)}
                                                                         setIsTimeUp={setIsTimeUp}
                                                                         purpose={'timer'}
                                                                         setShowModal={setShowTimesUpModal} />
