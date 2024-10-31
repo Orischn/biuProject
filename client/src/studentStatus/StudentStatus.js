@@ -28,13 +28,11 @@ function StudentStatus({token, selectedStudent, yearOption}) {
             if (res.status === 200) {
                 const gradeList = await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).map((task, key) => {
-                        console.log(task)
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
-                        console.log(user)
                         return <TaskDetails taskName={task.taskName} 
                         didSubmit={user.didSubmit} 
                         canSubmitLate={user.canSubmitLate}
-                        grade={user.grade ? user.grade : ''}/>
+                        grade={user.grade ? user.grade : ''} key={key}/>
                     }))
                     return JSON.parse(tasks).map((task, key) => {
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);

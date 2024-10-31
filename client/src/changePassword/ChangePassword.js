@@ -92,7 +92,7 @@ function ChangePassword({ token, userId }) {
                                 <button type="button" className="btn-close btn-close-white"
                                     onClick={handleCancel} style={{color: 'white'}}></button>
                             </div>
-                            <form onSubmit={change}>
+                            <form id="changePasswordForm" onSubmit={change}>
                                 <div className="modal-body">
                                     <input type="password" ref={currentPassBar} className="form-control" placeholder="Current Password" />
                                     <input type="text" ref={newPassBar} className="form-control" placeholder="Press New Password" />

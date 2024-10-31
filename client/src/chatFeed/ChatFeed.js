@@ -40,9 +40,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                 await res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
                         if (message.isBot) {
-                            return <BotMessage message={message} />
+                            return <BotMessage message={message} key={key}/>
                         } else {
-                            return <StudentMessage message={message} />
+                            return <StudentMessage message={message} key={key}/>
                         }
                     }));
                 });

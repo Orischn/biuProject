@@ -94,7 +94,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         }
 
         const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(email)) {
             setError('Invalid email address');
             setIsSuccessful(false);
             return;
@@ -146,7 +146,8 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
     return (
         <>
 
-
+            &emsp;&emsp;&emsp;
+            <label>Add Student</label>
             {/* Button trigger modal */}
             <button type="button" className="btn" onClick={handleClick}>
                 <i id="addStudent" className="bi bi-person-fill-add" style={{ color: "black" }} />

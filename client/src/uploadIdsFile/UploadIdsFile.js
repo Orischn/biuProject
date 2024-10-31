@@ -66,7 +66,7 @@ function UploadIdFile({ token, title }) {
     return (
         <>
             <div style={{ width: '100%' }}>
-                <label htmlFor="files">Upload valid id's numbers</label>
+                <label>Upload valid id's numbers</label>
                 <form noValidate onSubmit={save} >
                     {/* &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; */}
 

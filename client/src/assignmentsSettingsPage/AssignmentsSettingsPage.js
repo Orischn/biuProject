@@ -38,7 +38,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
                             return <AssignmentDetails token={token} taskName={task.taskName}
                                 endDate={task.endDate} refreshData={refreshData}
                                 setExpand={setExpand} setSelectedTask={setSelectedTask}
-                                yearOption={yearOption} />
+                                yearOption={yearOption} key={key}/>
                         }
                     }));
                 });

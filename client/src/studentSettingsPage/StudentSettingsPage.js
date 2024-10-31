@@ -79,9 +79,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                     <>
                         <ul className="setting-item">
                             <SearchStudent filter={filter} setFilter={setFilter} />
-                            <UploadIdFile token={token} title={'Valid ID\'s numbers'}/>
-                            &emsp;&emsp;&emsp;
-                            <label htmlFor="addStudent">Add Student</label>
+                            <UploadIdFile token={token} title={'Valid ID\'s numbers'}/> 
                             <AdminAddStudent token={token} studentList={studentList}
                                 setStudentList={setStudentList} refreshData={refreshData} />
 

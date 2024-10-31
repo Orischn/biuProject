@@ -161,19 +161,19 @@ function AddAssignment({ token, refreshData, yearOption }) {
 
                             <form onSubmit={add}>
                                 <div className="modal-body">
-                                    <label>Assignment's Name:</label>
-                                    <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
-                                    <label>Date of Start:</label>
-                                    <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
-                                    <label>Date of Submission:</label>
-                                    <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
-                                    <label>Assignemnt's duration: </label>
-                                    <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assName">Assignment's Name:</label>
+                                    <input id="assName" type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assStart">Date of Start:</label>
+                                    <input id="assStart" type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assEnd">Date of Submission:</label>
+                                    <input id="assEnd" type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assDuration">Assignemnt's duration: </label>
+                                    <input id="assDuration" type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
-                                    <label>Upload CSV File:</label>
-                                    <InputFile title={"Decision Tree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
-                                    <label>Upload Bot Picture:</label>
-                                    <InputFile title={"Bot Profile Picture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} />
+                                    <label htmlFor="DecisionTree">Upload CSV File:</label>
+                                    <InputFile title={"DecisionTree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
+                                    <label htmlFor="BotProfilePicture">Upload Bot Picture:</label>
+                                    <InputFile title={"BotProfilePicture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
