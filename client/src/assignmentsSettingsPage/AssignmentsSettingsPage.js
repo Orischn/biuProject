@@ -33,9 +33,8 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
             });
             if (res.status === 200) {
                 res.text().then((tasks) => {
-
                     setTaskList(JSON.parse(tasks).map((task, key) => {
-                        if (task.year === parseInt(yearOption.current.value)) {
+                        if (yearOption.current && task.year === parseInt(yearOption.current.value)) {
                             return <AssignmentDetails token={token} taskName={task.taskName}
                                 endDate={task.endDate} refreshData={refreshData}
                                 setExpand={setExpand} setSelectedTask={setSelectedTask}
