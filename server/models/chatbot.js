@@ -61,12 +61,10 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         }
         
         const user = existingTask.submitList.find(user => user.userId === userId);
-
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date + ' ' + time;
-
+        const time = Date().now()
+        if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
+            return { status: 403, practice: "Submission date passed."};
+        }
 
         const practice = {
             userId: userId,
@@ -133,8 +131,8 @@ async function submitPractice(userId, chatId) {
                 break;
             }
         }
-        if (!submitData.canSubmitLate && Date().now() > task.endDate) {
-            return { status: 403, error: "Submission date passed." };
+        if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
+            return { status: 403, practice: "Submission date passed."};
         }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
@@ -182,13 +180,13 @@ async function addMessage(userId, chatId, content, isBot) {
         if (!practice) {
             return { status: 404, error: "Couldn't find chat" };
         }
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date + ' ' + time;
-        if (dateTime - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
-            return { status: 403, error: "Submission timer ran out.\nWOMP WOMP." }
+        var time = new Date().now();
+        if (practice.durationHours || practice.durationMinutes) {
+            if (time - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
+                return { status: 403, error: "Submission timer ran out." }
+            }
         }
+        
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
