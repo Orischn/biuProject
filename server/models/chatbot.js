@@ -74,7 +74,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             messages: [],
             grade: user ? user.grade : null,
             feedback: user ? user.feedback : '',
-            startDate: dateTime,
+            startDate: Date().now(),
             submissionDate: null,
             endDate: endDate,
             durationHours: durationHours,
@@ -126,9 +126,16 @@ async function submitPractice(userId, chatId) {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateTime = date + ' ' + time;
-        // if (dateTime > task.endDate) {
-        //     return { status: 403, error: "Submission date passed." };
-        // }
+        let submitData = null
+        for (let submitUserData of existingTask.submitList) {
+            if (submitUserData.userId === userId) {
+                submitData = submitUserData;
+                break;
+            }
+        }
+        if (!submitData.canSubmitLate && Date().now() > task.endDate) {
+            return { status: 403, error: "Submission date passed." };
+        }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
@@ -164,11 +171,24 @@ async function getMessages(chatId, userId) {
 }
 
 async function addMessage(userId, chatId, content, isBot) {
+    const HOURS_TO_MS = 3600000;
+    const MIN_TO_MS = 60000
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
+        if (!practice) {
+            return { status: 404, error: "Couldn't find chat" };
+        }
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date + ' ' + time;
+        if (dateTime - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
+            return { status: 403, error: "Submission timer ran out.\nWOMP WOMP." }
+        }
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
