@@ -1,7 +1,12 @@
 const express = require('express');
-const { checkToken } = require('../controllers/token.js')
-const { decipherQuestion, answerQuestion } = require('../controllers/chatbot.js');
+const { validateUser } = require('../controllers/token.js');
+const { decipherQuestion, addPractice, recvPractices, recvPractice, finishPractice, viewTasks } = require('../controllers/chatbot.js');
 const router = express.Router();
 
-router.post('/api/sendMessage/',checkToken, decipherQuestion, answerQuestion);
+router.get('/api/getPractice/:practiceId', validateUser, recvPractice);
+router.get('/api/getPractices/', validateUser, recvPractices);
+router.get('/api/getTasks', validateUser, viewTasks);
+router.post('/api/addPractice/', validateUser, addPractice);
+router.post('/api/finishPractice', validateUser, finishPractice);
+router.post('/api/sendMessage/',validateUser, decipherQuestion);
 module.exports = router;

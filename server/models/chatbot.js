@@ -1,100 +1,192 @@
 const { MongoClient } = require('mongodb');
+const { check } = require('express-validator');
+const { spawn } = require('child_process');
+const os  = require('os');
+const { randomInt } = require('crypto');
 
-async function getChat(chatId, userId) {
-    const client = new MongoClient("mongodb://127.0.0.1:27017");
-    try {
-        await client.connect();
-        const db = await client.db('ChatBot');
-        const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatId: chatId, userId: userId});
-        if (!chat) {
-            return 404;
-        }
-        return chat;
-    } catch (error) {
-        return 500;
-    } finally {
-        await client.close();
-    }
-}
+const client = new MongoClient("mongodb://127.0.0.1:27017");
+const dbName = 'ChatBot';
+const db = client.db(dbName);
+const tasks = db.collection('tasks');
+const practices = db.collection('practices');
 
-async function getChats(userId) {
+let botProcesses = []
+
+const validateTaskInputs = [
+    check('taskName').isString().trim().escape(),
+    check('startingDate').isISO8601(),
+    check('endingDate').isISO8601(),
+    check('durationHours').isInt({ min: 0 }),
+    check('durationMinutes').isInt({ min: 0 }),
+    check('year').isInt({ min: 0 }),
+];
+
+async function getPractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('chats');
-        const res = await chats.find({userId});
-        if (!res) {
-            return 404;
-        }
-        return res;
+        const practices = db.collection('practices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId });
+        return { status: 200, practice: practice };
     } catch (error) {
-        return 500;
+        return { status: 500, practice: error.message };
+    } finally {
+        await client.close();
+    }
+}
+
+async function getPractices(userId) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        const res = await practices.find({ userId: userId }).toArray();
+        return { status: 200, practices: res.reverse() };
+    } catch (error) {
+        return { status: 500, practices: error.message };
     } finally {
         await client.close();
     }
 }
 
 
-async function postChat(user) {
+async function postPractice(userId, chatId, durationHours, durationMinutes, endDate, year) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = await client.db('ChatBot');
-        const chats = db.collection('chats');
-        const users = db.collection('users');
-
-        const existingUser = await users.findOne(user.username);
-        if (!existingUser) {
-            return 404;
+        const db = client.db('ChatBot');
+        const tasks = db.collection('tasks');
+        const practices = db.collection('practices');
+        
+        const existingTask = await tasks.findOne({ taskName: chatId, year: year });
+        if (!existingTask) {
+            return { status: 404, practice: "Cannot create practice since task doesn't exist." };
+        }
+        
+        const user = existingTask.submitList.find(user => user.userId === userId)
+        
+        const time = Date.now()
+        console.log(time)
+        console.log(existingTask.endDate)
+        console.log(user.canSubmitLate)
+        if (!((user.canSubmitLate && time < user.lateSubmitDate) || time < existingTask.endDate)) {
+            return { status: 403, practice: "Submission date passed."};
         }
 
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date + ' ' + time;
-
-        let nextChat = db.collection.find({userId: user.username});
-        if(nextChat) {
-            nextChat.endDate = dateTime;
+        answers = existingTask.questions.answers
+        answerIdx = randomInt(answers.length);
+        for (let i in existingTask.questions.questions) {
+            existingTask.questions.questions[i]['answer'] = answers[answerIdx]["answer"][i];
         }
-
-        nextChat = nextChat ? nextChat.sort({chatId:-1}).limit(1).chatId : 1;
-
-        const chat = {
-            userId: user,
-            chatId: nextChat,
+        let questions = { "questions": existingTask.questions.questions }
+        let botProcess = spawn('python3', ['-X', 'utf8', './bot.py', 0, JSON.stringify(questions)], {
+            encoding: 'utf-8'
+        })
+        botProcess.id = chatId + userId
+        botProcess.stdout.on('data', (data) => {
+            messageData = data.toString().split('|');
+            const result = addMessage(messageData[1], messageData[0], messageData[2], true);
+        })
+        botProcesses[botProcess.id] = botProcess
+      
+        await new Promise((resolve) => {
+            setTimeout(resolve, 15000);
+        });
+        
+        const practice = {
+            userId: userId,
+            chatId: chatId,
             messages: [],
-            startDate: dateTime,
-            endDate: null
-        }
-        await chats.insertOne(chat);
-        existingUser.lastChat = chat;
-
-
-        return 201;
+            grade: user ? user.grade : null,
+            feedback: user ? user.feedback : '',
+            startDate: Date.now(),
+            submissionDate: null,
+            endDate: endDate,
+            durationHours: durationHours,
+            durationMinutes: durationMinutes,
+            year: year,
+            active: true,
+            lateSubmit: user ? user.canSubmitLate : false,
+            botPic: existingTask.botPic
+        };
+        
+        await practices.insertOne(practice);
+        return { status: 200, practice: practice };
     } catch (error) {
-        return 500;
+        console.log(error.message)
+        return { status: 500, practice: `${error.message}${os.EOL}Please inform an admin immediately` };
     } finally {
         await client.close();
     }
 }
 
-async function deleteChat(chatId, userId) {
+async function deletePractice(chatId, userId) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
-        const db = client.db('Whatsapp');
-        const chats = db.collection('chats');
-        const chat = await chats.findOne({ chatId: chatId, userId: userId});
-        if (!chat) {
-            return 404;
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId });
+        if (!practice) {
+            return { status: 404, error: "Can not delete practice since the practice doesn't exist." };
         }
-        await chats.deleteOne({ chatId: chatId, userId: userId});
-        return 200;
+        await practices.deleteOne({ chatId: chatId, userId: userId });
+        return { status: 200, error: "" };
     } catch (error) {
-        return 500;
+        return { status: 500, error: error.message };
+    } finally {
+        await client.close();
+    }
+}
+
+async function submitPractice(userId, chatId) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        const tasks = db.collection('tasks');
+        const task = await tasks.findOne({ taskName: chatId });
+        if (!task) {
+            return { status: 404, error: "Can not submit practice since the practice doesn't exist." };
+        }
+        var time = Date.now();
+        let submitData = null
+        for (let submitUserData of existingTask.submitList) {
+            if (submitUserData.userId === userId) {
+                submitData = submitUserData;
+                break;
+            }
+        }
+        
+        if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
+            return { status: 403, practice: "Submission date passed."};
+        }
+        botProcesses[chatId + userId].kill('SIGKILL');
+        delete botProcesses[chatId + userId];
+        await practices.updateOne(
+            { chatId: chatId, userId: userId, active: true },
+            {
+                $set: {
+                    active: false,
+                    submissionDate: time,
+                },
+            },
+        );
+        
+        await tasks.updateOne(
+            { taskName: chatId, 'submitList.userId': userId },
+            {
+                $set: {
+                    'submitList.$.didSubmit': true,
+                }
+            }
+        );
+        return { status: 200, error: "" };
+    } catch (error) {
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }
@@ -102,49 +194,93 @@ async function deleteChat(chatId, userId) {
 
 async function getMessages(chatId, userId) {
     try {
-        const chat = await getChat(chatId, me);
-        return chat.messages;
+        const chat = (await getPractice(chatId, userId)).practice;
+        return { status: 200, messages: chat.messages };
     } catch (error) {
-        return 500;
+        return { status: 500, messages: error.message };
     }
 }
 
-async function addMessage(userId, content, isBot) {
+async function addMessage(userId, chatId, content, isBot) {
+    const HOURS_TO_MS = 3600000;
+    const MIN_TO_MS = 60000
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
         const db = client.db('ChatBot');
-        const chats = db.collection('chats');
-        const user = await getUser(userId);
-        if (!user) {
-            return 404;
+        const practices = db.collection('practices');
+        const practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
+        if (!practice) {
+            return { status: 404, error: "Couldn't find chat" };
         }
-        await chats.updateOne(
-            { chatId: user.lastChat.chatId, userId: userId },
+        var time = Date.now();
+        if (practice.durationHours || practice.durationMinutes) {
+            if (time - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
+                return { status: 403, error: "Submission timer ran out." }
+            }
+        }
+        
+        await practices.updateOne(
+            { chatId: chatId, userId: userId, active: true },
             {
                 $push: {
                     messages: {
                         $each: [{ content: content, isBot: isBot }],
                         $position: 0
                     }
-                }
+                },
             }
-
-        )
-        return 200;
+        );
+        
+        return { status: 200, error: "" };
     } catch (error) {
-        return 500;
+        console.log(error.message)
+        return { status: 500, error: error.message };
     } finally {
         await client.close();
     }
+}
 
+async function updateGrade(userId, chatId, newGrade) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const practices = db.collection('practices');
+        const tasks = db.collection('tasks');
+        await practices.updateOne(
+            { chatId: chatId, userId: userId, active: false },
+            {
+                $set: {
+                    grade: newGrade,
+                },
+            },
+        );
+        
+        await tasks.updateOne(
+            { taskName: chatId, "submitList.userId": userId },
+            {
+                $set: {
+                    "submitList.$.grade": newGrade
+                }
+            }
+        )
+        return { status: 200, error: "" };
+    } catch (error) {
+        return { status: 500, error: error.message };
+    } finally {
+        await client.close();
+    }
 }
 
 module.exports = {
-    getChat,
-    getChats,
-    postChat,
-    deleteChat,
+    getPractice,
+    getPractices,
+    deletePractice,
+    postPractice,
+    submitPractice,
     addMessage,
     getMessages,
-}
+    updateGrade,
+    botProcesses,
+};
