@@ -140,7 +140,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                     <>
                                         {!isEndDatePassed ? (
                                             <>
-                                                <Countdown targetDate={changeEndDateFormat(selectedPractice.endDate)}
+                                                <Countdown targetDate={changeEndDateFormat(new Date(selectedPractice.endDate).toISOString())}
                                                     setIsTimeUp={setIsTimeUp}
                                                     setIsEndDatePassed={setIsEndDatePassed}
                                                     purpose={'date'}
@@ -152,9 +152,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         <>
                                                             {!isTimeUp ? (
                                                                 <>
-                                                                    <Countdown targetDate={addTimeToDateString(
-                                                                        selectedPractice.startDate, selectedPractice.durationHours,
-                                                                        selectedPractice.durationMinutes, 17)}
+                                                                    <Countdown targetDate={
+                                                                        selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
+                                                                        selectedPractice.durationMinutes * 60000 + 17 * 1000}
                                                                         setIsTimeUp={setIsTimeUp}
                                                                         purpose={'timer'}
                                                                         setShowModal={setShowTimesUpModal} />
@@ -182,9 +182,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                         ) : selectedPractice.lateSubmit && !isTimeUp ? (
                                             <>
                                                 Late submission is allowed
-                                                <Countdown targetDate={addTimeToDateString(
-                                                    selectedPractice.startDate, selectedPractice.durationHours,
-                                                    selectedPractice.durationMinutes)}
+                                                <Countdown targetDate={
+                                                    selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
+                                                    selectedPractice.durationMinutes * 60000}
                                                     setIsTimeUp={setIsTimeUp}
                                                     purpose={'timer'}
                                                     setShowModal={setShowTimesUpModal} />
@@ -209,8 +209,8 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
                                                             The time for this assignemnt has over. <br />
                                                             Please submit your progress before the last date of submission. <br />
-                                                            <b>Submit until: {selectedPractice.endDate.split('T')[0]}
-                                                                {' '}on {selectedPractice.endDate.split('T')[1]}. </b><br />
+                                                            <b>Submit until: {new Date(selectedPractice.endDate).toDateString().split('T')[0]}
+                                                                {' '}on {new Date(selectedPractice.endDate).toDateString().split('T')[1]}. </b><br />
                                                             After this time you won't be allowed to submit your work. <br />
                                                             Good Luck!
 

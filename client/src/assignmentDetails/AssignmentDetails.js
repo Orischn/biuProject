@@ -48,7 +48,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
             'body': JSON.stringify({
                 "taskName": taskName,
                 "newTaskName": newTaskName,
-                "newEndDate": convertTimestampToDate(new Date(newEndDate).getTime()),
+                "newEndDate": new Date(newEndDate).getTime(),
                 "year": yearOption.current.value
             })
 
@@ -121,8 +121,8 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             </div>
                             <div className="col-4">
                                 {/* maybe remove the T for design */}
-                                {endDate.split('T')[0]}{' '}
-                                on {endDate.split('T')[1]}
+                                {convertTimestampToDate(endDate).split('T')[0]}{' '}
+                                on {convertTimestampToDate(endDate).split('T')[1]}
                             </div>
 
                             <div className="col-1">

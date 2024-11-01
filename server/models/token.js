@@ -11,7 +11,7 @@ const checkToken = async (authorization) => {
             jwt.verify(token, process.env.SECRET_TOKEN);
             return { status: 200, error: "" };
         } catch (err) {
-            return { status: 401, error: err };
+            return { status: 401, error: err.message };
         }
     } else {
         return { status: 401, error: "No authorization token provided." };

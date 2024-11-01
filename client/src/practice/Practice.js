@@ -3,12 +3,8 @@ import { useEffect, useState } from "react";
 function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice, refreshData }) {
 
     const hasTimePassed = function (targetDate) {
-        const [datePart, timePart] = targetDate.split('T');
-        const [day, month, year] = datePart.split('-');
-        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
-        const inputDate = new Date(formattedDateString);
         const currentDate = new Date();
-        return inputDate < currentDate;
+        return targetDate < currentDate;
     }
 
 
@@ -70,25 +66,21 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         }
     };
 
-    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
-        const [datePart, timePart] = dateString.split(' ');
-        const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
-        const formattedString = `${datePart}T${formattedTime}`;
-        const date = new Date(formattedString);
+    const convertTimestampToDate = (timestamp) => {
+        // Create a Date object from the timestamp
+        const date = new Date(timestamp);
 
-        date.setHours(date.getHours() + hoursToAdd);
-        date.setMinutes(date.getMinutes() + minutesToAdd);
-
+        // Extract and format the parts of the date
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const day = String(date.getDate()).padStart(2, '0');
 
-        const hoursFormatted = String(date.getHours()).padStart(2, '0');
-        const minutesFormatted = String(date.getMinutes()).padStart(2, '0');
-        const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
 
-        return `${day}-${month}-${year}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
+        // Return the formatted date string
+        return `${day}-${month}-${year}T${hours}:${minutes}:${seconds}`;
     };
 
     useEffect(() => {
@@ -108,8 +100,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     setIsFinished(!practice.active);
                     setIsFeedbackAvailable((practice.grade !== null && practice.feedback !== ''));
                     setIsLateSubmitAllowed(practice.lateSubmit);
-                    setIsTimeUp(hasTimePassed(addTimeToDateString(practice.startDate,
-                        practice.durationHours, practice.durationMinutes)));
+                    setIsTimeUp(hasTimePassed(practice.startDate + practice.durationHours * 3600000
+                        + practice.durationMinutes * 60000));
                     setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
                     setIsCreated(false); // make sure it's false when no matching practice is found
@@ -120,21 +112,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         fetchPractice();
 
     }, [selectedTask, task.taskName, token]);
-
-
-
-    const convertTimestampToDateOnly = (timestamp) => {
-        // Create a Date object from the timestamp
-        const date = new Date(timestamp);
-
-        // Extract and format the year, month, and day
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-        const day = String(date.getDate()).padStart(2, '0');
-
-        // Return the formatted date string (yyyy-mm-dd)
-        return `${day}/${month}/${year}`;
-    };
 
     return (
         <>
@@ -185,21 +162,21 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </>
                     ) : isTimeUp ? (
                         <>
-                            submission until {task.endDate.split('T')[0]}
+                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
                             <br />
-                            at {task.endDate.split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
                         </>
                     ) : isCreated ? (
                         <>
-                            submission until {task.endDate.split('T')[0]}
+                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
                             <br />
-                            at {task.endDate.split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
                         </>
                     ) : (
                         <>
-                            submission until {task.endDate.split('T')[0]}
+                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
                             <br />
-                            at {task.endDate.split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
                         </>
                     )
                     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
+import AssignmentDetails from "../assignmentDetails/AssignmentDetails";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
 function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed, isYearChanged }) {

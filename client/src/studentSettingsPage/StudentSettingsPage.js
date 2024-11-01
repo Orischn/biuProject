@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import StudentDetails from "../studentDetails/StudentDetails"
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import SearchStudent from "../searchStudent/SearchStudent";
+import StudentDetails from "../studentDetails/StudentDetails";
 import StudentStatus from "../studentStatus/StudentStatus";
-import InputFile from "../inputFile/InputFile";
-import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 
 function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand, isYearChanged }) {

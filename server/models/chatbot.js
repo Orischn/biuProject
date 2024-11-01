@@ -67,8 +67,11 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         
         const user = existingTask.submitList.find(user => user.userId === userId)
         
-        const time = Date().now()
-        if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
+        const time = Date.now()
+        console.log(time)
+        console.log(existingTask.endDate)
+        console.log(user.canSubmitLate)
+        if (!((user.canSubmitLate && time < user.lateSubmitDate) || time < existingTask.endDate)) {
             return { status: 403, practice: "Submission date passed."};
         }
 
@@ -98,7 +101,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             messages: [],
             grade: user ? user.grade : null,
             feedback: user ? user.feedback : '',
-            startDate: Date().now(),
+            startDate: Date.now(),
             submissionDate: null,
             endDate: endDate,
             durationHours: durationHours,
@@ -149,10 +152,7 @@ async function submitPractice(userId, chatId) {
         if (!task) {
             return { status: 404, error: "Can not submit practice since the practice doesn't exist." };
         }
-        var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date + ' ' + time;
+        var time = Date.now();
         let submitData = null
         for (let submitUserData of existingTask.submitList) {
             if (submitUserData.userId === userId) {
@@ -160,6 +160,7 @@ async function submitPractice(userId, chatId) {
                 break;
             }
         }
+        
         if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
             return { status: 403, practice: "Submission date passed."};
         }
@@ -170,7 +171,7 @@ async function submitPractice(userId, chatId) {
             {
                 $set: {
                     active: false,
-                    submissionDate: dateTime,
+                    submissionDate: time,
                 },
             },
         );
@@ -212,7 +213,7 @@ async function addMessage(userId, chatId, content, isBot) {
         if (!practice) {
             return { status: 404, error: "Couldn't find chat" };
         }
-        var time = new Date().now();
+        var time = Date.now();
         if (practice.durationHours || practice.durationMinutes) {
             if (time - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
                 return { status: 403, error: "Submission timer ran out." }

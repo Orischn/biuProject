@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import JsonTableInput from "../jsonTableInput/JsonTableInput";
 import InputFile from "../inputFile/InputFile";
 
 
@@ -54,22 +53,25 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const durationMinutes = durationMinutesBar.current.value.trim();
         // const format = formatBar.current.value.trim();
 
-        if (name === '' || startDate === '' || endDate === '' || durationHours === ''
-            || durationMinutes === '' || !questions || !image) {
-            setError('Must fill all fields');
+        if (name === '' || startDate === '' || endDate === '' || !questions || !image) {
+            setError('Must fill all fields except duration');
             return;
         }
-
-        const durationRegex = new RegExp('^[0-9]+$')
-        if (!durationRegex.test(durationHours) || !durationRegex.test(durationMinutes)) {
-            setError('Duration must be a number!');
-            return;
+        if (durationHours) {
+            const durationRegex = new RegExp('^[0-9]+$')
+            if (!durationRegex.test(durationHours) || !durationRegex.test(durationMinutes)) {
+                setError('Duration must be a number!');
+                return;
+            }
         }
-
-        if (parseInt(durationMinutes) >= 60) {
-            setError('Minutes must be a less than 60!');
-            return;
+        
+        if (durationMinutes) {
+            if (parseInt(durationMinutes) >= 60) {
+                setError('Minutes must be a less than 60!');
+                return;
+            }
         }
+        
 
         if (questionsDataType !== 'text/csv') {
             setError('Please Upload a CSV File!')
@@ -89,8 +91,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
             },
             'body': JSON.stringify({
                 "taskName": name,
-                "startDate": convertTimestampToDate(new Date(startDate).getTime()),
-                "endDate": convertTimestampToDate(new Date(endDate).getTime()),
+                "startDate": new Date(startDate).getTime(),
+                "endDate": new Date(endDate).getTime(),
                 "durationHours": durationHours,
                 "durationMinutes": durationMinutes,
                 "year": parseInt(yearOption.current.value),
@@ -100,7 +102,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             })
 
         })
-
+        console.log(res.status)
         if (res.status !== 201) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);
@@ -122,23 +124,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
         }
 
     }
-
-    const convertTimestampToDate = (timestamp) => {
-        // Create a Date object from the timestamp
-        const date = new Date(timestamp);
-
-        // Extract and format the parts of the date
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-        const day = String(date.getDate()).padStart(2, '0');
-
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-
-        // Return the formatted date string
-        return `${day}-${month}-${year}T${hours}:${minutes}:${seconds}`;
-    };
 
 
     return (
