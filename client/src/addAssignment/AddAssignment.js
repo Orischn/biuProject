@@ -110,6 +110,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         } else {
             setError("Added Successfully");
             setIsSuccessful(true)
+            cleanInput();
             refreshData();
             nameBar.current.value = '';
             startDateBar.current.value = '';

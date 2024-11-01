@@ -12,6 +12,7 @@ const uploadCSVTree = async (req, res) => {
 
 const uploadValidIdFile = async (req, res) => {
     const result = await uploadIdFile(req.body.fileName, req.body.fileContent);
+    console.log(result);
     return res.status(result.status).end(result.error);
 }
 

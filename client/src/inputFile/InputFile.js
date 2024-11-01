@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 
-function InputFile({ title, setFileContent, isBase64, setDataType }) {
-    var input = useRef(null);
-    const [error, setError] = useState('');
+function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedSuccessfully }) {
+    const input = useRef(null);
+    const [error, setError] = useState(null);
 
     function handleChange(e) {
         const file = e.target.files[0];
@@ -37,19 +37,22 @@ function InputFile({ title, setFileContent, isBase64, setDataType }) {
 
     return (
         <>
-            <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)}
-                style={{ width: '70%', margin: '0 auto' }} />
+            <div className="justify-content-md-center" style={{marginBottom: '10px'}}>
+                {/* <div className="col-2 text-black">
+                    {title}
+                </div> */}
                 
-            {error &&
-
-                <span className={'alert alert-danger w-50'} role="alert"
-                    style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>
-                    {error}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <i className="bi bi-x-lg" style={{ cursor: 'pointer' }}
-                        onClick={() => setError('')} />
-                </span>}
-                <br />
+                {/* <div className='mt-1'>
+                    {error &&
+                        <span className="alert alert-danger w-50" role="alert">
+                            {error}
+                        </span>}
+                </div> */}
+                <div className="">
+                    <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} required />
+                </div>
+            </div>
+            {/* <br /> */}
         </>
     );
 }

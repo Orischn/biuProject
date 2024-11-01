@@ -160,7 +160,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                                         setShowModal={setShowTimesUpModal} />
                                                                     <button type="button"
                                                                         className="btn btn-primary"
-                                                                        style={{ height: '5vh', text: 'center' }}
+                                                                        style={{ height: '5%', text: 'center' }}
                                                                         onClick={handleTimerClick}>
                                                                         Hide Time
                                                                     </button>

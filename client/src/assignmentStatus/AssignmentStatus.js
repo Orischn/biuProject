@@ -91,7 +91,7 @@ function AssignemntStatus({ token, taskName, yearOption }) {
         <>
             <h2 className="settings-title">{taskName} details</h2>
             {/* <div className="settings-container"> */}
-            average (submissions only): {average}
+            average (graded assignments only): {average}
 
             <ul className="setting-item" style={{ paddingTop: '0' }}>
                 <SearchStudent filter={filter} setFilter={setFilter} />

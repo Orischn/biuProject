@@ -36,6 +36,10 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         setIsEditing(false);
     }, [selectedStudent]);
 
+    const handleCancel = () => {
+        setIsEditing(false);
+    }
+
     const changeGrade = async () => {
 
         // if (input.current.value.trim() === '') {
@@ -132,7 +136,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     ('')}
                             </span>
 
-                            <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
+                            <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick} style={{cursor: 'pointer'}}></i>
                             <Feedback token={token} chatId={chatId} feedback={feedback}
                                 selectedStudent={selectedStudent} refreshData={refreshData}
                                 year={year} />
@@ -163,6 +167,7 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                 ref={input}
                                 // value={inputGrade}
                                 onChange={handleChange} />
+                                <i className="bi bi-x-lg" style={{cursor: 'pointer'}} onClick={handleCancel}/>
                             <button className="save-btn" onClick={changeGrade}>
                                 Save
                             </button>

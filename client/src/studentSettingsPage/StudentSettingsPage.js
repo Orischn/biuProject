@@ -5,6 +5,7 @@ import SearchStudent from "../searchStudent/SearchStudent";
 import StudentStatus from "../studentStatus/StudentStatus";
 import InputFile from "../inputFile/InputFile";
 import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
+import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 
 function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand, isYearChanged }) {
 
@@ -13,6 +14,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
     const [isChanged, setIsChanged] = useState(false);
     // const [expand, setExpand] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState('');
+ 
  
 
     const handleUnexpand = () => {
@@ -25,6 +27,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
         refreshDataInFeed()
     }
 
+    
     
     useEffect(() => {
         const fetchStudents = async (filter) => {
@@ -79,7 +82,9 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                     <>
                         <ul className="setting-item">
                             <SearchStudent filter={filter} setFilter={setFilter} />
-                            <UploadIdFile token={token} title={'Valid ID\'s numbers'}/> 
+                            <UploadIdFile token={token} title={'Valid ID\'s numbers'}/>
+                            &emsp;&emsp;&emsp;
+                            <label htmlFor="addStudent">Add Student</label>
                             <AdminAddStudent token={token} studentList={studentList}
                                 setStudentList={setStudentList} refreshData={refreshData} />
 

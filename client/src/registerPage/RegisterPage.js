@@ -111,6 +111,7 @@ function RegisterPage() {
 
         if (userId.trim() === '') {
             setUserIdError('ID number is required')
+            return;
         }
 
         if (firstName.trim() === '') {
