@@ -3,7 +3,7 @@ import AssignmentDetails from "../assignment/AssignmentDetails";
 import AddAssignment from "../addAssignment/AddAssignment";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 
-function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed }) {
+function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed, isYearChanged }) {
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
@@ -24,7 +24,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
     useEffect(() => {
 
         const fetchTasks = async () => {
-            const res = await fetch('https://localhost:5000/api/getTasks', {
+            const res = await fetch('http://localhost:5000/api/getTasks', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -33,13 +33,12 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
             });
             if (res.status === 200) {
                 res.text().then((tasks) => {
-
                     setTaskList(JSON.parse(tasks).map((task, key) => {
-                        if (task.year === parseInt(yearOption.current.value)) {
+                        if (yearOption.current && task.year === parseInt(yearOption.current.value)) {
                             return <AssignmentDetails token={token} taskName={task.taskName}
                                 endDate={task.endDate} refreshData={refreshData}
                                 setExpand={setExpand} setSelectedTask={setSelectedTask}
-                                yearOption={yearOption} />
+                                yearOption={yearOption} key={key}/>
                         }
                     }));
                 });
@@ -47,7 +46,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
         }
 
         fetchTasks()
-    }, [isChanged])
+    }, [isChanged, isYearChanged])
 
 
 
@@ -62,13 +61,13 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
                         <ul>
                             <div className="row">
                                 <div className="col-2">
-                                    <b><u>name</u></b>
+                                    <b><u>Name</u></b>
                                 </div>
                                 <div className="col-3">
-                                    <b><u>Submission status</u></b>
+                                    <b><u>Submission Status</u></b>
                                 </div>
                                 <div className="col-3">
-                                    <b><u>Submit until</u></b>
+                                    <b><u>Submit Until</u></b>
                                 </div>
                             </div>
                         </ul>

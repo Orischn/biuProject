@@ -94,7 +94,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
         }
 
         const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(email)) {
             setError('Invalid email address');
             setIsSuccessful(false);
             return;
@@ -102,7 +102,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
 
 
-        const res = await fetch('https://localhost:5000/api/createUser', {
+        const res = await fetch('http://localhost:5000/api/createUser', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -146,7 +146,8 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
     return (
         <>
 
-
+            &emsp;&emsp;&emsp;
+            <label>Add Student</label>
             {/* Button trigger modal */}
             <button type="button" className="btn" onClick={handleClick}>
                 <i id="addStudent" className="bi bi-person-fill-add" style={{ color: "black" }} />
@@ -160,7 +161,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">ADD STUDENT</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
 

@@ -1,16 +1,16 @@
 import React, { useRef, useState } from "react";
 
-
 function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year }) {
 
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-    
+
     const createFeedback = async function (e) {
         e.preventDefault();
         const feedback = feedbackBar.current.value.trim();
-        const res = await fetch('https://localhost:5000/api/createFeedback', {
+        const res = await fetch('http://localhost:5000/api/createFeedback', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -30,8 +30,9 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
             })
             return;
         } else {
-            alert('feedback sent to student')
-            setShowModal(false)
+            // alert('feedback sent to student')
+            setShowConfirmationModal(true);
+
             refreshData()
         }
     }
@@ -46,6 +47,16 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
         setShowModal(false); // Close the modal on cancel
     };
 
+    const handleConfirm = () => {
+        setShowConfirmationModal(false);
+        setShowModal(false)
+    }
+
+    const getNewlineCharacter = () => {
+        return navigator.userAgent.includes('Win') ? '\r\n' : '\n';
+    };
+
+    const newline = getNewlineCharacter();
     return (
 
         <>
@@ -59,7 +70,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                         <div className="modal-content">
                             <div className="modal-header text-white">
                                 <h5 className="modal-title">Give Feedback</h5>
-                                <button type="button" className="btn-close"
+                                <button type="button" className="btn-close btn-close-white"
                                     onClick={handleCancel}></button>
                             </div>
                             <form onSubmit={createFeedback}>
@@ -70,9 +81,9 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                                         className="form-control feedback-textarea"
                                         rows={3} // You can adjust this for height
                                     />
-                                    {feedback ? 
-                                    <><b><u>Feedback Given:</u></b> <br /> </>: <></>}
-                                    {feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
+                                    {feedback ?
+                                        <><b><u>Feedback Given:</u></b> <br /> </> : <></>}
+                                    {feedback.replace(/^"|"$/g, '').split(newline).map((line, index) => (
                                         <React.Fragment key={index}>
                                             {line}
                                             <br />
@@ -85,6 +96,24 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                                     <button type="submit" className="btn btn-primary" >Send Feedback</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+            {showConfirmationModal && (
+                <div className="modal show d-block" tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header"></div>
+                                <div className="modal-body">
+                                    <b>Feedback successfully sent to student</b>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" onClick={handleConfirm}
+                                        className="btn btn-primary">OK</button>
+                                </div>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import JsonTableInput from "../jsonTableInput/JsonTableInput";
+import InputFile from "../inputFile/InputFile";
 
 
 function AddAssignment({ token, refreshData, yearOption }) {
@@ -6,12 +8,17 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
+    const [questions, setQuestions] = useState({});
+    const [image, setImage] = useState('');
+    const [questionsDataType, setQuestionsDataType] = useState('')
+    const [imageDataType, setImageDataType] = useState('');
 
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
     const endDateBar = useRef(null);
     const durationHoursBar = useRef(null);
     const durationMinutesBar = useRef(null);
+    const formatBar = useRef(null)
 
     const cleanInput = () => {
         nameBar.current.value = '';
@@ -19,6 +26,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
         endDateBar.current.value = '';
         durationHoursBar.current.value = '';
         durationMinutesBar.current.value = '';
+        setQuestions({})
+        setImage("")
     }
 
     const handleClick = () => {
@@ -43,8 +52,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const endDate = endDateBar.current.value.trim();
         const durationHours = durationHoursBar.current.value.trim();
         const durationMinutes = durationMinutesBar.current.value.trim();
+        // const format = formatBar.current.value.trim();
 
-        if (name === '' || startDate === '' || endDate === '' || durationHours === '' || durationMinutes === '') {
+        if (name === '' || startDate === '' || endDate === '' || durationHours === ''
+            || durationMinutes === '' || !questions || !image) {
             setError('Must fill all fields');
             return;
         }
@@ -60,7 +71,17 @@ function AddAssignment({ token, refreshData, yearOption }) {
             return;
         }
 
-        const res = await fetch('https://localhost:5000/api/createTask', {
+        if (questionsDataType !== 'text/csv') {
+            setError('Please Upload a CSV File!')
+            return;
+        }
+
+        if (imageDataType !== 'image/png' && imageDataType !== 'image/jpeg') {
+            setError('Invalid Format for a Picture!')
+            return;
+        }
+
+        const res = await fetch('http://localhost:5000/api/createTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -72,7 +93,10 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 "endDate": convertTimestampToDate(new Date(endDate).getTime()),
                 "durationHours": durationHours,
                 "durationMinutes": durationMinutes,
-                "year": parseInt(yearOption.current.value)
+                "year": parseInt(yearOption.current.value),
+                "format": 'txt',
+                "questions": JSON.stringify(questions),
+                "botPic": image
             })
 
         })
@@ -88,6 +112,13 @@ function AddAssignment({ token, refreshData, yearOption }) {
             setIsSuccessful(true)
             cleanInput();
             refreshData();
+            nameBar.current.value = '';
+            startDateBar.current.value = '';
+            endDateBar.current.value = '';
+            durationHoursBar.current.value = '';
+            durationMinutesBar.current.value = '';
+            setQuestions({})
+            setImage('')
         }
 
     }
@@ -115,7 +146,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             {/* Button to trigger modal */}
             <button type="button" className="btn" onClick={handleClick}>
                 <i className="bi bi-plus-circle" style={{ color: "black" }} />
-                &nbsp; Add new assignment
+                &nbsp; Add new Assignment
             </button>
 
             {/* Modal */}
@@ -126,17 +157,24 @@ function AddAssignment({ token, refreshData, yearOption }) {
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">CREATE ASSIGNMENT</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
                             <form onSubmit={add}>
                                 <div className="modal-body">
-                                    <input type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
-                                    <input type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
-                                    <input type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
-                                    <center>Assignemnt's duration: </center>
-                                    <input type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assName">Assignment's Name:</label>
+                                    <input id="assName" type="text" ref={nameBar} className="form-control" placeholder="Assignment's name" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assStart">Date of Start:</label>
+                                    <input id="assStart" type="datetime-local" ref={startDateBar} className="form-control" placeholder="Date of start" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assEnd">Date of Submission:</label>
+                                    <input id="assEnd" type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="assDuration">Assignemnt's duration: </label>
+                                    <input id="assDuration" type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
+                                    <label htmlFor="DecisionTree">Upload CSV File:</label>
+                                    <InputFile title={"DecisionTree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
+                                    <label htmlFor="BotProfilePicture">Upload Bot Picture:</label>
+                                    <InputFile title={"BotProfilePicture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} />
                                 </div>
                                 <div className="modal-footer">
                                     {error &&

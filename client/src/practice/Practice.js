@@ -19,6 +19,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     const [isEndDatePassed, setIsEndDatePassed] = useState(hasTimePassed(task.endDate));
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleTaskClick = () => {
         if (!isCreated) {
@@ -29,10 +30,15 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         }
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         add();
+        setIsLoading(true);
+        await new Promise((resolve) => {
+            setTimeout(resolve, 15000);
+        });
         setSelectedTask(task);
         setShowModal(false);
+        setIsLoading(false);
     };
 
     const handleCancel = () => {
@@ -40,7 +46,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     };
 
     const add = async function () {
-        const res = await fetch(`https://localhost:5000/api/addPractice/`, {
+        const res = await fetch(`http://localhost:5000/api/addPractice/`, {
             method: 'post',
             headers: {
                 accept: 'application/json',
@@ -55,6 +61,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 year: task.year
             }),
         });
+
+
 
         if (res.status === 200) {
             const practice = await res.text();
@@ -85,7 +93,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
 
     useEffect(() => {
         const fetchPractice = async function () {
-            const res = await fetch(`https://localhost:5000/api/getPractice/${task.taskName}`, {
+            const res = await fetch(`http://localhost:5000/api/getPractice/${task.taskName}`, {
                 method: 'get',
                 headers: {
                     accept: 'application/json',
@@ -98,7 +106,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
                     setIsCreated(true);
                     setIsFinished(!practice.active);
-                    setIsFeedbackAvailable((practice.grade && practice.feedback !== ''));
+                    setIsFeedbackAvailable((practice.grade !== null && practice.feedback !== ''));
                     setIsLateSubmitAllowed(practice.lateSubmit);
                     setIsTimeUp(hasTimePassed(addTimeToDateString(practice.startDate,
                         practice.durationHours, practice.durationMinutes)));
@@ -148,7 +156,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         <span className="text-black badge date">
                             {(isEndDatePassed && !isFinished && !isLateSubmitAllowed) ?
                                 'Can\'t submit' :
-                                (isTimeUp && !isFinished)? 'Time\'s up!' :
+                                (isTimeUp && !isFinished) ? 'Time\'s up!' :
                                     !isCreated
                                         ? 'Click to start'
                                         : !isFinished
@@ -204,7 +212,9 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         <div className="modal-content">
                             <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                 <h5 className="modal-title text-white">Start Practice</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={handleCancel}></button>
+                                {!isLoading &&
+                                    <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
+                                }
                             </div>
                             <div className="modal-body">
                                 Are you sure you want to start <b>{task.taskName}</b>?<br />
@@ -215,12 +225,25 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                                     {task.durationMinutes} minutes.</b><br />
                                 After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, Cancel</button>
-                                <button type="button" className="btn btn-danger" onClick={handleConfirm}>
-                                    Yes, Start Practice
-                                </button>
-                            </div>
+                            {!isLoading &&
+                                <div className="modal-footer">
+
+                                    <>
+                                        <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, Cancel</button>
+                                        <button type="button" className="btn btn-danger" onClick={handleConfirm}>
+                                            Yes, Start Practice
+                                        </button>
+                                    </>
+                                </div>
+                            }
+                            {isLoading &&
+                                <>
+                                    <div className="modal-body">
+                                        <span><b>Loading Assignment...<br />
+                                            Please do not close this window!
+                                        </b></span>
+                                    </div>
+                                </>}
                         </div>
                     </div>
                 </div>

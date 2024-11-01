@@ -1,8 +1,8 @@
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const { check, validationResult } = require('express-validator');
+const { format } = require('path');
 require('dotenv').config();
-
 
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -43,17 +43,16 @@ async function uploadIdFile(fileName, fileContent) {
     return error ? { status: 500, error: error.message } : { status: 200, error: '' };
 }
 
-async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, users) {
+async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, format, questions, botPic, users) {
     const errors = validationResult(users); // Assuming `users` is coming from the request body
     if (!errors.isEmpty()) {
         return { status: 400, errors: errors.array() };
     }
 
     try {
-
         const existingTask = await tasks.findOne({ taskName: taskName, year: year })
         if (existingTask) {
-            return { status: 409, error: `This task already exists this year`}
+            return { status: 409, error: `This task already exists this year` }
         }
         const submitList = users
             .filter(user => user.year === year)
@@ -66,14 +65,16 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 grade: null,
                 feedback: ''
             }));
-
         await tasks.insertOne({
             taskName: taskName,
             startDate: startingDate,
             endDate: endingDate,
+            format: format,
+            questions: questions,
             durationHours: parseInt(durationHours, 10),
             durationMinutes: parseInt(durationMinutes, 10),
             year: year,
+            botPic: botPic,
             submitList: submitList,
         });
         return { status: 201, error: "" };
@@ -85,15 +86,30 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
 async function getTasks() {
     try {
         const taskList = await tasks.find({}, { projection: { submitList: 0 } }).toArray();
+        if (!taskList) {
+            return { status: 404, tasks: 'No existing tasks' }
+        }
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };
     }
 }
 
-async function adminViewTasks() {
+async function getTask(taskName, year) {
     try {
-        const taskList = await tasks.find({}).toArray();
+        const task = await tasks.findOne({ taskName: taskName, year: year });
+        return { status: 200, task: task };
+    } catch (error) {
+        return { status: 500, task: error.message };
+    }
+}
+
+async function adminViewTasks(year) {
+    try {
+        const taskList = await tasks.find({year: parseInt(year)}).toArray();
+        if (!taskList) {
+            return { status: 404, tasks: 'No existing tasks' }
+        }
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };
@@ -139,6 +155,11 @@ async function postFeedback(userId, chatId, feedback, year) {
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
+        const existingTask = await tasks.findOne({taskName: newTaskName, year: parseInt(year)});
+        if(existingTask && taskName !== newTaskName) {
+            return { status: 403, error: 'A task with this name is already existing this year'}
+        }
+
         await tasks.updateOne(
             { taskName: taskName, year: parseInt(year) },
             {
@@ -154,6 +175,7 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             {
                 $set: {
                     chatId: newTaskName,
+                    endDate: newEndDate
                 },
             },
         );
@@ -229,6 +251,7 @@ module.exports = {
     uploadIdFile,
     makeTask,
     getTasks,
+    getTask,
     adminViewTasks,
     getSubmissionStatus,
     postFeedback,

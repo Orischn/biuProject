@@ -5,7 +5,7 @@ import StudentMessage from "../studentMessage/StudentMessage";
 
 const { useState, useEffect, useRef, useCallback } = require("react");
 
-function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setLatestMessage,
+function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, latestMessage, setLatestMessage,
     isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed, setSelectedPractice, setSelectedTask }) {
     const [messages, setMessages] = useState([]);
     const [grade, setGrade] = useState(null);
@@ -28,7 +28,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
             if (!selectedPractice) {
                 return;
             }
-            const res = await fetch(`https://localhost:5000/api/getPractice/${selectedPractice.chatId}`, {
+            const res = await fetch(`http://localhost:5000/api/getPractice/${selectedPractice.chatId}`, {
                 'method': 'get',
                 'headers': {
                     'accept': 'application/json',
@@ -40,9 +40,9 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                 await res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
                         if (message.isBot) {
-                            return <BotMessage message={message} />
+                            return <BotMessage message={message} key={key}/>
                         } else {
-                            return <StudentMessage message={message} />
+                            return <StudentMessage message={message} key={key}/>
                         }
                     }));
                 });
@@ -52,13 +52,13 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
         chat.current.scrollTop = chat.current.scrollHeight;
         setLatestMessage(null);
         fetchMessages();
-    }, [selectedPractice, token, latestMessage])
+    }, [selectedPractice, selectedTask, token, latestMessage])
 
     const handleTimerClick = () => {
         setShowTimer(!showTimer)
     }
 
-    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0) => {
+    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0, secondsToAdd = 0) => {
         const [datePart, timePart] = dateString.split(' ');
         const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
         const formattedTime = `${hours}:${minutes}:${seconds}`;
@@ -67,6 +67,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
 
         date.setHours(date.getHours() + hoursToAdd);
         date.setMinutes(date.getMinutes() + minutesToAdd);
+        date.setSeconds(date.getSeconds() + secondsToAdd);
 
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -98,6 +99,8 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
+                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic} 
+                            style={{width: '45px', height:'45px'}}/>
                             <b className="ms-2">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
@@ -110,7 +113,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                         <>
                                             <span id="feedback-link" className="hyperlink">
                                                 click <span id="click-here" data-bs-toggle="modal" data-bs-target="#feedbackModal">here</span>
-                                                {' '}to see the grade and the teacher's feedback</span>
+                                                {' '}to see the grade and the lecturer's feedback</span>
 
                                             {/* Feedback Modal */}
                                             <div className="modal fade" id="feedbackModal" tabIndex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
@@ -118,11 +121,11 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                     <div className="modal-content">
                                                         <div className="modal-header text-white">
                                                             <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
-                                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div className="modal-body text-black">
-                                                            <div>grade: {selectedPractice.grade}</div>
-                                                            <div>feedback: {selectedPractice.feedback}</div>
+                                                        <div className="modal-body text-black" style={{fontWeight: 'normal'}}>
+                                                            <div><b>grade:</b> {selectedPractice.grade}</div>
+                                                            <div><b>feedback:</b> {selectedPractice.feedback}</div>
                                                         </div>
                                                         <div className="modal-footer">
                                                             <button type="button" className="btn btn-primary" data-bs-dismiss="modal">OK</button>
@@ -151,7 +154,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                                 <>
                                                                     <Countdown targetDate={addTimeToDateString(
                                                                         selectedPractice.startDate, selectedPractice.durationHours,
-                                                                        selectedPractice.durationMinutes)}
+                                                                        selectedPractice.durationMinutes, 17)}
                                                                         setIsTimeUp={setIsTimeUp}
                                                                         purpose={'timer'}
                                                                         setShowModal={setShowTimesUpModal} />
@@ -200,7 +203,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                     <div className="modal-content">
                                                         <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                                             <h5 className="modal-title text-white">Time's Up</h5>
-                                                            <button type="button" className="btn-close" aria-label="Close" onClick={handleCloseTimesUpModal}></button>
+                                                            <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseTimesUpModal}></button>
                                                         </div>
 
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
@@ -228,7 +231,7 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                                                     <div className="modal-content">
                                                         <div className="modal-header" style={{ backgroundColor: 'darkgreen' }}>
                                                             <h5 className="modal-title text-white">Missed Submission</h5>
-                                                            <button type="button" className="btn-close" aria-label="Close" onClick={handleCloseEndDateModal}></button>
+                                                            <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseEndDateModal}></button>
                                                         </div>
 
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
@@ -281,10 +284,10 @@ function ChatFeed({ token, selectedPractice, finishPractice, latestMessage, setL
                     <div className="modal-content">
                         <div className="modal-header text-white">
                             <h5 className="modal-title" id="confirmModalLabel">Confirm Submission</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure you want to submit <b>{selectedPractice.chatId}</b>? This will send the result to the teacher, and no changes will be possible afterward.
+                            Are you sure you want to submit <b>{selectedPractice.chatId}</b>? This will send the result to the lecturer, and no changes will be possible afterward.
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

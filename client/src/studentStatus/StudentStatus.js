@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TaskDetails from "../taskDetails/TaskDetails";
 
 
-function StudentStatus({token, selectedStudent}) {
+function StudentStatus({token, selectedStudent, yearOption}) {
 
     const [taskList, setTaskList] = useState([]);
     const [average, setAverage] = useState(0);
@@ -18,14 +18,13 @@ function StudentStatus({token, selectedStudent}) {
 
     useEffect(() => {
         const fetchStudentsAssignments = async function () {
-            const res = await fetch(`https://localhost:5000/api/adminGetTasks/`, {
+            const res = await fetch(`http://localhost:5000/api/adminGetTasks/${yearOption.current.value}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 }
             });
-
             if (res.status === 200) {
                 const gradeList = await res.text().then((tasks) => {
                     setTaskList(JSON.parse(tasks).map((task, key) => {
@@ -33,12 +32,14 @@ function StudentStatus({token, selectedStudent}) {
                         return <TaskDetails taskName={task.taskName} 
                         didSubmit={user.didSubmit} 
                         canSubmitLate={user.canSubmitLate}
-                        grade={user.grade ? user.grade : ''}/>
+                        grade={user.grade ? user.grade : ''} key={key}/>
                     }))
                     return JSON.parse(tasks).map((task, key) => {
                         let user = task.submitList.find(user => user.userId === selectedStudent.userId);
-                        return user.grade;
-                    }).filter((grade) => grade !== undefined && grade !== null);
+                        // return user.grade;
+                        return (user.grade !== undefined && user.grade !== null) ? user.grade : 0;
+                    })
+                    // }).filter((grade) => grade !== undefined && grade !== null);
                 });
                 return gradeList;
             } else {
@@ -63,19 +64,19 @@ function StudentStatus({token, selectedStudent}) {
             <h2 className="settings-title">
                 {selectedStudent.firstName +' '+ selectedStudent.lastName}
                 {' '}assignments details</h2>
-                average (of submitted assignments): {average}
+                Average: {average}
                 <ul></ul>
 
             <ul>
                 <div className="row">
                     <div className="col-2">
-                        <b><u>name</u></b>
+                        <b><u>Name</u></b>
                     </div>
                     <div className="col-3">
                         <b><u>Submission Status</u></b>
                     </div>
                     <div className="col-3">
-                        <b><u>Late submission</u></b>
+                        <b><u>Late Submission</u></b>
                     </div>
                     <div className="col-3">
                         <b><u>Grade</u></b>

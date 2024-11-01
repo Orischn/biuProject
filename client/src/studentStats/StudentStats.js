@@ -3,7 +3,7 @@ import Grade from "../grade/Grade";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 
 
-function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
+function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
@@ -17,7 +17,7 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
 
     useEffect(() => {
         const fetchPractices = async () => {
-            const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
+            const res = await fetch(`http://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
                 {
                     method: 'get',
                     headers: {
@@ -36,7 +36,7 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
 
 
         const fetchGrades = async (practices) => {
-            const res = await fetch(`https://localhost:5000/api/adminGetTasks`,
+            const res = await fetch(`http://localhost:5000/api/adminGetTasks/${yearOption.current.value}`,
                 {
                     method: 'get',
                     headers: {
@@ -80,7 +80,7 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
 
     // useEffect(() => {
     //     const fetchTasks = async () =>{
-    //         const res = await fetch(`https://localhost:5000/api/getTasks/`,
+    //         const res = await fetch(`http://localhost:5000/api/getTasks/`,
     //             {
     //                 method: 'get',
     //                 headers: {
@@ -100,7 +100,7 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted }) {
 
 
     //     const fetchGrades = async () => {
-    //         const res = await fetch(`https://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
+    //         const res = await fetch(`http://localhost:5000/api/studentPractices/${selectedStudent.userId}`,
     //             {
     //                 method: 'get',
     //                 headers: {

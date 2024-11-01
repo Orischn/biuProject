@@ -5,14 +5,16 @@ import SearchStudent from "../searchStudent/SearchStudent";
 import StudentStatus from "../studentStatus/StudentStatus";
 import InputFile from "../inputFile/InputFile";
 import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
+import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 
-function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand }) {
+function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand, isYearChanged }) {
 
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
     const [isChanged, setIsChanged] = useState(false);
     // const [expand, setExpand] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState('');
+ 
  
 
     const handleUnexpand = () => {
@@ -26,9 +28,10 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
     }
 
     
+    
     useEffect(() => {
         const fetchStudents = async (filter) => {
-            const res = await fetch('https://localhost:5000/api/getStudents', {
+            const res = await fetch('http://localhost:5000/api/getStudents', {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -69,7 +72,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
             }
         }
         fetchStudents(filter);
-    }, [token, filter, isChanged])
+    }, [token, filter, isChanged, isYearChanged])
 
     return (
         <>
@@ -91,13 +94,13 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                                 <ul>
                                     <div className="row">
                                         <div className="col-2">
-                                            <b><u>year</u></b>
+                                            <b><u>Year</u></b>
                                         </div>
                                         <div className="col-2">
-                                            <b><u>name</u></b>
+                                            <b><u>Name</u></b>
                                         </div>
                                         <div className="col-2">
-                                            <b><u>id number</u></b>
+                                            <b><u>Id Number</u></b>
                                         </div>
                                     </div>
                                 </ul>
@@ -115,7 +118,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                             <i className="bi bi-caret-left" style={{ cursor: 'pointer' }} onClick={handleUnexpand} />
                             go back
                         </div>
-                        <StudentStatus token={token} selectedStudent={selectedStudent} />
+                        <StudentStatus token={token} selectedStudent={selectedStudent} yearOption={yearOption}/>
                     </>
                 )}
 

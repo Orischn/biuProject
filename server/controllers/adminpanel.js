@@ -1,7 +1,9 @@
-const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, getSubmissionStatusByYear, removeTask, adminViewTasks, uploadIdFile } = require('../models/adminPanel');
+const { uploadFile, makeTask, getSubmissionStatus, postFeedback, changeTask, takeLateSubmit, giveLateSubmit, removeTask, adminViewTasks, uploadIdFile } = require('../models/adminPanel');
 const { getPractices, updateGrade } = require('../models/chatbot');
 const { getId } = require('../models/token');
 const { getUser, getStudents } = require('../models/users');
+const os = require('os');
+
 
 const uploadCSVTree = async (req, res) => {
     const result = await uploadFile(req.body.fileName, req.body.CSVTree);
@@ -14,10 +16,34 @@ const uploadValidIdFile = async (req, res) => {
     return res.status(result.status).end(result.error);
 }
 
+const parseQuestionsFile = (questions) => {
+    let lines = JSON.parse(questions).split(os.EOL);
+    let questionsList = [];
+    let answers = [];
+    let part = 1
+    for (let line of lines) {
+        if (line === '') {
+            part = 2
+            continue
+        }
+        switch (part) {
+            case 1:
+                questionsList.push({"question":line});
+                break;
+            case 2:
+                answers.push({"answer": line.split(',')})
+                break;
+        }
+    }
+    return {"questions": questionsList, "answers": answers};
+}
+
 const createTask = async (req, res) => {
     const users = await getStudents();
+    questionJSON = parseQuestionsFile(req.body.questions)
     const result = await makeTask(req.body.taskName, req.body.startDate, 
-        req.body.endDate, req.body.durationHours, req.body.durationMinutes, req.body.year, users.students);
+        req.body.endDate, req.body.durationHours, req.body.durationMinutes, req.body.year,
+        req.body.format, questionJSON, req.body.botPic, users.students);
     return res.status(result.status).end(result.error);
 }
 
@@ -42,7 +68,7 @@ const getStudentPractices = async (req, res) => {
 }
 
 const adminGetTasks = async (req, res) => {
-    const result = await adminViewTasks(req.params.userId);
+    const result = await adminViewTasks(req.params.year);
     return res.status(result.status).end(JSON.stringify(result.tasks))
 }
 

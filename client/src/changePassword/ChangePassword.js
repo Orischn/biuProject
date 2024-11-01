@@ -44,7 +44,7 @@ function ChangePassword({ token, userId }) {
             return;
         }
 
-        const res = await fetch('https://localhost:5000/api/changePassword', {
+        const res = await fetch('http://localhost:5000/api/changePassword', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -89,10 +89,10 @@ function ChangePassword({ token, userId }) {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title">Change your Password</h5>
-                                <button type="button" className="btn-close"
+                                <button type="button" className="btn-close btn-close-white"
                                     onClick={handleCancel} style={{color: 'white'}}></button>
                             </div>
-                            <form onSubmit={change}>
+                            <form id="changePasswordForm" onSubmit={change}>
                                 <div className="modal-body">
                                     <input type="password" ref={currentPassBar} className="form-control" placeholder="Current Password" />
                                     <input type="text" ref={newPassBar} className="form-control" placeholder="Press New Password" />

@@ -1,11 +1,16 @@
 const { MongoClient } = require('mongodb');
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
+const { spawn } = require('child_process');
+const os  = require('os');
+const { randomInt } = require('crypto');
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 const dbName = 'ChatBot';
 const db = client.db(dbName);
 const tasks = db.collection('tasks');
 const practices = db.collection('practices');
+
+let botProcesses = []
 
 const validateTaskInputs = [
     check('taskName').isString().trim().escape(),
@@ -54,18 +59,39 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-
+        
         const existingTask = await tasks.findOne({ taskName: chatId, year: year });
         if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
         
-        const user = existingTask.submitList.find(user => user.userId === userId);
+        const user = existingTask.submitList.find(user => user.userId === userId)
+        
         const time = Date().now()
         if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
             return { status: 403, practice: "Submission date passed."};
         }
 
+        answers = existingTask.questions.answers
+        answerIdx = randomInt(answers.length);
+        for (let i in existingTask.questions.questions) {
+            existingTask.questions.questions[i]['answer'] = answers[answerIdx]["answer"][i];
+        }
+        let questions = { "questions": existingTask.questions.questions }
+        let botProcess = spawn('python3', ['-X', 'utf8', './bot.py', 0, JSON.stringify(questions)], {
+            encoding: 'utf-8'
+        })
+        botProcess.id = chatId + userId
+        botProcess.stdout.on('data', (data) => {
+            messageData = data.toString().split('|');
+            const result = addMessage(messageData[1], messageData[0], messageData[2], true);
+        })
+        botProcesses[botProcess.id] = botProcess
+      
+        await new Promise((resolve) => {
+            setTimeout(resolve, 15000);
+        });
+        
         const practice = {
             userId: userId,
             chatId: chatId,
@@ -79,12 +105,15 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             durationMinutes: durationMinutes,
             year: year,
             active: true,
-            lateSubmit: user ? user.canSubmitLate : false
+            lateSubmit: user ? user.canSubmitLate : false,
+            botPic: existingTask.botPic
         };
+        
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
     } catch (error) {
-        return { status: 500, practice: error.message };
+        console.log(error.message)
+        return { status: 500, practice: `${error.message}${os.EOL}Please inform an admin immediately` };
     } finally {
         await client.close();
     }
@@ -134,6 +163,8 @@ async function submitPractice(userId, chatId) {
         if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
             return { status: 403, practice: "Submission date passed."};
         }
+        botProcesses[chatId + userId].kill('SIGKILL');
+        delete botProcesses[chatId + userId];
         await practices.updateOne(
             { chatId: chatId, userId: userId, active: true },
             {
@@ -143,6 +174,7 @@ async function submitPractice(userId, chatId) {
                 },
             },
         );
+        
         await tasks.updateOne(
             { taskName: chatId, 'submitList.userId': userId },
             {
@@ -195,11 +227,13 @@ async function addMessage(userId, chatId, content, isBot) {
                         $each: [{ content: content, isBot: isBot }],
                         $position: 0
                     }
-                }
+                },
             }
         );
+        
         return { status: 200, error: "" };
     } catch (error) {
+        console.log(error.message)
         return { status: 500, error: error.message };
     } finally {
         await client.close();
@@ -221,9 +255,9 @@ async function updateGrade(userId, chatId, newGrade) {
                 },
             },
         );
-
-        await tasks.updateOne (
-            {taskName: chatId, "submitList.userId": userId},
+        
+        await tasks.updateOne(
+            { taskName: chatId, "submitList.userId": userId },
             {
                 $set: {
                     "submitList.$.grade": newGrade
@@ -247,4 +281,5 @@ module.exports = {
     addMessage,
     getMessages,
     updateGrade,
+    botProcesses,
 };

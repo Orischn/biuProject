@@ -18,7 +18,7 @@ function UploadIdFile({ token, title }) {
             return;
         }
         const uploadIds = async () => {
-            const res = await fetch(`https://localhost:5000/api/uploadValidIdFile/`, {
+            const res = await fetch(`http://localhost:5000/api/uploadValidIdFile/`, {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function UploadIdFile({ token, title }) {
     return (
         <>
             <div style={{ width: '100%' }}>
-                <label htmlFor="files">Upload valid id's numbers</label>
+                <label>Upload valid id's numbers</label>
                 <form noValidate onSubmit={save} >
                     {/* &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; */}
 

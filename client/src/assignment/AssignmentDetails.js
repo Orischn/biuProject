@@ -7,6 +7,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
     const [numOfAssigned, setNumOfAssigned] = useState(0);
     const [numOfSubmits, setNumOfSubmits] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState('');
 
 
     const handleExpand = () => {
@@ -18,7 +19,6 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         setExpand(false);
     }
 
-    const [error, setError] = useState('');
     const newTaskNameBar = useRef(null);
     const newEndDateBar = useRef(null)
 
@@ -31,7 +31,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
     const editAssignment = async (e) => {
 
         if (!newTaskNameBar.current.value.trim() || !newEndDateBar.current.value.trim()) {
-            alert('must fill both fields')
+            setError('must fill both fields')
             return;
         }
 
@@ -39,7 +39,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
-        const res = await fetch('https://localhost:5000/api/updateTask', {
+        const res = await fetch('http://localhost:5000/api/updateTask', {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
-            const res = await fetch(`https://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -129,8 +129,8 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                                 <i className="bi bi-pencil" style={{ cursor: 'pointer' }} onClick={() => { setIsEditing(true) }} />
                             </div>
                             <div className="col-1">
-                                <DeleteAssignment token={token} taskName={taskName} 
-                                year={yearOption.current.value} refreshData={refreshData} />
+                                <DeleteAssignment token={token} taskName={taskName}
+                                    year={yearOption.current.value} refreshData={refreshData} />
                             </div>
                             <div className="col-1">
                                 <i className="bi bi-caret-right" style={{ cursor: 'pointer' }} onClick={handleExpand} />
@@ -167,6 +167,11 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             <button type="button" className="btn btn-danger" onClick={editAssignment}>save</button>
                         </div>
                     </div>
+                    {error &&
+                        <span className="alert alert-danger w-50" role="alert"
+                            style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>
+                            {error}
+                        </span>}
                 </ul>
             )}
 

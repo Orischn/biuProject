@@ -3,16 +3,18 @@ import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
+function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChanged }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const [expand, setExpand] = useState(false);
 
     const settingsOptions = [
         <AssignmentsSettingsPage token={token} yearOption={yearOption}
-            expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}/>,
+            expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}
+            isYearChanged={isYearChanged}/>,
         <StudentSettingsPage token={token} yearOption={yearOption}
-            refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand} />,
-        <GeneralSettingsPage token={token} userId={userId} />];
+            refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand}
+            isYearChanged={isYearChanged} />];
+        // <GeneralSettingsPage token={token} userId={userId} />];
 
     return (
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
@@ -20,7 +22,7 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed }) {
                 <div className="modal-content" >
                     <div className="modal-header text-white" >
                         <h1 className="modal-title fs-5" id="staticBackdropLabel">SETTINGS</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
                             onClick={() => {
                                 setSelectedSettings(0)
                                 setExpand(false)

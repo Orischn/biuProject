@@ -25,7 +25,7 @@ function AssignemntStatus({ token, taskName, yearOption }) {
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
-            const res = await fetch(`https://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
+            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
                 method: 'get',
                 headers: {
                     'accept': 'application/json',
@@ -99,13 +99,13 @@ function AssignemntStatus({ token, taskName, yearOption }) {
             <ul>
                 <div className="row">
                     <div className="col-2">
-                        <b><u>name</u></b>
+                        <b><u>Name</u></b>
                     </div>
-                    <div className="col-1">
-                        <b><u>id</u></b>
+                    <div className="col-2">
+                        <b><u>Id Number</u></b>
                     </div>
                     <div className="col-3">
-                        <b><u>submission status</u></b>
+                        <b><u>Submission Status</u></b>
                     </div>
 
                 </div>

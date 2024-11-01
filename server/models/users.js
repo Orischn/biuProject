@@ -2,6 +2,7 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+const os = require('os');
 require('dotenv').config();
 const MAIL_PASSWORD = process.env.MAIL_APP_PASSWORD;
 
@@ -97,7 +98,7 @@ async function postUser(user) {
     if (err) {
       console.error('Error reading ID file', err);
     } else {
-      validIds = data.split('\n').map(id => id.trim());
+      validIds = data.split(os.EOL).map(id => id.trim());
     }
   });
 
@@ -122,7 +123,7 @@ async function postUser(user) {
       sendEmail(`${user.email}`, 'Registration Completed Successfully',
         `Hello ${user.firstName} ${user.lastName}! <br />
         You successfully registered to the medical history questioning practice system 
-        of the Department of Optometry, Bar Ilan university.<br />
+        of the School of Optometry and Vision Science, Bar Ilan university.<br />
         Those are the details you provided in your registration: <br />
         <b>full name: ${user.firstName} ${user.lastName}</b><br />
         <b>ID number: ${user.userId}</b><br />
@@ -132,7 +133,7 @@ async function postUser(user) {
       sendEmail(`${user.email}`, 'Your password for first login',
         `Hello ${user.firstName} ${user.lastName}! <br />
         You were successfully added to the medical history questioning practice system 
-        of the Department of Optometry, Bar Ilan university.<br />
+        of the School of Optometry and Vision Science, Bar Ilan university.<br />
         Those are the details provided in the registration: <br />
         <b>full name: ${user.firstName} ${user.lastName}</b><br />
         <b>ID number: ${user.userId}</b><br />

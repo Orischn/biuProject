@@ -10,7 +10,7 @@ function GeneralSettingsPage({ token, userId }) {
 
     const save = async (e) => {
         const updateCSV = async () => {
-            const res = await fetch(`https://localhost:5000/api/uploadDecisionTree/`, {
+            const res = await fetch(`http://localhost:5000/api/uploadDecisionTree/`, {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',
@@ -45,15 +45,15 @@ function GeneralSettingsPage({ token, userId }) {
                 </div> */}
 
                 <div className="setting-item">
-                    <label htmlFor="files">Upload CSV Files</label>
-                    <form noValidate onSubmit={save} >
+                    <label htmlFor="uploadFile">Upload CSV Files</label>
+                    <form id="uploadFile" noValidate onSubmit={save} >
                         <InputFile title={'Decision Tree: '} setFileName={setFileName} setFileContent={setFileContent} error={error} />
                         <input type="submit" className="btn btn-primary submit" value="Save" />
                     </form>
                 </div>
 
                 <div className="setting-item">
-                    <label htmlFor="changePassword">Change your password</label>
+                    <label htmlFor="changePasswordForm">Change your password</label>
                     <ChangePassword token={token} userId={userId} />
                     <div>123</div>
                 </div>
