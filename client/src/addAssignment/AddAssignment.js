@@ -11,6 +11,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const [image, setImage] = useState('');
     const [questionsDataType, setQuestionsDataType] = useState('')
     const [imageDataType, setImageDataType] = useState('');
+    const [noTimeLimit, setNoTimeLimit] = useState(false);
 
     const nameBar = useRef(null);
     const startDateBar = useRef(null);
@@ -27,6 +28,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
         durationMinutesBar.current.value = '';
         setQuestions({})
         setImage("")
+        setNoTimeLimit(false)
     }
 
     const handleClick = () => {
@@ -49,12 +51,14 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const name = nameBar.current.value.trim();
         const startDate = startDateBar.current.value.trim();
         const endDate = endDateBar.current.value.trim();
-        const durationHours = durationHoursBar.current.value.trim();
-        const durationMinutes = durationMinutesBar.current.value.trim();
+        const durationHours = noTimeLimit ? null : durationHoursBar.current.value.trim();
+        const durationMinutes = noTimeLimit ? null : durationMinutesBar.current.value.trim();
         // const format = formatBar.current.value.trim();
 
-        if (name === '' || startDate === '' || endDate === '' || !questions || !image) {
-            setError('Must fill all fields except duration');
+
+        if (name === '' || startDate === '' || endDate === '' || !questions || !image
+            || (!noTimeLimit && durationHours === '') || (!noTimeLimit && durationMinutes === '')) {
+            setError('Must fill all fields');
             return;
         }
         if (durationHours) {
@@ -64,14 +68,14 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 return;
             }
         }
-        
+
         if (durationMinutes) {
             if (parseInt(durationMinutes) >= 60) {
                 setError('Minutes must be a less than 60!');
                 return;
             }
         }
-        
+
 
         if (questionsDataType !== 'text/csv') {
             setError('Please Upload a CSV File!')
@@ -102,7 +106,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
             })
 
         })
-        console.log(res.status)
         if (res.status !== 201) { //error
             await res.text().then((errorMessage) => {
                 setError(errorMessage);
@@ -121,6 +124,7 @@ function AddAssignment({ token, refreshData, yearOption }) {
             durationMinutesBar.current.value = '';
             setQuestions({})
             setImage('')
+            setNoTimeLimit(false)
         }
 
     }
@@ -154,8 +158,12 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <label htmlFor="assEnd">Date of Submission:</label>
                                     <input id="assEnd" type="datetime-local" ref={endDateBar} className="form-control" placeholder="Date of submission" style={{ width: '70%', margin: '0 auto' }} />
                                     <label htmlFor="assDuration">Assignemnt's duration: </label>
-                                    <input id="assDuration" type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} />
-                                    <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} />
+                                    <input id="assDuration" type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} disabled={noTimeLimit}/>
+                                    <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} disabled={noTimeLimit}/>
+                                    {/* <center><label htmlFor="noDuration">No Time Limit</label></center> */}
+                                    <center><span>No Time Limit: </span></center>
+                                    <input type="checkbox" checked={noTimeLimit} onClick={() => setNoTimeLimit(!noTimeLimit)}/>
+
                                     <label htmlFor="DecisionTree">Upload CSV File:</label>
                                     <InputFile title={"DecisionTree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
                                     <label htmlFor="BotProfilePicture">Upload Bot Picture:</label>
