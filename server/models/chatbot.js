@@ -111,7 +111,6 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             lateSubmit: user ? user.canSubmitLate : false,
             botPic: existingTask.botPic
         };
-        
         await practices.insertOne(practice);
         return { status: 200, practice: practice };
     } catch (error) {

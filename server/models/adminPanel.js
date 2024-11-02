@@ -63,7 +63,8 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 didSubmit: false,
                 canSubmitLate: false,
                 grade: null,
-                feedback: ''
+                feedback: '',
+                endDate: null,
             }));
         await tasks.insertOne({
             taskName: taskName,
@@ -196,13 +197,14 @@ async function removeTask(taskName, year) {
     }
 }
 
-async function giveLateSubmit(taskName, userId) {
+async function giveLateSubmit(taskName, userId, endDate) {
     try {
         await tasks.updateOne(
             { taskName: taskName, 'submitList.userId': userId },
             {
                 $set: {
                     'submitList.$.canSubmitLate': true,
+                    'submitList.$.endDate': endDate,
                 },
             }
         );
@@ -228,6 +230,7 @@ async function takeLateSubmit(taskName, userId) {
             {
                 $set: {
                     'submitList.$.canSubmitLate': false,
+                    'submitList.$.endDate': null,
                 },
             }
         );
