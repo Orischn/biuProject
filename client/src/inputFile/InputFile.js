@@ -49,7 +49,7 @@ function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedS
                         </span>}
                 </div> */}
                 <div className="">
-                    <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} required />
+                    <input ref={input} type="file" className="form-control input" id={title} onChange={(e) => handleChange(e)} />
                 </div>
             </div>
             {/* <br /> */}

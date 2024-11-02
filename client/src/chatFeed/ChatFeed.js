@@ -17,6 +17,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
     const chat = useRef(null);
 
     const changeEndDateFormat = (endDate) => {
+        console.log(endDate)
         const [datePart, timePart] = endDate.split('T');
         const [day, month, year] = datePart.split('-');
         const formattedDateString = `${year}-${month}-${day}T${timePart}`;
@@ -40,9 +41,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                 await res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
                         if (message.isBot) {
-                            return <BotMessage message={message} key={key}/>
+                            return <BotMessage message={message} key={key} />
                         } else {
-                            return <StudentMessage message={message} key={key}/>
+                            return <StudentMessage message={message} key={key} />
                         }
                     }));
                 });
@@ -58,12 +59,14 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         setShowTimer(!showTimer)
     }
 
-    const addTimeToDateString = (dateString, hoursToAdd = 0, minutesToAdd = 0, secondsToAdd = 0) => {
-        const [datePart, timePart] = dateString.split(' ');
-        const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
-        const formattedString = `${datePart}T${formattedTime}`;
-        const date = new Date(formattedString);
+    const addTimeToDateString = (timestamp, hoursToAdd = 0, minutesToAdd = 0, secondsToAdd = 0) => {
+        // const [datePart, timePart] = dateString.split(' ');
+        // const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
+        // const formattedTime = `${hours}:${minutes}:${seconds}`;
+        // const formattedString = `${datePart}T${formattedTime}`;
+        // const date = new Date(formattedString);
+
+        const date = new Date(timestamp);
 
         date.setHours(date.getHours() + hoursToAdd);
         date.setMinutes(date.getMinutes() + minutesToAdd);
@@ -80,6 +83,24 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         return `${year}-${month}-${day}T${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
     };
 
+
+    const convertTimestampToDate = (timestamp,) => {
+        // Create a Date object from the timestamp
+        const date = new Date(timestamp);
+
+        // Extract and format the parts of the date
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        // Return the formatted date string
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
+
     const handleCloseTimesUpModal = () => {
         setShowTimesUpModal(false);
         setSelectedPractice(null);
@@ -93,14 +114,16 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
     }
 
 
+
+
     return (
         <>
             <div id="chatFeed" className="col-9">
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
-                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic} 
-                            style={{width: '45px', height:'45px'}}/>
+                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic}
+                                style={{ width: '45px', height: '45px' }} />
                             <b className="ms-2">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
@@ -123,7 +146,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                             <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
                                                             <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div className="modal-body text-black" style={{fontWeight: 'normal'}}>
+                                                        <div className="modal-body text-black" style={{ fontWeight: 'normal' }}>
                                                             <div><b>grade:</b> {selectedPractice.grade}</div>
                                                             <div><b>feedback:</b> {selectedPractice.feedback}</div>
                                                         </div>
@@ -140,7 +163,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                     <>
                                         {!isEndDatePassed ? (
                                             <>
-                                                <Countdown targetDate={changeEndDateFormat(new Date(selectedPractice.endDate).toISOString())}
+                                                <Countdown targetDate={convertTimestampToDate(selectedPractice.endDate)}
                                                     setIsTimeUp={setIsTimeUp}
                                                     setIsEndDatePassed={setIsEndDatePassed}
                                                     purpose={'date'}
@@ -152,22 +175,27 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         <>
                                                             {!isTimeUp ? (
                                                                 <>
-                                                                    <Countdown targetDate={
-                                                                        selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
-                                                                        selectedPractice.durationMinutes * 60000 + 17 * 1000}
-                                                                        setIsTimeUp={setIsTimeUp}
-                                                                        purpose={'timer'}
-                                                                        setShowModal={setShowTimesUpModal} />
-                                                                    <button type="button"
-                                                                        className="btn btn-primary"
-                                                                        style={{ height: '5%', text: 'center' }}
-                                                                        onClick={handleTimerClick}>
-                                                                        Hide Time
-                                                                    </button>
+                                                                    {selectedPractice.durationHours ? (
+                                                                        <>
+                                                                            <Countdown targetDate={addTimeToDateString(
+                                                                                selectedPractice.startDate, selectedPractice.durationHours,
+                                                                                selectedPractice.durationMinutes, 17)}
+                                                                                setIsTimeUp={setIsTimeUp}
+                                                                                purpose={'timer'}
+                                                                                setShowModal={setShowTimesUpModal} />
+                                                                            <button type="button"
+                                                                                className="btn btn-primary"
+                                                                                style={{ height: '5%', text: 'center' }}
+                                                                                onClick={handleTimerClick}>
+                                                                                Hide Time
+                                                                            </button>
+                                                                        </>
+                                                                    ) : (
+                                                                        <></>
+                                                                    )}
+
                                                                 </>
                                                             ) : ('Time\'s up!')}
-
-
 
                                                         </>
                                                     ) : (
@@ -182,19 +210,24 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                         ) : selectedPractice.lateSubmit && !isTimeUp ? (
                                             <>
                                                 Late submission is allowed
-                                                <Countdown targetDate={
-                                                    selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
-                                                    selectedPractice.durationMinutes * 60000}
-                                                    setIsTimeUp={setIsTimeUp}
-                                                    purpose={'timer'}
-                                                    setShowModal={setShowTimesUpModal} />
+                                                {selectedPractice.durationHours ? (
+                                                    <Countdown targetDate={
+                                                        selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
+                                                        selectedPractice.durationMinutes * 60000}
+                                                        setIsTimeUp={setIsTimeUp}
+                                                        purpose={'timer'}
+                                                        setShowModal={setShowTimesUpModal} />
+                                                ) : (
+                                                    <></>
+                                                )}
+
                                             </>
 
                                         ) : selectedPractice.lateSubmit ? (
                                             'Time\'s up!'
                                         ) : (
-                                                'Submission date has passed!'
-                                            )}
+                                            'Submission date has passed!'
+                                        )}
 
 
                                         {showTimesUpModal && (
