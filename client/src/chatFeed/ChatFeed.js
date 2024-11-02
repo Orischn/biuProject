@@ -41,9 +41,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                 await res.text().then((practice) => {
                     setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
                         if (message.isBot) {
-                            return <BotMessage message={message} key={key}/>
+                            return <BotMessage message={message} key={key} />
                         } else {
-                            return <StudentMessage message={message} key={key}/>
+                            return <StudentMessage message={message} key={key} />
                         }
                     }));
                 });
@@ -65,7 +65,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         // const formattedTime = `${hours}:${minutes}:${seconds}`;
         // const formattedString = `${datePart}T${formattedTime}`;
         // const date = new Date(formattedString);
-        
+
         const date = new Date(timestamp);
 
         date.setHours(date.getHours() + hoursToAdd);
@@ -84,7 +84,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
     };
 
 
-    const convertTimestampToDate = (timestamp, ) => {
+    const convertTimestampToDate = (timestamp,) => {
         // Create a Date object from the timestamp
         const date = new Date(timestamp);
 
@@ -113,7 +113,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         setSelectedTask(null)
     }
 
-    
+
 
 
     return (
@@ -122,8 +122,8 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
-                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic} 
-                            style={{width: '45px', height:'45px'}}/>
+                            <img className="ms-3 rounded-circle" src={selectedPractice.botPic}
+                                style={{ width: '45px', height: '45px' }} />
                             <b className="ms-2">
                                 {selectedPractice ? selectedPractice.chatId : ''}
                             </b>
@@ -146,7 +146,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                             <h5 className="modal-title" id="confirmModalLabel">Grade and Feedback</h5>
                                                             <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div className="modal-body text-black" style={{fontWeight: 'normal'}}>
+                                                        <div className="modal-body text-black" style={{ fontWeight: 'normal' }}>
                                                             <div><b>grade:</b> {selectedPractice.grade}</div>
                                                             <div><b>feedback:</b> {selectedPractice.feedback}</div>
                                                         </div>
@@ -175,22 +175,27 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         <>
                                                             {!isTimeUp ? (
                                                                 <>
-                                                                        <Countdown targetDate={addTimeToDateString(
-                                                                            selectedPractice.startDate, selectedPractice.durationHours,
-                                                                            selectedPractice.durationMinutes, 17)}
-                                                                        setIsTimeUp={setIsTimeUp}
-                                                                        purpose={'timer'}
-                                                                        setShowModal={setShowTimesUpModal} />
-                                                                    <button type="button"
-                                                                        className="btn btn-primary"
-                                                                        style={{ height: '5%', text: 'center' }}
-                                                                        onClick={handleTimerClick}>
-                                                                        Hide Time
-                                                                    </button>
+                                                                    {selectedPractice.durationHours ? (
+                                                                        <>
+                                                                            <Countdown targetDate={addTimeToDateString(
+                                                                                selectedPractice.startDate, selectedPractice.durationHours,
+                                                                                selectedPractice.durationMinutes, 17)}
+                                                                                setIsTimeUp={setIsTimeUp}
+                                                                                purpose={'timer'}
+                                                                                setShowModal={setShowTimesUpModal} />
+                                                                            <button type="button"
+                                                                                className="btn btn-primary"
+                                                                                style={{ height: '5%', text: 'center' }}
+                                                                                onClick={handleTimerClick}>
+                                                                                Hide Time
+                                                                            </button>
+                                                                        </>
+                                                                    ) : (
+                                                                        <></>
+                                                                    )}
+
                                                                 </>
                                                             ) : ('Time\'s up!')}
-
-
 
                                                         </>
                                                     ) : (
@@ -205,19 +210,24 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                         ) : selectedPractice.lateSubmit && !isTimeUp ? (
                                             <>
                                                 Late submission is allowed
-                                                <Countdown targetDate={
-                                                    selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
-                                                    selectedPractice.durationMinutes * 60000}
-                                                    setIsTimeUp={setIsTimeUp}
-                                                    purpose={'timer'}
-                                                    setShowModal={setShowTimesUpModal} />
+                                                {selectedPractice.durationHours ? (
+                                                    <Countdown targetDate={
+                                                        selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
+                                                        selectedPractice.durationMinutes * 60000}
+                                                        setIsTimeUp={setIsTimeUp}
+                                                        purpose={'timer'}
+                                                        setShowModal={setShowTimesUpModal} />
+                                                ) : (
+                                                    <></>
+                                                )}
+
                                             </>
 
                                         ) : selectedPractice.lateSubmit ? (
                                             'Time\'s up!'
                                         ) : (
-                                                'Submission date has passed!'
-                                            )}
+                                            'Submission date has passed!'
+                                        )}
 
 
                                         {showTimesUpModal && (

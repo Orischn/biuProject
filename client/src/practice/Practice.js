@@ -133,7 +133,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         <span className="text-black badge date">
                             {(isEndDatePassed && !isFinished && !isLateSubmitAllowed) ?
                                 'Can\'t submit' :
-                                (isTimeUp && !isFinished) ? 'Time\'s up!' :
+                                (isTimeUp && !isFinished && task.durationHours !== null 
+                                    && task.durationMinutes !== null) ? 'Time\'s up!' :
                                     !isCreated
                                         ? 'Click to start'
                                         : !isFinished
@@ -193,15 +194,25 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                                     <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                                 }
                             </div>
-                            <div className="modal-body">
-                                Are you sure you want to start <b>{task.taskName}</b>?<br />
-                                This will start a timer of&nbsp;
-                                <b>{task.durationHours > 0 ? (
-                                    `${task.durationHours} hours and `
-                                ) : ('')}
-                                    {task.durationMinutes} minutes.</b><br />
-                                After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
-                            </div>
+                            {task.durationHours ? (
+                                <div className="modal-body">
+                                    Are you sure you want to start <b>{task.taskName}</b>?<br />
+                                    This will start a timer of&nbsp;
+                                    <b>{task.durationHours > 0 ? (
+                                        `${task.durationHours} hours and `
+                                    ) : ('')}
+                                        {task.durationMinutes} minutes.</b><br />
+                                    After the time ends, you will have to submit what you've done so far, and no changes will be possible afterward.
+                                </div>
+                            ) : (
+                                <div className="modal-body">
+                                    Are you sure you want to start <b>{task.taskName}</b>?<br />
+                                    Please note that this assignment <b>does not have a time limit</b>, 
+                                    and you can take a much time you need, as long you submit it 
+                                    before the last date of submission.
+                                </div>
+                            )}
+
                             {!isLoading &&
                                 <div className="modal-footer">
 
