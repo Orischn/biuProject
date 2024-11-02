@@ -166,6 +166,8 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             {
                 $set: {
                     taskName: newTaskName,
+                },
+                $max: {
                     endDate: newEndDate,
                 },
             },
@@ -199,21 +201,11 @@ async function removeTask(taskName, year) {
 
 async function giveLateSubmit(taskName, userId, endDate) {
     try {
-        await tasks.updateOne(
-            { taskName: taskName, 'submitList.userId': userId },
-            {
-                $set: {
-                    'submitList.$.canSubmitLate': true,
-                    'submitList.$.endDate': endDate,
-                },
-            }
-        );
-
         await practices.updateOne(
             { chatId: taskName, userId: userId },
             {
                 $set: {
-                    lateSubmit: true,
+                    endDate: endDate,
                 },
             },
         );
