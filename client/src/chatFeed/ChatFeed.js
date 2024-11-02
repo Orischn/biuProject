@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import BotMessage from "../botMessage/BotMessage";
 import Countdown from "../countdown/Countdown";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
@@ -8,6 +9,7 @@ const { useState, useEffect, useRef, useCallback } = require("react");
 
 function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, latestMessage, setLatestMessage,
     isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed, setSelectedPractice, setSelectedTask }) {
+        const navigate = useNavigate();
         const [messages, setMessages] = useState([]);
         const [grade, setGrade] = useState(null);
         const [feedback, setFeedback] = useState('');
@@ -40,6 +42,9 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                             return <StudentMessage message={message} key={key} />
                         }
                     }));
+                } else if (res.status === 403) {
+                    navigate('/');
+                    return
                 }
             }
             

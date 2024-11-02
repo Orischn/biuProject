@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import AdminAddStudent from "../adminAddStudent/AdminAddStudent";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import SearchStudent from "../searchStudent/SearchStudent";
@@ -7,7 +8,7 @@ import StudentStatus from "../studentStatus/StudentStatus";
 import UploadIdFile from "../uploadIdsFile/UploadIdsFile";
 
 function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, setExpand, isYearChanged }) {
-    
+    const navigate = useNavigate();
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
     const [isChanged, setIsChanged] = useState(false);
@@ -60,6 +61,9 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                     }
                     return null; // Ensure that the map function returns null if no match
                 }));
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         fetchStudents(filter);

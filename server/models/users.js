@@ -246,11 +246,11 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     const users = db.collection('users');
 
     if (!await bcrypt.compare(oldPassword, user.password)) {
-      return { status: 403, error: "Old password isn't correct." };
+      return { status: 400, error: "Old password isn't correct." };
     }
 
     // if (oldPassword !== user.password) {
-    //   return { status: 403, error: "Old password isn't correct." };
+    //   return { status: 400, error: "Old password isn't correct." };
     // }
 
     const hashedNewPassword = await hashPassword(newPassword)

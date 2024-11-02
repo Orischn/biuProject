@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import ChangePassword from "../changePassword/ChangePassword";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import InputFile from "../inputFile/InputFile";
 
 function GeneralSettingsPage({ token, userId }) {
-    
+    const navigate = useNavigate();
     const [fileName, setFileName] = useState('');
     const [fileContent, setFileContent] = useState('');
     const [error, setError] = useState('')
@@ -19,6 +20,9 @@ function GeneralSettingsPage({ token, userId }) {
                 alert(res.data)
             } else if (res === 400) {
                 setError(res.data)
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         e.preventDefault();

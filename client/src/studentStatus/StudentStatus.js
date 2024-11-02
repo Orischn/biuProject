@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import TaskDetails from "../taskDetails/TaskDetails";
 
 
 function StudentStatus({token, selectedStudent, yearOption}) {
-    
+    const navigate = useNavigate();
     const [taskList, setTaskList] = useState([]);
     const [average, setAverage] = useState(0);
     
@@ -33,6 +34,9 @@ function StudentStatus({token, selectedStudent, yearOption}) {
                     let user = task.submitList.find(user => user.userId === selectedStudent.userId);
                     return (user.grade !== undefined && user.grade !== null) ? user.grade : 0;
                 })
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
             console.log(res.data)
             return [];

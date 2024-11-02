@@ -1,10 +1,11 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router";
 import BotMessage from "../botMessage/BotMessage";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import StudentMessage from "../studentMessage/StudentMessage";
 
 function SendMessage({ token, selectedPractice, messages, setMessages, setLatestMessage, isTimeUp, isEndDatePassed }) {
-    
+    const navigate = useNavigate();
     const typeBar = useRef(null);
     const send = async (e) => {
         
@@ -24,9 +25,10 @@ function SendMessage({ token, selectedPractice, messages, setMessages, setLatest
         })
         if (res.status === 500) {
             setMessages(messages.slice(0, -1));
-        }
-        
-        if (res.status === 200) {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else if (res.status === 200) {
             setMessages(messages => [...messages, <BotMessage message={res.data} />]);
         }
         setLatestMessage(message);

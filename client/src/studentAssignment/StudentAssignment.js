@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, taskName,
-    refreshData, grade }) {
+function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
+    taskName, refreshData, grade }) {
+        const navigate = useNavigate();
         
         const [expand, setExpand] = useState(false);
         const [error, setError] = useState('');
@@ -25,6 +27,9 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
             
             if (res.status !== 200) { //error
                 alert(res.data)
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             } else {
                 refreshData();
             }
@@ -43,6 +48,9 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
             
             if (res.status !== 200) {
                 setError(res.data)
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             } else {
                 setError('')
                 refreshData();

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import DeleteAssignment from "../deleteAssignment/DeleteAssignment";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask, yearOption }) {
-
+    const navigate = useNavigate();
     const [numOfAssigned, setNumOfAssigned] = useState(0);
     const [numOfSubmits, setNumOfSubmits] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
@@ -50,6 +51,9 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         if (res.status !== 200) { //error
             setError(res.data);
             return;
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         } else {
             setError("Added Successfully");
             newTaskNameBar.current.value = "";
@@ -85,6 +89,9 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                 const submissionList = res.data;
                 setNumOfAssigned(submissionList.length);
                 setNumOfSubmits((submissionList.filter(user => user.didSubmit)).length);
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         fetchSubmissionStatus(taskName, yearOption.current.value);

@@ -158,7 +158,7 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
         const existingTask = await tasks.findOne({taskName: newTaskName, year: parseInt(year)});
         if(existingTask && taskName !== newTaskName) {
-            return { status: 403, error: 'A task with this name is already existing this year'}
+            return { status: 400, error: 'A task with this name is already existing this year'}
         }
 
         await tasks.updateOne(

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import Feedback from "../feedback/Feedback";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback,
     setNewGrade, isActive, refreshData, year, isStarted }) {
-        
+        const navigate = useNavigate();
         var input = useRef(null);
         
         const [inputGrade, setInputGrade] = useState(grade);
@@ -67,6 +68,9 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
             if (res === 500) {
                 alert(res.data);
                 return;
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
             setNewGrade(input.current.value)
             setIsEditing(false);

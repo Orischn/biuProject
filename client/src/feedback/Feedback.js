@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year }) {
-    
+    const navigate = useNavigate();
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -21,6 +22,9 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
         if (res.status !== 200) { //error
             alert(res.data);
             return;
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         } else {
             setShowConfirmationModal(true);
             refreshData()

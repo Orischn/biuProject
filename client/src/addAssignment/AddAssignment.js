@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import InputFile from "../inputFile/InputFile";
 
 
 function AddAssignment({ token, refreshData, yearOption }) {
-    
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false)
     const [showModal, setShowModal] = useState(false);
@@ -103,6 +104,9 @@ function AddAssignment({ token, refreshData, yearOption }) {
                 setError(res.data);
                 setIsSuccessful(false)
                 return;
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             } else {
                 setError("Added Successfully");
                 setIsSuccessful(true)

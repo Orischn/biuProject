@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
-
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -28,9 +29,10 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
             setError(res.data);
             setIsSuccessful(false);
             return;
-        }
-
-        else {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else {
             // setError("Deleted Successfully");
             setIsSuccessful(true);
             // setIsChanged(userId);

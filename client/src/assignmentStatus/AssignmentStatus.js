@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import SearchStudent from "../searchStudent/SearchStudent";
 import StudentAssignment from "../studentAssignment/StudentAssignment";
 
 
 function AssignemntStatus({ token, taskName, yearOption }) {
-    
+    const navigate = useNavigate();
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
     const [isChanged, setIsChanged] = useState(false);
@@ -61,6 +62,9 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                 .filter((grade) => grade !== undefined && grade !== null);
                 return gradeList;
                 
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
             console.log(res.data)
             return [];

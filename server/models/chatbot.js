@@ -72,7 +72,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         console.log(existingTask.endDate)
         console.log(user.canSubmitLate)
         if (!((user.canSubmitLate && time < user.lateSubmitDate) || time < existingTask.endDate)) {
-            return { status: 403, practice: "Submission date passed."};
+            return { status: 400, practice: "Submission date passed."};
         }
 
         answers = existingTask.questions.answers
@@ -161,7 +161,7 @@ async function submitPractice(userId, chatId) {
         }
         
         if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
-            return { status: 403, practice: "Submission date passed."};
+            return { status: 400, practice: "Submission date passed."};
         }
         botProcesses[chatId + userId].kill('SIGKILL');
         delete botProcesses[chatId + userId];
@@ -215,7 +215,7 @@ async function addMessage(userId, chatId, content, isBot) {
         var time = Date.now();
         if (practice.durationHours || practice.durationMinutes) {
             if (time - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
-                return { status: 403, error: "Submission timer ran out." }
+                return { status: 400, error: "Submission timer ran out." }
             }
         }
         

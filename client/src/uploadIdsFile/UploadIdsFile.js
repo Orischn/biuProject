@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function UploadIdFile({ token, title }) {
-    
+    const navigate = useNavigate();
     const [fileName, setFileName] = useState('');
     const [fileContent, setFileContent] = useState('');
     const [error, setError] = useState('');
@@ -25,6 +26,9 @@ function UploadIdFile({ token, title }) {
             if (res.status !== 200) {
                 setError(res.data);
                 setFileUploadedSuccessfully(false);
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             } else {
                 setError('Uploaded Successfully');
                 setFileUploadedSuccessfully(true);

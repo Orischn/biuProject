@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import ChangePassword from "../changePassword/ChangePassword";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import SearchStudent from "../searchStudent/SearchStudent";
@@ -9,6 +10,7 @@ import StudentStats from "../studentStats/StudentStats";
 
 
 function AdminFeed({ token, userId }) {
+    const navigate = useNavigate();
     const [studentList, setStudentList] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [fullName, setFullName] = useState("");
@@ -61,14 +63,19 @@ function AdminFeed({ token, userId }) {
                     }
                     return null; // Ensure that the map function returns null if no match
                 }));
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
-            
         }
         const fetchName = async () => {
             const res = await api.get(`/api/getStudent/${userId}`);
             if (res.status === 200) {
                 const user = res.data;
                 setFullName(user.firstName + " " + user.lastName);
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         

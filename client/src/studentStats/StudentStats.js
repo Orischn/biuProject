@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import ChatsHistory from "../chatsHistory/ChatsHistory";
 import Grade from "../grade/Grade";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
+import { useNavigate } from "react-router";
 
 
 function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
+    const navigate = useNavigate();
     const [grades, setGrades] = useState([]);
     const [newGrade, setNewGrade] = useState(null);
     const [selectedGradeId, setSelectedGradeId] = useState(null);
@@ -23,6 +25,9 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
                 const practices = await res.data;
                 setPracticeList(practices);  // Update the practice list state
                 return practices;  // Return the practices for immediate use
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
             return [];
         }
@@ -45,6 +50,9 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
                     refreshData={refreshData} year={task.year} 
                     isStarted={practice ? true : false}/>
                 }))
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             } else {
                 alert(res.data);
             }

@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
-
+    const navigate = useNavigate();
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -120,9 +121,10 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
             setError(res.data);
             setIsSuccessful(false);
             return;
-        }
-
-        else {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else {
             setError("Added Successfully");
             setIsSuccessful(true);
             refreshData()

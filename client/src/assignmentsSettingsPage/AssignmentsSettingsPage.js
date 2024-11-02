@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import AddAssignment from "../addAssignment/AddAssignment";
 import AssignmentDetails from "../assignmentDetails/AssignmentDetails";
 import AssignemntStatus from "../assignmentStatus/AssignmentStatus";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refreshDataInFeed, isYearChanged }) {
+    const navigate = useNavigate();
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('')
@@ -35,6 +37,9 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
                         yearOption={yearOption} key={key}/>
                     }
                 }));
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import BotMessage from "../botMessage/BotMessage";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import StudentMessage from "../studentMessage/StudentMessage";
 
 
 function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
-    
+    const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     
     useEffect(() => {
@@ -47,6 +48,9 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
                         }));
                     }
                 })
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         fetchMessages();

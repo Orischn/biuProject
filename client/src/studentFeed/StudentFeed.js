@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import ChangePassword from "../changePassword/ChangePassword";
 import ChatFeed from "../chatFeed/ChatFeed";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
@@ -6,6 +7,7 @@ import Practice from "../practice/Practice";
 
 
 function StudentFeed({ token, userId }) {
+    const navigate = useNavigate();
     const [taskList, setTaskList] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [selectedPractice, setSelectedPractice] = useState(null);
@@ -41,6 +43,9 @@ function StudentFeed({ token, userId }) {
                         refreshData={refreshData} />
                     }
                 }));
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
 
@@ -51,6 +56,9 @@ function StudentFeed({ token, userId }) {
                 const user = res.data
                 setFullName(user.firstName + " " + user.lastName);
                 setYear(user.year);
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
         

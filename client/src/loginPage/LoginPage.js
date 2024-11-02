@@ -5,7 +5,7 @@ import api from "../handleTokenRefresh/HandleTokenRefresh";
 import InputText from "../inputText/InputText";
 
 
-function LoginPage({ setUserId }) {
+function LoginPage({ setToken }) {
   const navigate = useNavigate();
   const [userId, setUserIdTry] = useState('');
   const [password, setPassword] = useState('');
@@ -33,8 +33,8 @@ function LoginPage({ setUserId }) {
       type: 'password'
     }
   ]
-
-  const navigateTo = async (token) => {
+  
+  const navigateToken = async () => {
     const res = await api.get('/api/student/');
     console.log(res)
     if (res.status === 200) {
@@ -43,17 +43,19 @@ function LoginPage({ setUserId }) {
       } else {
         navigate('/studentFeed');
       }
+    } else if (res.status === 403) {
+      navigate('/');
+      return
     }
   }
-
+  
   useEffect(() => {
-    console.log(localStorage.accessToken)
-    if (localStorage.accessToken) {
-      navigateTo(localStorage.accessToken);
+    if (localStorage.getItem('accessToken')) {
+      navigateToken();
     }
   }, [])
-
-
+  
+  
   const infoInputList = neededInfo.map((data, key) => {
     return <InputText {...data} key={key} />;
   })
@@ -87,11 +89,15 @@ function LoginPage({ setUserId }) {
     if (res.status !== 200) {
       setError(res.data)
       return;
+    } else if (res.status === 403) {
+      navigate('/');
+      return
     }
     const token = res.data
     localStorage.setItem('accessToken', token);
-    setUserId(userId)
-    navigateTo(token);
+    setToken(token)
+    localStorage.setItem('userId', userId)
+    navigateToken();
   }
   return (
     <>

@@ -236,6 +236,9 @@ function RegisterPage() {
         if (res.status !== 201) {
             setError(res.data);
             return;
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         }
         navigate('/loginPage')
     };

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
+import { useNavigate } from "react-router";
 
 function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice, refreshData }) {
-    
+    const navigate = useNavigate();
     const hasTimePassed = function (targetDate) {
         const currentDate = new Date();
         return targetDate < currentDate;
@@ -54,6 +55,9 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         if (res.status === 200) {
             const practice = res.data
             setSelectedPractice(practice);
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         }
     };
     
@@ -88,14 +92,17 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     setIsTimeUp(hasTimePassed(practice.startDate + practice.durationHours * 3600000
                         + practice.durationMinutes * 60000));
                         setIsEndDatePassed(hasTimePassed(practice.endDate));
-                    } else {
-                        setIsCreated(false); // make sure it's false when no matching practice is found
-                    }
+                } else {
+                    setIsCreated(false); // make sure it's false when no matching practice is found
                 }
-            };
-            fetchPractice();
+            } else if (res.status === 403) {
+                navigate('/');
+                return
+            }
+        }
+        fetchPractice();
             
-        }, [selectedTask, task.taskName, token]);
+    }, [selectedTask, task.taskName, token]);
         
         return (
             <>

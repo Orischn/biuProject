@@ -1,7 +1,8 @@
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function AddPractice({token, selectedTask, setSelectedTask}) {
-
+    const navigate = useNavigate();
     const add = async function (e) {
 
         const res = await api.get('api/addPractice/', {
@@ -10,6 +11,9 @@ function AddPractice({token, selectedTask, setSelectedTask}) {
 
         if (res.status === 201) {
             setSelectedTask(res.data);
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         }
     };
 

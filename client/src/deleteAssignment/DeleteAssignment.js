@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function DeleteAssignment({ token, taskName, year, refreshData }) {
-    
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -27,6 +28,9 @@ function DeleteAssignment({ token, taskName, year, refreshData }) {
             setError(res.data);
             setIsSuccessful(false);
             return;
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         } else {
             setIsSuccessful(true);
             refreshData();

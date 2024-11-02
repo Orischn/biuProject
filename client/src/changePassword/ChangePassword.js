@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function ChangePassword({ token, userId }) {
-    
+    const navigate = useNavigate();
     const currentPassBar = useRef(null);
     const newPassBar = useRef(null);
     const newPassBarCon = useRef(null);
@@ -55,9 +56,10 @@ function ChangePassword({ token, userId }) {
             setError(res.data);
             setIsSuccessful(false);
             return;
-        }
-        
-        else {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else {
             
             setError("Changed Successfully");
             setIsSuccessful(true);
