@@ -104,8 +104,11 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     <div className="col-2">
                         <b><u>Id Number</u></b>
                     </div>
-                    <div className="col-3">
-                        <b><u>Submission Status</u></b>
+                    <div className="col-1">
+                        <b><u>Status</u></b>
+                    </div>
+                    <div className="col-2">
+                        <b><u>Grade</u></b>
                     </div>
 
                 </div>
