@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
@@ -19,22 +20,12 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
 
     const deleteStudent = async function (e) {
 
-        const res = await fetch('http://localhost:5000/api/deleteUser', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "userId": userId
-            })
-
+        const res = await api.post('/api/deleteUser', {
+            "userId": userId
         })
 
         if (res.status !== 200) { //error
-            await res.text().then((errorMessage) => {
-                setError(errorMessage);
-            })
+            setError(res.data);
             setIsSuccessful(false);
             return;
         }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import DeleteAssignment from "../deleteAssignment/DeleteAssignment";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, setSelectedTask, yearOption }) {
@@ -39,25 +40,15 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
-        const res = await fetch('http://localhost:5000/api/updateTask', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "taskName": taskName,
-                "newTaskName": newTaskName,
-                "newEndDate": new Date(newEndDate).getTime(),
-                "year": yearOption.current.value
-            })
-
+        const res = await api.post('/api/updateTask', {
+            "taskName": taskName,
+            "newTaskName": newTaskName,
+            "newEndDate": new Date(newEndDate).getTime(),
+            "year": yearOption.current.value
         })
 
         if (res.status !== 200) { //error
-            await res.text().then((errorMessage) => {
-                setError(errorMessage);
-            })
+            setError(res.data);
             return;
         } else {
             setError("Added Successfully");
@@ -89,18 +80,11 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
 
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
-            const res = await fetch(`http://localhost:5000/api/getSubmissionStatus/${taskName}/${year}`, {
-                method: 'get',
-                headers: {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
+            const res = await api.get(`/api/getSubmissionStatus/${taskName}/${year}`);
             if (res.status === 200) {
-                await res.text().then((submissionList) => {
-                    setNumOfAssigned(JSON.parse(submissionList).length);
-                    setNumOfSubmits((JSON.parse(submissionList).filter(user => user.didSubmit)).length);
-                });
+                const submissionList = res.data;
+                setNumOfAssigned(submissionList.length);
+                setNumOfSubmits((submissionList.filter(user => user.didSubmit)).length);
             }
         }
         fetchSubmissionStatus(taskName, yearOption.current.value);

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
@@ -102,31 +103,21 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
 
 
-        const res = await fetch('http://localhost:5000/api/createUser', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "user": {
-                    "password": password,
-                    "permissions": false,
-                    "firstName": firstName,
-                    "lastName": lastName,
-                    "userId": userId,
-                    "year": year,
-                    "email": email,
-                    "isSelfRegistered": false
-                }
-            })
-
+        const res = await api.post('/api/createUser', {
+            "user": {
+                "password": password,
+                "permissions": false,
+                "firstName": firstName,
+                "lastName": lastName,
+                "userId": userId,
+                "year": year,
+                "email": email,
+                "isSelfRegistered": false
+            }
         })
 
         if (res.status !== 201) { //error
-            await res.text().then((errorMessage) => {
-                setError(errorMessage);
-            })
+            setError(res.data);
             setIsSuccessful(false);
             return;
         }

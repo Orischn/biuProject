@@ -8,9 +8,8 @@ const app = express();
 
 
 const options = {
-    origin: 'http://localhost:3000', // Allow requests from this origin
-    methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
+    origin: 'http://localhost:3000',
+    credentials: true,
 };
 
 // SSL certificate and private key

@@ -19,7 +19,6 @@ const checkToken = async (authorization) => {
 }
 
 const postToken = async (user) => {
-    console.log(user);
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -36,8 +35,9 @@ const postToken = async (user) => {
         if (!passwordMatch) {
             return { status: 401, token: "Password is incorrect." };
         }
-        const token = jwt.sign(user.userId, process.env.SECRET_TOKEN);
-        return { status: 200, token: token };
+        const token = jwt.sign({ id: user.userId }, process.env.SECRET_TOKEN, {expiresIn: '2h'});
+        const refreshToken = jwt.sign({ id: user.userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
+        return { status: 200, token: token, refreshToken: refreshToken };
     } catch (error) {
         return { status: 500, token: error.message };
     } finally {
@@ -49,7 +49,7 @@ const getId = async (authorization) => {
     try {
         const token = authorization.split(" ")[1];
         const data = jwt.verify(token, process.env.SECRET_TOKEN);
-        return data;
+        return data.id;
     } catch (err) {
         return null;
     }
