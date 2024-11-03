@@ -23,7 +23,7 @@ async function uploadIdFile(fileContent) {
     return error ? { status: 500, error: error.message } : { status: 200, error: '' };
 }
 
-async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, format, questions, botPic, users) {
+async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, questions, botPic, users) {
     try {
         const existingTask = await tasks.findOne({ taskName:
             { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } })
@@ -149,8 +149,6 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             {
                 $set: {
                     taskName: mongoSanitize(newTaskName),
-                },
-                $max: {
                     endDate: parseInt(newEndDate),
                 },
             },
@@ -161,9 +159,11 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             {
                 $set: {
                     chatId: mongoSanitize(newTaskName),
-                },
-                $max: {
-                    endDate: parseInt(newEndDate),
+                    endDate: { $cond: { 
+                        if: { $eq: [existingTask.endDate, "$endDate"] },
+                        then: parseInt(newEndDate),
+                        else: "$endDate",
+                        },
                 },
             },
         );
