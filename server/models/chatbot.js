@@ -45,13 +45,23 @@ async function getPractices(userId) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const res = await practices.find({ userId: { $eq: mongoSanitize(userId) } }).toArray();
-        practices.forEach(practice => {
-            practice.botPic = Buffer.from(practice.botPic, 'base64').toString('utf-8');
-            practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
-            practice.messages = practice.messages.map((encMessage) => {
-                return Buffer.from(encMessage, 'base64').toString('utf-8');
-            })
+        
+        res.forEach(practice => {
+            if (typeof practice.botPic === 'string') {
+                practice.botPic = Buffer.from(practice.botPic, 'base64').toString('utf-8');
+            }
+            if (typeof practice.feedback === 'string') {
+                practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
+            }
+            if (Array.isArray(practice.messages)) {
+                practice.messages = practice.messages.map((encMessage) => {
+                    return typeof encMessage === 'string'
+                        ? Buffer.from(encMessage, 'base64').toString('utf-8')
+                        : encMessage;
+                });
+            }
         });
+
         return { status: 200, practices: res.reverse() };
     } catch (error) {
         return { status: 500, practices: error.message };
@@ -59,6 +69,8 @@ async function getPractices(userId) {
         await client.close();
     }
 }
+
+
 
 
 async function postPractice(userId, chatId, durationHours, durationMinutes, endDate, year) {
@@ -287,7 +299,7 @@ async function getSubmissionData(chatId, userId, year) {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ chatId: { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) } });
+        const task = await tasks.findOne({ taskName: { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) } });
         return { status: 200, submitData: task.submitList.find(user => user.userId === userId) }
     } catch (error) {
         return { status: 500, submitData: error.message };

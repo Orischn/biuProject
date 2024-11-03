@@ -15,7 +15,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isEndDatePassed, setIsEndDatePassed] = useState(hasTimePassed(task.endDate));
-    const [initialEndDate, setInitialEndDate] = useState(task.endDate);
+    const [trueEndDate, setTrueEndDate] = useState(task.endDate);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +94,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
             const res = await api.get(`/api/getUserSubmitData/${task.taskName}/${task.year}`);
             if (res.status === 200) {
                 setIsEndDatePassed(hasTimePassed(res.data.endDate))
-                setInitialEndDate(res.data.endDate);
+                setTrueEndDate(res.data.endDate);
             }
         }
 
@@ -132,7 +132,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
                 onClick={() => {
-                    if (isEndDatePassed) {
+                    if (isEndDatePassed && !isCreated) {
                         alert('wow');
                         return;
                     } else
@@ -182,21 +182,21 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                             </>
                         ) : isTimeUp ? (
                             <>
-                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
+                            submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />
-                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(trueEndDate).split('T')[1].slice(0, -3)}
                             </>
                         ) : isCreated ? (
                             <>
-                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
+                            submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />
-                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(trueEndDate).split('T')[1].slice(0, -3)}
                             </>
                         ) : (
                             <>
-                            submission until {convertTimestampToDate(initialEndDate).split('T')[0]}
+                            submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />
-                            at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
+                            at {convertTimestampToDate(trueEndDate).split('T')[1].slice(0, -3)}
                             </>
                         )
                     }
@@ -213,7 +213,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                                     <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                                 }
                             </div>
-                            {task.durationHours ? (
+                            {task.durationHours || task.durationMinutes ? (
                                 <div className="modal-body">
                                     Are you sure you want to start <b>{task.taskName}</b>?<br />
                                     This will start a timer of&nbsp;

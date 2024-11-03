@@ -21,8 +21,10 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
     useEffect(() => {
         const fetchPractices = async () => {
             const res = await api.get(`/api/studentPractices/${selectedStudent.userId}`)
+            console.log(res)
             if (res.status === 200) {
                 const practices = await res.data;
+                console.log(practices)
                 setPracticeList(practices);  // Update the practice list state
                 return practices;  // Return the practices for immediate use
             } else if (res.status === 403) {
@@ -38,7 +40,8 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption}) {
             if (res.status === 200) {
                 setGrades(res.data.reverse().map((task, key) => {
                     const practice = practices.find(practice => practice.chatId === task.taskName);
-                    const user = task.submitList.find(user => user.userId === selectedStudent.userId)
+                    const user = task.submitList.find(user => user.userId === selectedStudent.userId);
+                    // console.log(practice)
                     return <Grade selectedGradeId={selectedGradeId}
                     setSelectedGradeId={setSelectedGradeId}
                     token={token} selectedStudent={selectedStudent}

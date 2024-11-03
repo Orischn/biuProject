@@ -25,8 +25,10 @@ async function uploadIdFile(fileContent) {
 
 async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, questions, botPic, users) {
     try {
-        const existingTask = await tasks.findOne({ taskName:
-            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } })
+        const existingTask = await tasks.findOne({
+            taskName:
+                { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) }
+        })
         if (existingTask) {
             return { status: 409, error: `This task already exists this year` }
         }
@@ -48,7 +50,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
             endDate: parseInt(endingDate),
             questions: Buffer.from(JSON.stringify(questions)).toString('base64'),
             durationHours: durationHours ? parseInt(durationHours) : null,
-            durationMinutes: durationMinutes ?  parseInt(durationMinutes) : null,
+            durationMinutes: durationMinutes ? parseInt(durationMinutes) : null,
             year: parseInt(year),
             botPic: Buffer.from(botPic).toString('base64'),
             submitList: submitList,
@@ -82,7 +84,7 @@ async function getTask(taskName, year) {
 
 async function adminViewTasks(year) {
     try {
-        const taskList = await tasks.find({year: { $eq: parseInt(year) }}).toArray();
+        const taskList = await tasks.find({ year: { $eq: parseInt(year) } }).toArray();
         if (!taskList) {
             return { status: 404, tasks: 'No existing tasks' }
         }
@@ -94,8 +96,10 @@ async function adminViewTasks(year) {
 
 async function getSubmissionStatus(taskName, year) {
     try {
-        const task = await tasks.findOne({ taskName:
-            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
+        const task = await tasks.findOne({
+            taskName:
+                { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) }
+        });
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }
@@ -108,8 +112,9 @@ async function getSubmissionStatus(taskName, year) {
 async function postFeedback(userId, chatId, feedback, year) {
     try {
         await practices.updateOne(
-            { chatId:
-                { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) },
+            {
+                chatId:
+                    { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) },
                 year: { $eq: mongoSanitize(year) }
             },
             {
@@ -138,10 +143,12 @@ async function postFeedback(userId, chatId, feedback, year) {
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
-        const existingTask = await tasks.findOne({taskName:
-            { $eq: mongoSanitize(newTaskName) }, year: { $eq: parseInt(year) } });
-        if(existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
-            return { status: 400, error: 'A task with this name already exists this year'}
+        const existingTask = await tasks.findOne({
+            taskName:
+                { $eq: mongoSanitize(newTaskName) }, year: { $eq: parseInt(year) }
+        });
+        if (existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
+            return { status: 400, error: 'A task with this name already exists this year' }
         }
 
         await tasks.updateOne(
@@ -154,32 +161,47 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             },
         );
 
+
+        await tasks.updateMany(
+            { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
+            {
+                $max: {
+                    'submitList.$[].endDate': newEndDate
+                },
+            },
+        );
+
         await practices.updateMany(
             { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
                 $set: {
                     chatId: mongoSanitize(newTaskName),
-                    endDate: { $cond: { 
-                        if: { $eq: [existingTask.endDate, "$endDate"] },
-                        then: parseInt(newEndDate),
-                        else: "$endDate",
+                    endDate: {
+                        $cond: {
+                            if: { $eq: [existingTask.endDate, "$endDate"] },
+                            then: parseInt(newEndDate),
+                            else: "$endDate",
                         },
+                    },
                 },
-            },
-        );
-
+            });
         return { status: 200, error: '' };
     } catch (error) {
+        console.log(error.message)
         return { status: 500, error: error.message };
     }
 }
 
 async function removeTask(taskName, year) {
     try {
-        await tasks.deleteMany({ taskName:
-            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
-        await practices.deleteMany({ chatId:
-            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
+        await tasks.deleteMany({
+            taskName:
+                { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) }
+        });
+        await practices.deleteMany({
+            chatId:
+                { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) }
+        });
         return { status: 200, error: '' };
     } catch (error) {
         return { status: 500, error: error.message };
@@ -189,8 +211,10 @@ async function removeTask(taskName, year) {
 async function giveLateSubmit(taskName, userId, endDate) {
     try {
         await tasks.updateOne(
-            { taskName:
-                { $eq: mongoSanitize(taskName) }, 'submitList.userId': { $eq: mongoSanitize(userId) } },
+            {
+                taskName:
+                    { $eq: mongoSanitize(taskName) }, 'submitList.userId': { $eq: mongoSanitize(userId) }
+            },
             {
                 $set: {
                     'submitList.$.endDate': parseInt(endDate),
