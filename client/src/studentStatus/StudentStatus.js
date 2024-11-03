@@ -27,7 +27,7 @@ function StudentStatus({token, selectedStudent, yearOption}) {
                     let user = task.submitList.find(user => user.userId === selectedStudent.userId);
                     return <TaskDetails taskName={task.taskName} 
                     didSubmit={user.didSubmit} 
-                    canSubmitLate={user.canSubmitLate}
+                    endDate={user.endDate}
                     grade={user.grade ? user.grade : ''} key={key}/>
                 }))
                 return tasks.map((task, key) => {
@@ -66,7 +66,7 @@ function StudentStatus({token, selectedStudent, yearOption}) {
         <b><u>Submission Status</u></b>
         </div>
         <div className="col-3">
-        <b><u>Late Submission</u></b>
+        <b><u>Submit Until</u></b>
         </div>
         <div className="col-3">
         <b><u>Grade</u></b>
