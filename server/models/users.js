@@ -48,7 +48,7 @@ async function getUser(userId) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const user = await users.findOne({ userId: userId });
+    const user = await users.findOne({ userId: { $eq: userId } });
     if (!user) {
       return { status: 404, user: "User doesn't exist in the database." };
     }
@@ -67,7 +67,7 @@ async function getStudents() {
     const db = client.db('ChatBot');
     const users = db.collection('users');
 
-    const allStudents = await users.find({ permissions: false }).toArray();
+    const allStudents = await users.find({ permissions: { $eq: false } }).toArray();
     if (!allStudents) {
       return { status: 404, students: "No students were found in the database." };
     }
@@ -108,7 +108,7 @@ async function postUser(user) {
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const tasks = db.collection('tasks');
-    const existingUser = await users.findOne({ userId: user.userId });
+    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
     if (existingUser) {
       return { status: 409, error: "This user ID already exists!" };
     }
@@ -159,7 +159,7 @@ async function postUser(user) {
     });
 
     await tasks.updateMany(
-      { year: parseInt(user.year) },
+      { year: { $eq: parseInt(user.year) } },
       {
         $push: {
           submitList: {
@@ -185,16 +185,16 @@ async function deleteUser(user) {
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const tasks = db.collection('tasks');
-    const existingUser = await users.findOne({ userId: user.userId });
+    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
     const practices = db.collection('practices');
-    await practices.deleteMany({ userId: user.userId });
-    await users.deleteOne({ userId: user.userId });
+    await practices.deleteMany({ userId: { $eq: user.userId } });
+    await users.deleteOne({ userId: { $eq: user.userId } });
 
     await tasks.updateMany(
-      { 'submitList.userId': user.userId },
+      { 'submitList.userId': { $eq: user.userId } },
       {
         $pull: {
           submitList: { userId: user.userId },
@@ -218,7 +218,7 @@ async function changeAdminPermissions(user, permissions) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ userId: user.userId });
+    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
@@ -244,6 +244,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
+    const isValidUserId = typeof user.userId === 'string' && /^[a-fA-F0-9]{24}$/.test(user.userId);
 
     if (!await bcrypt.compare(oldPassword, user.password)) {
       return { status: 400, error: "Old password isn't correct." };
@@ -255,7 +256,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
 
     const hashedNewPassword = await hashPassword(newPassword)
 
-    await users.updateOne({ userId: user.userId },
+    await users.updateOne({ userId: { $eq: user.userId } },
       {
         $set: {
           password: hashedNewPassword

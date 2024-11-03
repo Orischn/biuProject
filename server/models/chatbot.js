@@ -27,7 +27,7 @@ async function getPractice(chatId, userId) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        const practice = await practices.findOne({ chatId: chatId, userId: userId });
+        const practice = await practices.findOne({ chatId: { $eq: chatId }, userId: { $eq: userId } });
         return { status: 200, practice: practice };
     } catch (error) {
         return { status: 500, practice: error.message };
@@ -42,7 +42,7 @@ async function getPractices(userId) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        const res = await practices.find({ userId: userId }).toArray();
+        const res = await practices.find({ userId: { $eq: userId } }).toArray();
         return { status: 200, practices: res.reverse() };
     } catch (error) {
         return { status: 500, practices: error.message };
@@ -60,7 +60,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
         
-        const existingTask = await tasks.findOne({ taskName: chatId, year: year });
+        const existingTask = await tasks.findOne({ taskName: { $eq: chatId }, year: { $eq: year } });
         if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
@@ -124,11 +124,11 @@ async function deletePractice(chatId, userId) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        const practice = await practices.findOne({ chatId: chatId, userId: userId });
+        const practice = await practices.findOne({ chatId: { $eq: chatId }, userId: { $eq: userId } });
         if (!practice) {
             return { status: 404, error: "Can not delete practice since the practice doesn't exist." };
         }
-        await practices.deleteOne({ chatId: chatId, userId: userId });
+        await practices.deleteOne({ chatId: { $eq: chatId }, userId: { $eq: userId } });
         return { status: 200, error: "" };
     } catch (error) {
         return { status: 500, error: error.message };
@@ -144,7 +144,7 @@ async function submitPractice(userId, chatId) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ taskName: chatId });
+        const task = await tasks.findOne({ taskName: { $eq: chatId } });
         if (!task) {
             return { status: 404, error: "Can not submit practice since the practice doesn't exist." };
         }
@@ -157,7 +157,7 @@ async function submitPractice(userId, chatId) {
         botProcesses[chatId + userId].kill('SIGKILL');
         delete botProcesses[chatId + userId];
         await practices.updateOne(
-            { chatId: chatId, userId: userId, active: true },
+            { chatId: { $eq: chatId }, userId: { $eq: userId }, active: { $eq: true } },
             {
                 $set: {
                     active: false,
@@ -167,7 +167,7 @@ async function submitPractice(userId, chatId) {
         );
         
         await tasks.updateOne(
-            { taskName: chatId, 'submitList.userId': userId },
+            { taskName: { $eq: chatId }, 'submitList.userId': { $eq: userId } },
             {
                 $set: {
                     'submitList.$.didSubmit': true,
@@ -199,7 +199,7 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        const practice = await practices.findOne({ chatId: chatId, userId: userId, active: true });
+        const practice = await practices.findOne({ chatId: { $eq: chatId }, userId: { $eq: userId }, active: { $eq: true } });
         if (!practice) {
             return { status: 404, error: "Couldn't find chat" };
         }
@@ -211,7 +211,7 @@ async function addMessage(userId, chatId, content, isBot) {
         }
         
         await practices.updateOne(
-            { chatId: chatId, userId: userId, active: true },
+            { chatId: { $eq: chatId }, userId: { $eq: userId }, active: { $eq: true } },
             {
                 $push: {
                     messages: {
@@ -239,7 +239,7 @@ async function updateGrade(userId, chatId, newGrade) {
         const practices = db.collection('practices');
         const tasks = db.collection('tasks');
         await practices.updateOne(
-            { chatId: chatId, userId: userId, active: false },
+            { chatId: { $eq: chatId }, userId: { $eq: userId }, active: { $eq: false } },
             {
                 $set: {
                     grade: newGrade,
@@ -248,7 +248,7 @@ async function updateGrade(userId, chatId, newGrade) {
         );
         
         await tasks.updateOne(
-            { taskName: chatId, "submitList.userId": userId },
+            { taskName: { $eq: chatId }, "submitList.userId": { $eq: userId } },
             {
                 $set: {
                     "submitList.$.grade": newGrade
@@ -263,6 +263,21 @@ async function updateGrade(userId, chatId, newGrade) {
     }
 }
 
+async function getSubmissionData(chatId, userId, year) {
+    const client = new MongoClient("mongodb://127.0.0.1:27017");
+    try {
+        await client.connect();
+        const db = client.db('ChatBot');
+        const tasks = db.collection('tasks');
+        const task = await tasks.findOne({ chatId: { $eq: chatId }, year: { $eq: parseInt(year) } });
+        return { status: 200, submitData: task.submitList.find(user => user.userId === userId) }
+    } catch (error) {
+        return { status: 500, submitData: error.message };
+    } finally {
+        await client.close()
+    }
+}
+
 module.exports = {
     getPractice,
     getPractices,
@@ -272,5 +287,5 @@ module.exports = {
     addMessage,
     getMessages,
     updateGrade,
-    botProcesses,
+    getSubmissionData,
 };

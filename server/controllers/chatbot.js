@@ -1,5 +1,5 @@
 const { getTasks, getTask } = require("../models/adminPanel");
-const { postPractice, getPractice, getPractices, addMessage, getMessages, submitPractice, botProcesses } = require("../models/chatbot");
+const { postPractice, getPractice, getPractices, addMessage, getMessages, submitPractice, botProcesses, getSubmissionData } = require("../models/chatbot");
 const { getId } = require("../models/token");
 const os = require('os');
 
@@ -53,6 +53,12 @@ const viewTasks = async (req, res) => {
     return res.status(result.status).end(JSON.stringify(result.tasks));
 }
 
+const getUserSubmitData = async (req, res) => {
+    const userId = await getId(req.headers.authorization);
+    const result = await getSubmissionData(req.params.taskName, userId, req.params.year)
+    return res.status(result.status).json(result.submitData).end()
+}
+
 module.exports = {
     decipherQuestion,
     addPractice,
@@ -60,4 +66,5 @@ module.exports = {
     recvPractice,
     finishPractice,
     viewTasks,
+    getUserSubmitData,
 };
