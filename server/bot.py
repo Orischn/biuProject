@@ -41,7 +41,7 @@ def answer_question(user_input):
     best_question = current_questions[best_match_idx]
     return best_question["answer"]
 
-data = json.loads(argv[2])
+data = json.loads(argv[1])
 while True:
     prompt = input()
     chat_id = input()

@@ -11,7 +11,6 @@ const decipherQuestion = async (req, res) => {
     }
 
     botProcesses[req.body.chatId + userId].stdin.write(`${req.body.msg}\n${req.body.chatId}\n${userId}\n`);
-    // while (!botProcesses[req.body.chatId + userId].dataRead);
     await new Promise((resolve) => {
         setTimeout(resolve, 2000);
     });

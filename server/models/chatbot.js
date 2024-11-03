@@ -20,11 +20,16 @@ async function getPractice(chatId, userId) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const practice = await practices.findOne({ chatId: { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) } });
+        if (!practice) {
+            return { status: 404, practice: null}
+        }
         practice.botPic = Buffer.from(practice.botPic, 'base64').toString('utf-8');
         practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
-        practice.messages = chat.messages.map((encMessage) => {
-            return Buffer.from(encMessage, 'base64').toString('utf-8');
-        })
+        if (practice.messages) {
+            practice.messages.forEach((encMessage) => {
+                encMessage.content = Buffer.from(encMessage.content, 'base64').toString('utf-8');
+            })
+        }
         return { status: 200, practice: practice };
     } catch (error) {
         return { status: 500, practice: error.message };
@@ -73,7 +78,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const user = existingTask.submitList.find(user => user.userId === mongoSanitize(userId))
         
         const time = Date.now()
-        if (!(time < max(user.endDate, existingTask.endDate))) {
+        if (!(time < Math.max(user.endDate, existingTask.endDate))) {
             return { status: 400, practice: "Submission date passed.\nWomp Womp BITCH."};
         }
         const decodedQuestions = JSON.parse(Buffer.from(existingTask.questions, 'base64').toString('utf-8'));
@@ -83,16 +88,15 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             decodedQuestions.questions[i]['answer'] = answers[answerIdx]["answer"][i];
         }
         let questions = { "questions": decodedQuestions.questions }
-        let botProcess = spawn('python3', ['-X', 'utf8', './bot.py', 0, JSON.stringify(questions)], {
+        let botProcess = spawn('python3', ['-X', 'utf8', './bot.py', JSON.stringify(questions)], {
             encoding: 'utf-8'
         })
-        botProcess.id = mongoSanitize(chatId) + mongoSanitize(userId)
         botProcess.stdout.on('data', (data) => {
+            console.log(data.toString())
             messageData = data.toString().split('|');
             addMessage(messageData[1], messageData[0], messageData[2], true);
         })
-        botProcesses[botProcess.id] = botProcess
-      
+        botProcesses[chatId + userId] = botProcess
         await new Promise((resolve) => {
             setTimeout(resolve, 15000);
         });
@@ -105,7 +109,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             feedback: user ? user.feedback : '',
             startDate: Date.now(),
             submissionDate: null,
-            endDate: max(parseInt(endDate), user.endDate),
+            endDate: Math.max(parseInt(endDate), user.endDate),
             durationHours: parseInt(durationHours),
             durationMinutes: parseInt(durationMinutes),
             year: parseInt(year),
@@ -160,7 +164,7 @@ async function submitPractice(userId, chatId) {
         var time = Date.now();
         const submitData = task.submitList.find(user => user.userId === userId)
         
-        if (!(time < max(submitData.endDate, task.endDate))) {
+        if (!(time < Math.max(submitData.endDate, task.endDate))) {
             return { status: 400, practice: "Submission date passed."};
         }
         botProcesses[chatId + userId].kill('SIGKILL');
@@ -194,11 +198,12 @@ async function submitPractice(userId, chatId) {
 async function getMessages(chatId, userId) {
     try {
         const chat = (await getPractice(chatId, userId)).practice;
-        let decodedMessages = chat.messages.map((encMessage) => {
-            return Buffer.from(encMessage, 'base64').toString('utf-8');
+        chat.messages.forEach((encMessage) => {
+            encMessage.content = Buffer.from(encMessage.content, 'base64').toString('utf-8');
         })
-        return { status: 200, messages: decodedMessages };
+        return { status: 200, messages: chat.messages };
     } catch (error) {
+        console.log(error.message)
         return { status: 500, messages: error.message };
     }
 }
@@ -301,4 +306,5 @@ module.exports = {
     getMessages,
     updateGrade,
     getSubmissionData,
+    botProcesses,
 };
