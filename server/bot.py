@@ -33,7 +33,9 @@ def answer_question(user_input):
     similarities = util.pytorch_cos_sim(user_input_embedding, questions_embedding)
     best_match_idx = similarities.argmax().item()
     score = similarities[0][best_match_idx].item()
-    if score < 0.6:
+    with open('scores.txt', 'w') as file:
+         file.write(f'{score}\n')
+    if score < 0.75:
             return "Failed to understand the question"
     values, _ = torch.topk(similarities, 2)
     if values.max().item() - values.min().item() < 0.015:
