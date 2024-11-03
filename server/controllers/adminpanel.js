@@ -92,6 +92,7 @@ const createFeedback = async (req, res) => {
 }
 
 const allowLateSubmit = async (req, res) => {
+    console.log(req.body.endDate)
     const result = await giveLateSubmit(req.body.taskName, req.body.userId, req.body.endDate);
     return res.status(result.status).end(result.error);
 }

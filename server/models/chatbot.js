@@ -68,8 +68,8 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const user = existingTask.submitList.find(user => user.userId === userId)
         
         const time = Date.now()
-        if (!(time < max(user.endDate, existingTask.endDate))) {
-            return { status: 400, practice: "Submission date passed.\nWomp Womp BITCH."};
+        if (!(time < Math.max(user.endDate, existingTask.endDate))) {
+            return { status: 400, practice: "Submission date passed!"};
         }
 
         answers = existingTask.questions.answers
@@ -100,7 +100,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             feedback: user ? user.feedback : '',
             startDate: Date.now(),
             submissionDate: null,
-            endDate: max(endDate, user.endDate),
+            endDate: Math.max(endDate, user.endDate),
             durationHours: durationHours,
             durationMinutes: durationMinutes,
             year: year,
@@ -151,7 +151,7 @@ async function submitPractice(userId, chatId) {
         var time = Date.now();
         const submitData = task.submitList.find(user => user.userId === userId)
         
-        if (!(time < max(submitData.endDate, task.endDate))) {
+        if (!(time < Math.max(submitData.endDate, task.endDate))) {
             return { status: 400, practice: "Submission date passed."};
         }
         botProcesses[chatId + userId].kill('SIGKILL');

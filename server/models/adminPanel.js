@@ -64,7 +64,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 canSubmitLate: false,
                 grade: null,
                 feedback: '',
-                endDate: null,
+                endDate: endingDate,
             }));
         await tasks.insertOne({
             taskName: taskName,

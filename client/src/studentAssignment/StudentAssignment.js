@@ -22,7 +22,7 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
         const res = await api.post('/api/allowLateSubmit', {
             "taskName": taskName,
             "userId": userId,
-            "newDate": new Date(newDate).getTime()
+            "endDate": new Date(newDate).getTime()
         })
 
         if (res.status !== 200) { //error

@@ -30,6 +30,13 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     
     const handleConfirm = async () => {
         add();
+        // console.log(res)
+        // if (res === 400) {
+        //     setShowModal(false);
+        //     alert('pop a modal that says you are late and cant start')
+        //     return;
+        // }
+
         setIsLoading(true);
         await new Promise((resolve) => {
             setTimeout(resolve, 15000);
@@ -58,6 +65,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         } else if (res.status === 403) {
             navigate('/');
             return
+        } else if (res.status === 400) {
+            return res.status;
         }
     };
     
@@ -112,10 +121,11 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
                 onClick={() => {
-                    if (isEndDatePassed) {
-                        alert('wow');
-                        return;
-                    } else {
+                    // if (isEndDatePassed) {
+                    //     alert('wow');
+                    //     return;
+                    // } else
+                     {
                         handleTaskClick()
                     }
                 }}
