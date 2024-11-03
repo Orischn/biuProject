@@ -66,7 +66,6 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                 navigate('/');
                 return
             }
-            console.log(res.data)
             return [];
             
         }

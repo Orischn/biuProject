@@ -38,7 +38,6 @@ function StudentStatus({token, selectedStudent, yearOption}) {
                 navigate('/');
                 return
             }
-            console.log(res.data)
             return [];
         }
         
