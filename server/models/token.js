@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
-
+const mongoSanitize = require('mongo-sanitize');
 
 
 const checkToken = async (authorization) => {
@@ -26,7 +26,7 @@ const postToken = async (user) => {
         const db = client.db('ChatBot');
         const users = db.collection('users');
 
-        const existingUser = await users.findOne({ userId: { $eq: user.userId } });
+        const existingUser = await users.findOne({ userId: { $eq: mongoSanitize(user.userId) } });
         if (!existingUser) {
             return { status: 404, token: "User doesn't exist." };
         }
@@ -36,8 +36,8 @@ const postToken = async (user) => {
         if (!passwordMatch) {
             return { status: 401, token: "Password is incorrect." };
         }
-        const token = jwt.sign({ id: user.userId }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
-        const refreshToken = jwt.sign({ id: user.userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
+        const refreshToken = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
         return { status: 200, token: token, refreshToken: refreshToken };
     } catch (error) {
         return { status: 500, token: error.message };

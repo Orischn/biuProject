@@ -20,7 +20,6 @@ function UploadIdFile({ token, title }) {
         }
         const uploadIds = async () => {
             const res = await api.post(`/api/uploadValidIdFile/`, {
-                'fileName': 'validIds.txt',
                 "fileContent": fileContent,
             })
             if (res.status !== 200) {

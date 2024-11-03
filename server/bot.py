@@ -33,7 +33,7 @@ def answer_question(user_input):
     similarities = util.pytorch_cos_sim(user_input_embedding, questions_embedding)
     best_match_idx = similarities.argmax().item()
     score = similarities[0][best_match_idx].item()
-    if score < 0.5:
+    if score < 0.6:
             return "Failed to understand the question"
     values, _ = torch.topk(similarities, 2)
     if values.max().item() - values.min().item() < 0.015:
@@ -41,7 +41,7 @@ def answer_question(user_input):
     best_question = current_questions[best_match_idx]
     return best_question["answer"]
 
-data = json.loads(argv[2])
+data = json.loads(argv[1])
 while True:
     prompt = input()
     chat_id = input()
