@@ -21,42 +21,50 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         setExpand(false);
     }
 
-    const newTaskNameBar = useRef(null);
+    // const newTaskNameBar = useRef(null);
     const newEndDateBar = useRef(null)
 
     const handleCancel = () => {
         setIsEditing(false);
-        newTaskNameBar.current.value = "";
+        // newTaskNameBar.current.value = "";
         newEndDateBar.current.value = "";
     }
 
     const editAssignment = async (e) => {
 
-        if (!newTaskNameBar.current.value.trim() || !newEndDateBar.current.value.trim()) {
-            setError('must fill both fields')
+        // if (!newTaskNameBar.current.value.trim() || !newEndDateBar.current.value.trim()) {
+        //     setError('must fill both fields')
+        //     return;
+        // }
+
+        if (!newEndDateBar.current.value.trim()) {
+            setError('must choose a new date')
             return;
         }
 
         e.preventDefault();
-        const newTaskName = newTaskNameBar.current.value.trim();
+        // const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
         const res = await api.post('/api/updateTask', {
             "taskName": taskName,
-            "newTaskName": newTaskName,
+            // "newTaskName": newTaskName,
             "newEndDate": new Date(newEndDate).getTime(),
             "year": yearOption.current.value
         })
 
+        console.log(res)
+
         if (res.status !== 200) { //error
             setError(res.data);
+            refreshData()
             return;
         } else if (res.status === 403) {
             navigate('/');
             return
         } else {
-            setError("Added Successfully");
-            newTaskNameBar.current.value = "";
+            setError("Changed Successfully");
+            // newTaskNameBar.current.value = "";
             newEndDateBar.current.value = "";
             setIsEditing(false);
             refreshData()
@@ -136,9 +144,12 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
             ) : (
                 <ul>
                     <div className="row">
-                        <div className="col-2" style={{ alignItems: 'left' }}>
+                        {/* <div className="col-2" style={{ alignItems: 'left' }}>
                             <input className="editAssignmentInput" ref={newTaskNameBar} type="text"
                                 placeholder="new name" style={{ width: "100%", paddingLeft: '10%' }} />
+                        </div> */}
+                        <div className="col-2">
+                            {taskName}
                         </div>
                         <div className="col-3">
                             {numOfSubmits} / {numOfAssigned} submitted

@@ -143,24 +143,19 @@ async function postFeedback(userId, chatId, feedback, year) {
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
-        const existingTask = await tasks.findOne({
-            taskName:
-                { $eq: mongoSanitize(newTaskName) }, year: { $eq: parseInt(year) }
+        // const existingTask = await tasks.findOne({
+        //     taskName: { $eq: mongoSanitize(newTaskName) },
+        //     year: { $eq: parseInt(year) }
+        // });
+
+        // if (existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
+        //     return { status: 400, error: 'A task with this name already exists this year' }
+        // }
+
+        const currentTask = await tasks.findOne({
+            taskName: { $eq: mongoSanitize(taskName) },
+            year: { $eq: parseInt(year) }
         });
-        if (existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
-            return { status: 400, error: 'A task with this name already exists this year' }
-        }
-
-        await tasks.updateOne(
-            { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
-            {
-                $set: {
-                    taskName: mongoSanitize(newTaskName),
-                    endDate: parseInt(newEndDate),
-                },
-            },
-        );
-
 
         await tasks.updateMany(
             { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
@@ -171,20 +166,67 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             },
         );
 
-        await practices.updateMany(
-            { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
+        await tasks.updateOne(
+            { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
                 $set: {
-                    chatId: mongoSanitize(newTaskName),
-                    endDate: {
-                        $cond: {
-                            if: { $eq: [existingTask.endDate, "$endDate"] },
-                            then: parseInt(newEndDate),
-                            else: "$endDate",
-                        },
-                    },
+                    // taskName: mongoSanitize(newTaskName),
+                    endDate: parseInt(newEndDate),
                 },
-            });
+            },
+        );
+
+
+        // await practices.updateMany(
+        //     { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
+        //     {
+        //         $set: {
+        //             chatId: mongoSanitize(newTaskName),
+        //             endDate: {
+        //                 $cond: {
+        //                     if: { $eq: [currentTask.endDate, "$endDate"] },
+        //                     then: parseInt(newEndDate),
+        //                     else: "$endDate",
+        //                 },
+        //             },
+        //         },
+        //     });
+
+        // await practices.updateMany(
+        //     { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
+        //     {
+        //         $set: {
+        //             chatId: mongoSanitize(newTaskName),
+        //             endDate: {
+        //                 $max: ["$endDate", parseInt(newEndDate)]
+        //             },
+        //         },
+        //     });
+
+        await practices.updateMany(
+            {
+                chatId: { $eq: mongoSanitize(taskName) },
+                year: { $eq: parseInt(year) }
+            },
+            [
+                {
+                    $set: {
+                        // chatId: mongoSanitize(newTaskName),
+                        endDate: {
+                            $max: ["$endDate", parseInt(newEndDate)]
+                        }
+                    }
+                }
+            ]
+        );
+
+        const updatedPractice = await practices.findOne({
+            chatId: { $eq: mongoSanitize(newTaskName) },
+            year: { $eq: parseInt(year) }
+        });
+        
+        // console.log(updatedPractice.endDate);
+
         return { status: 200, error: '' };
     } catch (error) {
         console.log(error.message)

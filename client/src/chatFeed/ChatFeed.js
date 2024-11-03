@@ -115,6 +115,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
 
     return (
         <>
+        {console.log(selectedPractice.endDate)}
             <div id="chatFeed" className="col-9">
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
