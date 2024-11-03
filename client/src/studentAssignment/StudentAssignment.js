@@ -34,6 +34,8 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
                 alert(error)
             })
         } else {
+            setExpand(false);
+            setError('ok')
             refreshData();
         }
     }

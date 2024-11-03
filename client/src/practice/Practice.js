@@ -120,7 +120,14 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 className={`list-group-item practice container
                     ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
-                onClick={handleTaskClick}
+                onClick={() => {
+                    if (isEndDatePassed) {
+                        alert('wow');
+                        return;
+                    } else {
+                        handleTaskClick()
+                    }
+                }}
             >
 
                 {/* <br /> */}
@@ -133,7 +140,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         <span className="text-black badge date">
                             {(isEndDatePassed && !isFinished && !isLateSubmitAllowed) ?
                                 'Can\'t submit' :
-                                (isTimeUp && !isFinished && task.durationHours !== null 
+                                (isTimeUp && !isFinished && task.durationHours !== null
                                     && task.durationMinutes !== null) ? 'Time\'s up!' :
                                     !isCreated
                                         ? 'Click to start'
@@ -207,8 +214,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                             ) : (
                                 <div className="modal-body">
                                     Are you sure you want to start <b>{task.taskName}</b>?<br />
-                                    Please note that this assignment <b>does not have a time limit</b>, 
-                                    and you can take a much time you need, as long you submit it 
+                                    Please note that this assignment <b>does not have a time limit</b>,
+                                    and you can take a much time you need, as long you submit it
                                     before the last date of submission.
                                 </div>
                             )}
