@@ -68,11 +68,8 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const user = existingTask.submitList.find(user => user.userId === userId)
         
         const time = Date.now()
-        console.log(time)
-        console.log(existingTask.endDate)
-        console.log(user.canSubmitLate)
-        if (!((user.canSubmitLate && time < user.lateSubmitDate) || time < existingTask.endDate)) {
-            return { status: 400, practice: "Submission date passed."};
+        if (!(time < max(user.endDate, existingTask.endDate))) {
+            return { status: 400, practice: "Submission date passed.\nWomp Womp BITCH."};
         }
 
         answers = existingTask.questions.answers
@@ -87,7 +84,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         botProcess.id = chatId + userId
         botProcess.stdout.on('data', (data) => {
             messageData = data.toString().split('|');
-            const result = addMessage(messageData[1], messageData[0], messageData[2], true);
+            addMessage(messageData[1], messageData[0], messageData[2], true);
         })
         botProcesses[botProcess.id] = botProcess
       
@@ -103,7 +100,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             feedback: user ? user.feedback : '',
             startDate: Date.now(),
             submissionDate: null,
-            endDate: endDate,
+            endDate: max(endDate, user.endDate),
             durationHours: durationHours,
             durationMinutes: durationMinutes,
             year: year,
@@ -152,15 +149,9 @@ async function submitPractice(userId, chatId) {
             return { status: 404, error: "Can not submit practice since the practice doesn't exist." };
         }
         var time = Date.now();
-        let submitData = null
-        for (let submitUserData of existingTask.submitList) {
-            if (submitUserData.userId === userId) {
-                submitData = submitUserData;
-                break;
-            }
-        }
+        const submitData = task.submitList.find(user => user.userId === userId)
         
-        if (!((user.canSubmitLate && time > user.lateSubmitDate) || time > existingTask.endDate)) {
+        if (!(time < max(submitData.endDate, task.endDate))) {
             return { status: 400, practice: "Submission date passed."};
         }
         botProcesses[chatId + userId].kill('SIGKILL');
@@ -213,7 +204,7 @@ async function addMessage(userId, chatId, content, isBot) {
             return { status: 404, error: "Couldn't find chat" };
         }
         var time = Date.now();
-        if (practice.durationHours || practice.durationMinutes) {
+        if ((practice.durationHours || practice.durationMinutes) && !isBot) {
             if (time - practice.startDate > practice.durationHours * HOURS_TO_MS + practice.durationMinutes * MIN_TO_MS) {
                 return { status: 400, error: "Submission timer ran out." }
             }

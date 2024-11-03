@@ -20,7 +20,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         const chat = useRef(null);
         
         const changeEndDateFormat = (endDate) => {
-            console.log(endDate)
             const [datePart, timePart] = endDate.split('T');
             const [day, month, year] = datePart.split('-');
             const formattedDateString = `${year}-${month}-${day}T${timePart}`;

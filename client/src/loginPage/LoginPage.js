@@ -36,7 +36,6 @@ function LoginPage({ setToken }) {
   
   const navigateToken = async () => {
     const res = await api.get('/api/student/');
-    console.log(res)
     if (res.status === 200) {
       if (res.data.permissions) {
         navigate('/adminFeed');
