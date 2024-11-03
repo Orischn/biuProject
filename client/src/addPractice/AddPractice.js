@@ -1,23 +1,19 @@
+import { useNavigate } from "react-router";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function AddPractice({token, selectedTask, setSelectedTask}) {
-
+    const navigate = useNavigate();
     const add = async function (e) {
 
-        const res = await fetch(`http://localhost:5000/api/addPractice/`, {
-            'method': 'post',
-            'headers': {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "chatId": selectedTask.taskName
-            })
+        const res = await api.get('api/addPractice/', {
+            "chatId": selectedTask.taskName
         });
 
         if (res.status === 201) {
-            await res.text().then((practice) => {
-                setSelectedTask(JSON.parse(practice));
-            });
+            setSelectedTask(res.data);
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         }
     };
 

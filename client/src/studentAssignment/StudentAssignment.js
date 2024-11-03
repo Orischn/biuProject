@@ -1,8 +1,11 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, taskName,
-    refreshData, grade }) {
+function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
+    taskName, refreshData, grade }) {
+    const navigate = useNavigate();
 
     const [expand, setExpand] = useState(false);
     const [error, setError] = useState('');
@@ -16,23 +19,17 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
             setError('Must choose date');
             return
         }
-        const res = await fetch('http://localhost:5000/api/allowLateSubmit', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "taskName": taskName,
-                "userId": userId,
-                "newDate": new Date(newDate).getTime()
-            })
+        const res = await api.post('/api/allowLateSubmit', {
+            "taskName": taskName,
+            "userId": userId,
+            "newDate": new Date(newDate).getTime()
         })
 
         if (res.status !== 200) { //error
-            await res.text().then((error) => {
-                alert(error)
-            })
+            alert(res.data)
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         } else {
             setExpand(false);
             setError('ok')
@@ -46,22 +43,16 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
     }
 
     const cancelLateSubmit = async function (userId, taskName) {
-        const res = await fetch('http://localhost:5000/api/cancelLateSubmit', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "taskName": taskName,
-                "userId": userId
-            })
+        const res = await api.post('/api/cancelLateSubmit', {
+            "taskName": taskName,
+            "userId": userId
         })
 
-        if (res.status !== 200) { //error
-            await res.text().then((error) => {
-                setError(error)
-            })
+        if (res.status !== 200) {
+            setError(res.data)
+        } else if (res.status === 403) {
+            navigate('/');
+            return
         } else {
             setError('')
             refreshData();
@@ -117,15 +108,15 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate, 
                                     onClick={() => setExpand(true)}>Allow late submit</button>
                             ) : (
                                 <>
-                                <div>
-                                    <input ref={newDateBar} type="datetime-local" style={{ width: "65%", paddingLeft: '10%' }} />
-                                    &nbsp;
-                                    <i className="bi bi-x-lg" onClick={handleCancel}
-                                        style={{ cursor: 'pointer', color: 'red' }} />
-                                    &nbsp;
-                                    <i className="bi bi-check-lg" onClick={() => allowLateSubmit(userId, taskName)}
-                                       style={{ cursor: 'pointer', color: 'green' }} />
-                                       </div>
+                                    <div>
+                                        <input ref={newDateBar} type="datetime-local" style={{ width: "65%", paddingLeft: '10%' }} />
+                                        &nbsp;
+                                        <i className="bi bi-x-lg" onClick={handleCancel}
+                                            style={{ cursor: 'pointer', color: 'red' }} />
+                                        &nbsp;
+                                        <i className="bi bi-check-lg" onClick={() => allowLateSubmit(userId, taskName)}
+                                            style={{ cursor: 'pointer', color: 'green' }} />
+                                    </div>
                                     {error &&
                                         <span className="alert alert-danger w-50" role="alert"
                                             style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
-
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -19,27 +21,18 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
 
     const deleteStudent = async function (e) {
 
-        const res = await fetch('http://localhost:5000/api/deleteUser', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "userId": userId
-            })
-
+        const res = await api.post('/api/deleteUser', {
+            "userId": userId
         })
 
         if (res.status !== 200) { //error
-            await res.text().then((errorMessage) => {
-                setError(errorMessage);
-            })
+            setError(res.data);
             setIsSuccessful(false);
             return;
-        }
-
-        else {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else {
             // setError("Deleted Successfully");
             setIsSuccessful(true);
             // setIsChanged(userId);

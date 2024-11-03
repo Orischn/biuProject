@@ -8,7 +8,8 @@ const checkToken = async (authorization) => {
     if (authorization) {
         const token = authorization.split(" ")[1];
         try {
-            jwt.verify(token, process.env.SECRET_TOKEN);
+            data = jwt.verify(token, process.env.SECRET_TOKEN);
+            jwt.sign({ id: data.id }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
             return { status: 200, error: "" };
         } catch (err) {
             return { status: 401, error: err.message };
@@ -19,7 +20,6 @@ const checkToken = async (authorization) => {
 }
 
 const postToken = async (user) => {
-    console.log(user);
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {
         await client.connect();
@@ -36,8 +36,9 @@ const postToken = async (user) => {
         if (!passwordMatch) {
             return { status: 401, token: "Password is incorrect." };
         }
-        const token = jwt.sign(user.userId, process.env.SECRET_TOKEN);
-        return { status: 200, token: token };
+        const token = jwt.sign({ id: user.userId }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
+        const refreshToken = jwt.sign({ id: user.userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
+        return { status: 200, token: token, refreshToken: refreshToken };
     } catch (error) {
         return { status: 500, token: error.message };
     } finally {
@@ -49,7 +50,7 @@ const getId = async (authorization) => {
     try {
         const token = authorization.split(" ")[1];
         const data = jwt.verify(token, process.env.SECRET_TOKEN);
-        return data;
+        return data.id;
     } catch (err) {
         return null;
     }

@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
-
+    const navigate = useNavigate();
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -102,36 +104,27 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
 
 
-        const res = await fetch('http://localhost:5000/api/createUser', {
-            'method': 'post',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            'body': JSON.stringify({
-                "user": {
-                    "password": password,
-                    "permissions": false,
-                    "firstName": firstName,
-                    "lastName": lastName,
-                    "userId": userId,
-                    "year": year,
-                    "email": email,
-                    "isSelfRegistered": false
-                }
-            })
-
+        const res = await api.post('/api/createUser', {
+            "user": {
+                "password": password,
+                "permissions": false,
+                "firstName": firstName,
+                "lastName": lastName,
+                "userId": userId,
+                "year": year,
+                "email": email,
+                "isSelfRegistered": false
+            }
         })
 
         if (res.status !== 201) { //error
-            await res.text().then((errorMessage) => {
-                setError(errorMessage);
-            })
+            setError(res.data);
             setIsSuccessful(false);
             return;
-        }
-
-        else {
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        } else {
             setError("Added Successfully");
             setIsSuccessful(true);
             refreshData()
