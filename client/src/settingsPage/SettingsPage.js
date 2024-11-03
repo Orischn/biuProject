@@ -9,7 +9,7 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChan
     const settingsOptions = [
         <AssignmentsSettingsPage token={token} yearOption={yearOption}
             expand={expand} setExpand={setExpand} refreshDataInFeed={refreshDataInFeed}
-            isYearChanged={isYearChanged}/>,
+            isYearChanged={isYearChanged} />,
         <StudentSettingsPage token={token} yearOption={yearOption}
             refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand}
             isYearChanged={isYearChanged} />];

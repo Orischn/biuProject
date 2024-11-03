@@ -6,9 +6,9 @@ import RegisterPage from './registerPage/RegisterPage';
 import StudentFeed from './studentFeed/StudentFeed';
 
 function App() {
-    const  [token, setToken] = useState(localStorage.getItem('accessToken'));
+    const [token, setToken] = useState(localStorage.getItem('accessToken'));
     return (
-        <main>          
+        <main>
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<LoginPage setToken={setToken} />} />

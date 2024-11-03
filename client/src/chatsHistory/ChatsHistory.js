@@ -8,7 +8,7 @@ import StudentMessage from "../studentMessage/StudentMessage";
 function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
-    
+
     useEffect(() => {
         const fetchMessages = async () => {
             if (!selectedGradeId) {
@@ -21,13 +21,13 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             //         'Authorization': `Bearer ${token}`,
             //     }
             // });
-            
+
             const res = await api.get(`/api/studentPractices/${selectedStudent.userId}`)
-            
+
             // if (res.status === 200) {
             //     res.then((practice) => {
-                //         setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
-                    //             if (message.isBot) {
+            //         setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
+            //             if (message.isBot) {
             //                 return <BotMessage message={message}/>
             //             } else {
             //                 return <StudentMessage message={message}/>
@@ -35,7 +35,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             //         }));
             //     });
             // }
-            
+
             if (res.status === 200) {
                 res.data.map((practice, key) => {
                     if (practice.chatId === selectedGradeId) {
@@ -55,18 +55,18 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
         }
         fetchMessages();
     }, [selectedGradeId, token, selectedStudent])
-    
+
     return (
         <>
-        {selectedGradeId ?
-            <>
-            <h5>Chat History - {selectedGradeId}</h5>
-            {messages}
-            </> :
-            <></>}
-            
-            </>
-        )
-    }
-    
-    export default ChatsHistory;
+            {selectedGradeId ?
+                <>
+                    <h5>Chat History - {selectedGradeId}</h5>
+                    {messages}
+                </> :
+                <></>}
+
+        </>
+    )
+}
+
+export default ChatsHistory;

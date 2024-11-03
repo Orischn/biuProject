@@ -16,7 +16,7 @@ function StudentDetails({ token, user, setSelectedStudent, refreshData, setExpan
                     {user.year}
                 </div>
                 <div className="col-2">
-                {user.firstName + ' ' + user.lastName}
+                    {user.firstName + ' ' + user.lastName}
                 </div>
                 <div className="col-2">
                     {user.userId}
@@ -28,7 +28,7 @@ function StudentDetails({ token, user, setSelectedStudent, refreshData, setExpan
                 <div className="col-3">
                     Delete Student
                     <AdminDeleteStudent token={token} userId={user.userId} fullName={user.firstName + ' ' + user.lastName}
-                    refreshData={refreshData}/>
+                        refreshData={refreshData} />
                 </div>
             </div>
         </ul>

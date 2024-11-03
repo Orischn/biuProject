@@ -15,14 +15,14 @@ function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedS
             };
             if (isBase64) {
                 // if (file.type === 'image/png' || file.type === 'image/jpeg') {
-                    reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
                 // } else {
                 //     setError('Invalid File Format for a Picture')
                 //     return;
                 // }
             } else {
                 // if (file.type === 'text/csv') {
-                    reader.readAsText(file);
+                reader.readAsText(file);
                 // } else {
                 //     setError('Please Upload a CSV File')
                 //     return;
@@ -37,11 +37,11 @@ function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedS
 
     return (
         <>
-            <div className="justify-content-md-center" style={{marginBottom: '10px'}}>
+            <div className="justify-content-md-center" style={{ marginBottom: '10px' }}>
                 {/* <div className="col-2 text-black">
                     {title}
                 </div> */}
-                
+
                 {/* <div className='mt-1'>
                     {error &&
                         <span className="alert alert-danger w-50" role="alert">

@@ -77,7 +77,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                                     />
                                     {feedback ?
                                         <><b><u>Feedback Given:</u></b> <br /> </> : <></>}
-                                     {feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
+                                    {feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
                                         <React.Fragment key={index}>
                                             {line}
                                             <br />

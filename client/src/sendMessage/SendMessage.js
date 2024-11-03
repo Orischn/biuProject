@@ -8,13 +8,13 @@ function SendMessage({ token, selectedPractice, messages, setMessages, setLatest
     const navigate = useNavigate();
     const typeBar = useRef(null);
     const send = async (e) => {
-        
+
         e.preventDefault();
         if (typeBar.current.value.trim() === '') {
             return;
         }
         const content = typeBar.current.value.trim();
-        const message = {content: content}
+        const message = { content: content }
         setLatestMessage(message);
         setMessages(messages => [...messages, <StudentMessage message={message} />]);
         typeBar.current.value = '';
@@ -32,31 +32,31 @@ function SendMessage({ token, selectedPractice, messages, setMessages, setLatest
             setMessages(messages => [...messages, <BotMessage message={res.data} />]);
         }
         setLatestMessage(message);
-        
+
     }
-    
-    
+
+
     return (
         <div className="d-flex">
-        <span id="messageBar" className="input-group">
-        <form onSubmit={send} className="input-group">
-        <input ref={typeBar} 
-        className={`form-control input ${(!selectedPractice.active || isTimeUp ||
-            (isEndDatePassed && !selectedPractice.lateSubmit)
-        ) ? 'custom-disabled' : ''}`}
-        placeholder="Type a message"
-        disabled={!selectedPractice.active || isTimeUp ||
-            (isEndDatePassed && !selectedPractice.lateSubmit)
-        }/>
-        <button id="sendButton" type="submit" 
-        className={`btn ${(!selectedPractice.active || isTimeUp)? 'custom-disabled' : ''}`}
-        disabled={!selectedPractice.active || isTimeUp || 
-            (isEndDatePassed && !selectedPractice.lateSubmit)
-        }>
-        <i className="bi bi-send" style={{color: 'black'}}/>
-        </button>
-        </form>
-        </span>
+            <span id="messageBar" className="input-group">
+                <form onSubmit={send} className="input-group">
+                    <input ref={typeBar}
+                        className={`form-control input ${(!selectedPractice.active || isTimeUp ||
+                            (isEndDatePassed && !selectedPractice.lateSubmit)
+                        ) ? 'custom-disabled' : ''}`}
+                        placeholder="Type a message"
+                        disabled={!selectedPractice.active || isTimeUp ||
+                            (isEndDatePassed && !selectedPractice.lateSubmit)
+                        } />
+                    <button id="sendButton" type="submit"
+                        className={`btn ${(!selectedPractice.active || isTimeUp) ? 'custom-disabled' : ''}`}
+                        disabled={!selectedPractice.active || isTimeUp ||
+                            (isEndDatePassed && !selectedPractice.lateSubmit)
+                        }>
+                        <i className="bi bi-send" style={{ color: 'black' }} />
+                    </button>
+                </form>
+            </span>
         </div>
     );
 }

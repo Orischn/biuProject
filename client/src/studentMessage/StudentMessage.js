@@ -1,6 +1,6 @@
 
 
-function StudentMessage({message}) {
+function StudentMessage({ message }) {
     return (
         <div key={message._id} dir="rtl">
             <div className="studentMessage">

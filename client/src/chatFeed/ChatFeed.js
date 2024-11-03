@@ -115,7 +115,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
 
     return (
         <>
-        {console.log(selectedPractice.endDate)}
+            {console.log(selectedPractice.endDate)}
             <div id="chatFeed" className="col-9">
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
@@ -173,8 +173,8 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         <>
                                                             {!isTimeUp ? (
                                                                 <>
-                                                                {console.log(selectedPractice.durationHours, selectedPractice.durationMinutes)}
-                                                                {console.log(selectedPractice.durationHours || selectedPractice.durationMinutes)}
+                                                                    {console.log(selectedPractice.durationHours, selectedPractice.durationMinutes)}
+                                                                    {console.log(selectedPractice.durationHours || selectedPractice.durationMinutes)}
                                                                     {selectedPractice.durationHours || selectedPractice.durationMinutes ? (
                                                                         <>
                                                                             <Countdown targetDate={addTimeToDateString(
@@ -210,7 +210,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                         ) : selectedPractice.lateSubmit && !isTimeUp ? (
                                             <>
                                                 Late submission is allowed
-                                                {selectedPractice.durationHours || selectedPractice.durationMinutes? (
+                                                {selectedPractice.durationHours || selectedPractice.durationMinutes ? (
                                                     <Countdown targetDate={
                                                         selectedPractice.startDate + selectedPractice.durationHours * 3600000 +
                                                         selectedPractice.durationMinutes * 60000}

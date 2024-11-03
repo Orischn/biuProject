@@ -6,7 +6,7 @@ function Student({ student, selectedStudent, setSelectedStudent }) {
         <li key={student.userId}
             className={`list-group-item practice container ${selectedStudent && selectedStudent.userId === student.userId ? 'practice-active' : ''}`}
             onClick={() => setSelectedStudent(student)}
-            style={{height: "11%"}}>
+            style={{ height: "11%" }}>
             <div className="row">
                 <div>
                     <b className="text-black w-100">{student.firstName} {student.lastName}</b>
