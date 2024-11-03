@@ -269,7 +269,7 @@ async function getSubmissionData(chatId, userId, year) {
         await client.connect();
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
-        const task = await tasks.findOne({ chatId: { $eq: chatId }, year: { $eq: parseInt(year) } });
+        const task = await tasks.findOne({ taskName: { $eq: chatId }, year: { $eq: parseInt(year) } });
         return { status: 200, submitData: task.submitList.find(user => user.userId === userId) }
     } catch (error) {
         return { status: 500, submitData: error.message };

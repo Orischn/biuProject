@@ -15,6 +15,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [isEndDatePassed, setIsEndDatePassed] = useState(hasTimePassed(task.endDate));
+    const [initialEndDate, setInitialEndDate] = useState(task.endDate);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [isLateSubmitAllowed, setIsLateSubmitAllowed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -88,6 +89,15 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     };
     
     useEffect(() => {
+
+        const fetchEndDate = async function () {
+            const res = await api.get(`/api/getUserSubmitData/${task.taskName}/${task.year}`);
+            if (res.status === 200) {
+                setIsEndDatePassed(hasTimePassed(res.data.endDate))
+                setInitialEndDate(res.data.endDate);
+            }
+        }
+
         const fetchPractice = async function () {
             const res = await api.get(`/api/getPractice/${task.taskName}`);
             
@@ -109,6 +119,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                 return
             }
         }
+        fetchEndDate();
         fetchPractice();
             
     }, [selectedTask, task.taskName, token]);
@@ -121,10 +132,10 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     ${selectedTask && selectedTask.taskName === task.taskName ? 'practice-active' : ''}
                     ${''}`}
                 onClick={() => {
-                    // if (isEndDatePassed) {
-                    //     alert('wow');
-                    //     return;
-                    // } else
+                    if (isEndDatePassed) {
+                        alert('wow');
+                        return;
+                    } else
                      {
                         handleTaskClick()
                     }
@@ -183,7 +194,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                             </>
                         ) : (
                             <>
-                            submission until {convertTimestampToDate(task.endDate).split('T')[0]}
+                            submission until {convertTimestampToDate(initialEndDate).split('T')[0]}
                             <br />
                             at {convertTimestampToDate(task.endDate).split('T')[1].slice(0, -3)}
                             </>
