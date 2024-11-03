@@ -34,7 +34,7 @@ const postToken = async (user) => {
         // Compare the input password with the stored hashed password
         const passwordMatch = await bcrypt.compare(user.password, existingUser.password);
         if (!passwordMatch) {
-            return { status: 401, token: "Password is incorrect." };
+            return { status: 404, token: "Password is incorrect." };
         }
         const token = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
         const refreshToken = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
@@ -56,8 +56,25 @@ const getId = async (authorization) => {
     }
 }
 
+const refresh = async (req, res) => {
+    if (!req.headers.cookie) return res.sendStatus(403)
+    let refreshToken = req.headers.cookie;
+    refreshToken = refreshToken.slice(refreshToken.indexOf('=') + 1)
+    console.log(refreshToken)
+    if (!refreshToken) return res.sendStatus(403);
+    
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        
+        const accessToken = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, { expiresIn: '30m' });
+        res.json({ accessToken });
+    });
+    return res.end();
+}
+
 module.exports = {
     postToken,
     checkToken,
     getId,
+    refresh,
 };

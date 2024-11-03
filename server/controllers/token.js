@@ -1,4 +1,4 @@
-const { checkToken, postToken } = require('../models/token');
+const { checkToken, postToken, refresh } = require('../models/token');
 
 const validateUser = async (req, res, next) => {
     const result = await checkToken(req.headers.authorization);
@@ -21,22 +21,12 @@ const login = async (req, res) => {
     return res.status(result.status).end(result.token);
 }
 
-const refresh = async (req, res) => {
-    if (!req.cookies) return res.sendStatus(403)
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.sendStatus(403);
-    
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        
-        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
-        res.json({ accessToken });
-    });
-    return res.end();
+const refreshAccessToken = async (req, res) => {
+    return await refresh(req, res);
 }
 
 module.exports = {
     validateUser,
     login,
-    refresh,
+    refreshAccessToken,
 };
