@@ -10,6 +10,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
     const [numOfSubmits, setNumOfSubmits] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
     const [error, setError] = useState('');
+    const [isSuccessful, setIsSuccessful] = useState(false);
 
 
     const handleExpand = () => {
@@ -25,6 +26,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
     const newEndDateBar = useRef(null)
 
     const handleCancel = () => {
+        setError('')
         setIsEditing(false);
         // newTaskNameBar.current.value = "";
         newEndDateBar.current.value = "";
@@ -53,10 +55,10 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
             "year": yearOption.current.value
         })
 
-        console.log(res)
 
         if (res.status !== 200) { //error
             setError(res.data);
+            setIsSuccessful(false);
             refreshData()
             return;
         } else if (res.status === 403) {
@@ -64,9 +66,10 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
             return
         } else {
             setError("Changed Successfully");
+            setIsSuccessful(true);
             // newTaskNameBar.current.value = "";
             newEndDateBar.current.value = "";
-            setIsEditing(false);
+            // setIsEditing(false);
             refreshData()
 
         }
@@ -170,10 +173,10 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                         </div>
                     </div>
                     {error &&
-                        <span className="alert alert-danger w-50" role="alert"
+                        <center><span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert"
                             style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>
                             {error}
-                        </span>}
+                        </span></center>}
                 </ul>
             )}
 
