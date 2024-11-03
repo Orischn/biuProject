@@ -5,9 +5,13 @@ import json
 from sys import argv
 from os import linesep
 
-model_name = "onlplab/alephbert-base"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
+model_name = "Qwen/Qwen-72B-Chat"
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    device_map="auto",
+    trust_remote_code=True
+).eval()
 
 def encodeText(text):
     inputs = tokenizer(text, return_tensors="pt")
@@ -33,7 +37,8 @@ def answer_question(user_input):
     similarities = util.pytorch_cos_sim(user_input_embedding, questions_embedding)
     best_match_idx = similarities.argmax().item()
     score = similarities[0][best_match_idx].item()
-    if score < 0.6:
+    print(score)
+    if score < 0.75:
             return "Failed to understand the question"
     values, _ = torch.topk(similarities, 2)
     if values.max().item() - values.min().item() < 0.015:
@@ -41,7 +46,10 @@ def answer_question(user_input):
     best_question = current_questions[best_match_idx]
     return best_question["answer"]
 
-data = json.loads(argv[1])
+with open('csvFiles/tree.csv', 'r') as file:
+    data = json.load(file)
+
+# data = json.loads(argv[1])
 while True:
     prompt = input()
     chat_id = input()
