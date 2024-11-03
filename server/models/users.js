@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const os = require('os');
+const mongoSanitize = require('mongo-sanitize');
 require('dotenv').config();
 const MAIL_PASSWORD = process.env.MAIL_APP_PASSWORD;
 
@@ -48,7 +49,7 @@ async function getUser(userId) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const user = await users.findOne({ userId: { $eq: userId } });
+    const user = await users.findOne({ userId: { $eq: mongoSanitize(userId) } });
     if (!user) {
       return { status: 404, user: "User doesn't exist in the database." };
     }
@@ -108,12 +109,12 @@ async function postUser(user) {
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const tasks = db.collection('tasks');
-    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
+    const existingUser = await users.findOne({ userId: { $eq: mongoSanitize(user.userId) } });
     if (existingUser) {
       return { status: 409, error: "This user ID already exists!" };
     }
 
-    if (!validIds.includes(user.userId)) {
+    if (!validIds.includes(mongoSanitize(user.userId))) {
       return { status: 400, error: "This ID number isn't allowed!" }
     }
 
@@ -150,9 +151,9 @@ async function postUser(user) {
     const hashedPassword = await hashPassword(user.password);
 
     await users.insertOne({
-      userId: user.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      userId: mongoSanitize(user.userId),
+      firstName: mongoSanitize(user.firstName),
+      lastName: mongoSanitize(user.lastName),
       password: hashedPassword,
       permissions: false,
       year: parseInt(user.year)
@@ -163,7 +164,8 @@ async function postUser(user) {
       {
         $push: {
           submitList: {
-            userId: user.userId, firstName: user.firstName, lastName: user.lastName,
+            userId: mongoSanitize(user.userId),
+            firstName: mongoSanitize(user.firstName), lastName: mongoSanitize(user.lastName),
             didSubmit: false, canSubmitLate: false, grade: null
           },
         },
@@ -185,19 +187,19 @@ async function deleteUser(user) {
     const db = client.db('ChatBot');
     const users = db.collection('users');
     const tasks = db.collection('tasks');
-    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
+    const existingUser = await users.findOne({ userId: { $eq: mongoSanitize(user.userId) } });
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
     const practices = db.collection('practices');
-    await practices.deleteMany({ userId: { $eq: user.userId } });
-    await users.deleteOne({ userId: { $eq: user.userId } });
+    await practices.deleteMany({ userId: { $eq: mongoSanitize(user.userId) } });
+    await users.deleteOne({ userId: { $eq: mongoSanitize(user.userId) } });
 
     await tasks.updateMany(
-      { 'submitList.userId': { $eq: user.userId } },
+      { 'submitList.userId': { $eq: mongoSanitize(user.userId) } },
       {
         $pull: {
-          submitList: { userId: user.userId },
+          submitList: { userId: mongoSanitize(user.userId) },
         },
       },
     )
@@ -218,14 +220,17 @@ async function changeAdminPermissions(user, permissions) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const existingUser = await users.findOne({ userId: { $eq: user.userId } });
+    const existingUser = await users.findOne({ userId: { $eq: mongoSanitize(user.userId) } });
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
+    }
+    if (typeof(permissions) !== Boolean) {
+      return { status: 400, error: `${permissions} is not a valid permission` };
     }
     await users.updateOne({ existingUser },
       {
         $set: {
-          permissions: permissions
+          permissions: mongoSanitize(permissions)
         }
       }
     );
@@ -244,7 +249,6 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     await client.connect();
     const db = client.db('ChatBot');
     const users = db.collection('users');
-    const isValidUserId = typeof user.userId === 'string' && /^[a-fA-F0-9]{24}$/.test(user.userId);
 
     if (!await bcrypt.compare(oldPassword, user.password)) {
       return { status: 400, error: "Old password isn't correct." };
@@ -256,7 +260,7 @@ async function changeUserPassword(user, oldPassword, newPassword) {
 
     const hashedNewPassword = await hashPassword(newPassword)
 
-    await users.updateOne({ userId: { $eq: user.userId } },
+    await users.updateOne({ userId: { $eq: mongoSanitize(user.userId) } },
       {
         $set: {
           password: hashedNewPassword

@@ -1,6 +1,5 @@
 import { useState } from "react"
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
-import GeneralSettingsPage from "../generalSettingsPage/GeneralSettingsPage";
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
 function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChanged }) {
@@ -14,7 +13,6 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChan
         <StudentSettingsPage token={token} yearOption={yearOption}
             refreshDataInFeed={refreshDataInFeed} expand={expand} setExpand={setExpand}
             isYearChanged={isYearChanged} />];
-        // <GeneralSettingsPage token={token} userId={userId} />];
 
     return (
         <div className="modal fade custom-modal" id="settingsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">

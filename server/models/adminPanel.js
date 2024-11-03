@@ -1,8 +1,7 @@
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
-const { check, validationResult } = require('express-validator');
-const { format } = require('path');
 require('dotenv').config();
+const mongoSanitize = require('mongo-sanitize');
 
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -13,30 +12,11 @@ const db = client.db(dbName);
 const tasks = db.collection('tasks');
 const practices = db.collection('practices');
 
-// Middleware for validating inputs
-const validateTaskInputs = [
-    check('taskName').isString().trim().escape(),
-    check('startingDate').isISO8601(),
-    check('endingDate').isISO8601(),
-    check('durationHours').isInt({ min: 0 }),
-    check('durationMinutes').isInt({ min: 0 }),
-    check('year').isInt({ min: 0 }),
-];
 
-async function uploadFile(fileName, fileContent) {
+async function uploadIdFile(fileContent) {
     let error = null;
     try {
-        fs.writeFileSync(`csvFiles/${fileName}`, fileContent); // Use synchronous to ensure completion
-    } catch (err) {
-        error = err;
-    }
-    return error ? { status: 500, error: error.message } : { status: 200 };
-}
-
-async function uploadIdFile(fileName, fileContent) {
-    let error = null;
-    try {
-        fs.writeFileSync(fileName, fileContent);
+        fs.writeFileSync('validIds.txt', fileContent);
     } catch (err) {
         error = err;
     }
@@ -44,22 +24,18 @@ async function uploadIdFile(fileName, fileContent) {
 }
 
 async function makeTask(taskName, startingDate, endingDate, durationHours, durationMinutes, year, format, questions, botPic, users) {
-    const errors = validationResult(users); // Assuming `users` is coming from the request body
-    if (!errors.isEmpty()) {
-        return { status: 400, errors: errors.array() };
-    }
-
     try {
-        const existingTask = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: year } })
+        const existingTask = await tasks.findOne({ taskName:
+            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } })
         if (existingTask) {
             return { status: 409, error: `This task already exists this year` }
         }
         const submitList = users
-            .filter(user => user.year === year)
+            .filter(user => user.year === parseInt(year))
             .map(user => ({
-                userId: user.userId,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                userId: mongoSanitize(user.userId),
+                firstName: mongoSanitize(user.firstName),
+                lastName: mongoSanitize(user.lastName),
                 didSubmit: false,
                 canSubmitLate: false,
                 grade: null,
@@ -67,15 +43,14 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
                 endDate: null,
             }));
         await tasks.insertOne({
-            taskName: taskName,
-            startDate: startingDate,
-            endDate: endingDate,
-            format: format,
-            questions: questions,
-            durationHours: durationHours ? parseInt(durationHours, 10) : null,
-            durationMinutes: durationMinutes ?  parseInt(durationMinutes, 10) : null,
-            year: year,
-            botPic: botPic,
+            taskName: mongoSanitize(taskName),
+            startDate: parseInt(startingDate),
+            endDate: parseInt(endingDate),
+            questions: Buffer.from(JSON.stringify(questions)).toString('base64'),
+            durationHours: durationHours ? parseInt(durationHours) : null,
+            durationMinutes: durationMinutes ?  parseInt(durationMinutes) : null,
+            year: parseInt(year),
+            botPic: Buffer.from(botPic).toString('base64'),
             submitList: submitList,
         });
         return { status: 201, error: "" };
@@ -98,7 +73,7 @@ async function getTasks() {
 
 async function getTask(taskName, year) {
     try {
-        const task = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: year } });
+        const task = await tasks.findOne({ taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
         return { status: 200, task: task };
     } catch (error) {
         return { status: 500, task: error.message };
@@ -119,7 +94,8 @@ async function adminViewTasks(year) {
 
 async function getSubmissionStatus(taskName, year) {
     try {
-        const task = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: parseInt(year, 10) } });
+        const task = await tasks.findOne({ taskName:
+            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }
@@ -132,55 +108,62 @@ async function getSubmissionStatus(taskName, year) {
 async function postFeedback(userId, chatId, feedback, year) {
     try {
         await practices.updateOne(
-            { chatId: { $eq: chatId }, userId: { $eq: userId }, year: { $eq: year } },
+            { chatId:
+                { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) },
+                year: { $eq: mongoSanitize(year) }
+            },
             {
                 $set: {
-                    feedback: feedback,
+                    feedback: Buffer.from(feedback).toString('base64'),
                 },
             },
         );
 
         await tasks.updateOne(
-            { taskName: { $eq: chatId }, year: { $eq: year }, 'submitList.userId': { $eq: userId } },
+            {
+                taskName: { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) },
+                'submitList.userId': { $eq: mongoSanitize(userId) },
+            },
             {
                 $set: {
-                    'submitList.$.feedback': feedback
+                    'submitList.$.feedback': Buffer.from(feedback).toString('base64'),
                 },
             },
         );
-        return { status: 200, error: feedback };
+        return { status: 200, feedback: feedback };
     } catch (error) {
-        return { status: 500, error: error.message };
+        return { status: 500, feedback: error.message };
     }
 }
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
-        const existingTask = await tasks.findOne({taskName: { $eq: newTaskName }, year: { $eq: parseInt(year) } });
-        if(existingTask && taskName !== newTaskName) {
-            return { status: 400, error: 'A task with this name is already existing this year'}
+        const existingTask = await tasks.findOne({taskName:
+            { $eq: mongoSanitize(newTaskName) }, year: { $eq: parseInt(year) } });
+        if(existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
+            return { status: 400, error: 'A task with this name already exists this year'}
         }
 
         await tasks.updateOne(
-            { taskName: { $eq: taskName }, year: { $eq: parseInt(year) } },
+            { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
                 $set: {
-                    taskName: newTaskName,
+                    taskName: mongoSanitize(newTaskName),
                 },
                 $max: {
-                    endDate: newEndDate,
+                    endDate: parseInt(newEndDate),
                 },
             },
         );
 
         await practices.updateMany(
-            { chatId: { $eq: taskName }, year: { $eq: parseInt(year) } },
+            { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
                 $set: {
-                    chatId: newTaskName,
+                    chatId: mongoSanitize(newTaskName),
                 },
                 $max: {
-                    endDate: newEndDate,
+                    endDate: parseInt(newEndDate),
                 },
             },
         );
@@ -193,8 +176,10 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
 
 async function removeTask(taskName, year) {
     try {
-        await tasks.deleteMany({ taskName: { $eq: taskName }, year: { $eq: parseInt(year) } });
-        await practices.deleteMany({ chatId: { $eq: taskName }, year: { $eq: parseInt(year) } });
+        await tasks.deleteMany({ taskName:
+            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
+        await practices.deleteMany({ chatId:
+            { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
         return { status: 200, error: '' };
     } catch (error) {
         return { status: 500, error: error.message };
@@ -204,19 +189,20 @@ async function removeTask(taskName, year) {
 async function giveLateSubmit(taskName, userId, endDate) {
     try {
         await tasks.updateOne(
-            { taskName: { $eq: taskName }, 'submitList.userId': { $eq: userId } },
+            { taskName:
+                { $eq: mongoSanitize(taskName) }, 'submitList.userId': { $eq: mongoSanitize(userId) } },
             {
                 $set: {
-                    'submitList.$.endDate': endDate,
+                    'submitList.$.endDate': parseInt(endDate),
                 },
             }
         );
 
         await practices.updateOne(
-            { chatId: taskName, userId: userId },
+            { chatId: mongoSanitize(taskName), userId: mongoSanitize(userId) },
             {
                 $set: {
-                    endDate: endDate,
+                    endDate: parseInt(endDate),
                 },
             },
         );
@@ -229,7 +215,7 @@ async function giveLateSubmit(taskName, userId, endDate) {
 async function takeLateSubmit(taskName, userId) {
     try {
         await tasks.updateOne(
-            { taskName: { $eq: taskName }, 'submitList.userId': { $eq: userId } },
+            { taskName: { $eq: mongoSanitize(taskName) }, 'submitList.userId': { $eq: mongoSanitize(userId) } },
             {
                 $set: {
                     'submitList.$.endDate': null,
@@ -238,7 +224,7 @@ async function takeLateSubmit(taskName, userId) {
         );
 
         await practices.updateOne(
-            { chatId: { $eq: taskName }, userId: { $eq: userId } },
+            { chatId: { $eq: mongoSanitize(taskName) }, userId: { $eq: mongoSanitize(userId) } },
             {
                 $set: {
                     'endDate': null,
@@ -252,7 +238,6 @@ async function takeLateSubmit(taskName, userId) {
 }
 
 module.exports = {
-    uploadFile,
     uploadIdFile,
     makeTask,
     getTasks,
@@ -264,5 +249,4 @@ module.exports = {
     removeTask,
     giveLateSubmit,
     takeLateSubmit,
-    validateTaskInputs, // Export validation middleware for use in routes
 };
