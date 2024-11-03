@@ -50,7 +50,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     }
 
     try {
-        const existingTask = await tasks.findOne({ taskName: taskName, year: year })
+        const existingTask = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: year } })
         if (existingTask) {
             return { status: 409, error: `This task already exists this year` }
         }
@@ -98,7 +98,7 @@ async function getTasks() {
 
 async function getTask(taskName, year) {
     try {
-        const task = await tasks.findOne({ taskName: taskName, year: year });
+        const task = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: year } });
         return { status: 200, task: task };
     } catch (error) {
         return { status: 500, task: error.message };
@@ -107,7 +107,7 @@ async function getTask(taskName, year) {
 
 async function adminViewTasks(year) {
     try {
-        const taskList = await tasks.find({year: parseInt(year)}).toArray();
+        const taskList = await tasks.find({year: { $eq: parseInt(year) }}).toArray();
         if (!taskList) {
             return { status: 404, tasks: 'No existing tasks' }
         }
@@ -119,7 +119,7 @@ async function adminViewTasks(year) {
 
 async function getSubmissionStatus(taskName, year) {
     try {
-        const task = await tasks.findOne({ taskName: taskName, year: parseInt(year, 10) });
+        const task = await tasks.findOne({ taskName: { $eq: taskName }, year: { $eq: parseInt(year, 10) } });
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }
@@ -132,7 +132,7 @@ async function getSubmissionStatus(taskName, year) {
 async function postFeedback(userId, chatId, feedback, year) {
     try {
         await practices.updateOne(
-            { chatId: chatId, userId: userId, year: year },
+            { chatId: { $eq: chatId }, userId: { $eq: userId }, year: { $eq: year } },
             {
                 $set: {
                     feedback: feedback,
@@ -141,7 +141,7 @@ async function postFeedback(userId, chatId, feedback, year) {
         );
 
         await tasks.updateOne(
-            { taskName: chatId, year: year, 'submitList.userId': userId },
+            { taskName: { $eq: chatId }, year: { $eq: year }, 'submitList.userId': { $eq: userId } },
             {
                 $set: {
                     'submitList.$.feedback': feedback
@@ -156,13 +156,13 @@ async function postFeedback(userId, chatId, feedback, year) {
 
 async function changeTask(taskName, newTaskName, newEndDate, year) {
     try {
-        const existingTask = await tasks.findOne({taskName: newTaskName, year: parseInt(year)});
+        const existingTask = await tasks.findOne({taskName: { $eq: newTaskName }, year: { $eq: parseInt(year) } });
         if(existingTask && taskName !== newTaskName) {
             return { status: 400, error: 'A task with this name is already existing this year'}
         }
 
         await tasks.updateOne(
-            { taskName: taskName, year: parseInt(year) },
+            { taskName: { $eq: taskName }, year: { $eq: parseInt(year) } },
             {
                 $set: {
                     taskName: newTaskName,
@@ -174,7 +174,7 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
         );
 
         await practices.updateMany(
-            { chatId: taskName, year: parseInt(year) },
+            { chatId: { $eq: taskName }, year: { $eq: parseInt(year) } },
             {
                 $set: {
                     chatId: newTaskName,
@@ -193,8 +193,8 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
 
 async function removeTask(taskName, year) {
     try {
-        await tasks.deleteMany({ taskName: taskName, year: parseInt(year) });
-        await practices.deleteMany({ chatId: taskName, year: parseInt(year) });
+        await tasks.deleteMany({ taskName: { $eq: taskName }, year: { $eq: parseInt(year) } });
+        await practices.deleteMany({ chatId: { $eq: taskName }, year: { $eq: parseInt(year) } });
         return { status: 200, error: '' };
     } catch (error) {
         return { status: 500, error: error.message };
@@ -204,7 +204,7 @@ async function removeTask(taskName, year) {
 async function giveLateSubmit(taskName, userId, endDate) {
     try {
         await tasks.updateOne(
-            { taskName: taskName, 'submitList.userId': userId },
+            { taskName: { $eq: taskName }, 'submitList.userId': { $eq: userId } },
             {
                 $set: {
                     'submitList.$.endDate': endDate,
@@ -229,7 +229,7 @@ async function giveLateSubmit(taskName, userId, endDate) {
 async function takeLateSubmit(taskName, userId) {
     try {
         await tasks.updateOne(
-            { taskName: taskName, 'submitList.userId': userId },
+            { taskName: { $eq: taskName }, 'submitList.userId': { $eq: userId } },
             {
                 $set: {
                     'submitList.$.endDate': null,
@@ -238,7 +238,7 @@ async function takeLateSubmit(taskName, userId) {
         );
 
         await practices.updateOne(
-            { chatId: taskName, userId: userId },
+            { chatId: { $eq: taskName }, userId: { $eq: userId } },
             {
                 $set: {
                     'endDate': null,
