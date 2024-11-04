@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/api/getPractice/:practiceId', validateUser, recvPractice);
 router.get('/api/getPractices/', validateUser, recvPractices);
-router.get('/api/getTasks', validateUser, viewTasks);
+router.get('/api/getTasks/:year', validateUser, viewTasks);
 router.get('/api/getUserSubmitData/:taskName/:year', validateUser, getUserSubmitData)
 router.post('/api/addPractice/', validateUser, addPractice);
 router.post('/api/finishPractice', validateUser, finishPractice);

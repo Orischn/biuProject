@@ -48,7 +48,7 @@ const finishPractice = async (req, res) => {
 }
 
 const viewTasks = async (req, res) => {
-    const result = await getTasks();
+    const result = await getTasks(req.params.year);
     return res.status(result.status).end(JSON.stringify(result.tasks));
 }
 

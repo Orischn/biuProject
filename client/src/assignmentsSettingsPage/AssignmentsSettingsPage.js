@@ -27,7 +27,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
     useEffect(() => {
 
         const fetchTasks = async () => {
-            const res = await api.get('/api/getTasks');
+            const res = await api.get(`/api/getTasks/${yearOption.current.value}`);
             if (res.status === 200) {
                 setTaskList(res.data.map((task, key) => {
                     if (yearOption.current && task.year === parseInt(yearOption.current.value)) {

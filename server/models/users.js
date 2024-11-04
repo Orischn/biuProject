@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const os = require('os');
 const mongoSanitize = require('mongo-sanitize');
+const { getTasks } = require('./adminPanel');
 require('dotenv').config();
 const MAIL_PASSWORD = process.env.MAIL_APP_PASSWORD;
 
@@ -159,18 +160,25 @@ async function postUser(user) {
       year: parseInt(user.year)
     });
 
-    await tasks.updateMany(
-      { year: { $eq: parseInt(user.year) } },
-      {
-        $push: {
-          submitList: {
-            userId: mongoSanitize(user.userId),
-            firstName: mongoSanitize(user.firstName), lastName: mongoSanitize(user.lastName),
-            didSubmit: false, canSubmitLate: false, grade: null
-          },
-        },
-      },
-    )
+    const result = await getTasks(user.year);
+    if (result.status !== 200) {
+      return result;
+    }
+
+    console.log(result.tasks)
+
+    result.tasks.forEach(async (task) => {
+      await tasks.updateOne({taskName: task.taskName, year: task.year},
+        {
+          $push: {
+            submitList: {
+              userId: mongoSanitize(user.userId),
+              firstName: mongoSanitize(user.firstName), lastName: mongoSanitize(user.lastName),
+              didSubmit: false, canSubmitLate: false, grade: null, endDate: task.endDate
+            },
+          }
+        })
+    })
 
     return { status: 201, error: "" };
   } catch (error) {
@@ -224,7 +232,7 @@ async function changeAdminPermissions(user, permissions) {
     if (!existingUser) {
       return { status: 404, error: "User doesn't exist in the database." };
     }
-    if (typeof(permissions) !== Boolean) {
+    if (typeof (permissions) !== Boolean) {
       return { status: 400, error: `${permissions} is not a valid permission` };
     }
     await users.updateOne({ existingUser },

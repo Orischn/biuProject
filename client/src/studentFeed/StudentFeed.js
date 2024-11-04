@@ -31,17 +31,18 @@ function StudentFeed({ token, userId }) {
     }
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            const res = await api.get('/api/getTasks');
+        const fetchTasks = async (yearJson) => {
+            console.log(yearJson.year)
+            const res = await api.get(`/api/getTasks/${yearJson.year}`);
             if (res.status === 200) {
                 setTaskList(res.data.reverse().map((task, key) => {
-                    if (year === task.year) {
-                        return <Practice task={task} key={key}
-                            selectedTask={selectedTask}
-                            setSelectedTask={setSelectedTask}
-                            setSelectedPractice={setSelectedPractice} token={token}
-                            refreshData={refreshData} />
-                    }
+                    // if (year === task.year) {
+                    return <Practice task={task} key={key}
+                        selectedTask={selectedTask}
+                        setSelectedTask={setSelectedTask}
+                        setSelectedPractice={setSelectedPractice} token={token}
+                        refreshData={refreshData} />
+                    // }
                 }));
             } else if (res.status === 403) {
                 navigate('/');
@@ -50,20 +51,28 @@ function StudentFeed({ token, userId }) {
         }
 
 
-        const fetchMyName = async () => {
+        const fetchMyName = async (yearJson) => {
             const res = await api.get(`/api/student`);
             if (res.status === 200) {
                 const user = res.data
                 setFullName(user.firstName + " " + user.lastName);
                 setYear(user.year);
+                yearJson.year = user.year;
             } else if (res.status === 403) {
                 navigate('/');
                 return
             }
         }
 
-        fetchMyName();
-        fetchTasks();
+        const yearJson = {}
+
+        const loadData = async () => {
+            await fetchMyName(yearJson);
+            await fetchTasks(yearJson);
+        }
+
+        loadData();
+
     }, [selectedTask, token, userId, year, isChanged])
 
     const logout = () => {

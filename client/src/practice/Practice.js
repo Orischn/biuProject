@@ -94,6 +94,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         const fetchEndDate = async function () {
             const res = await api.get(`/api/getUserSubmitData/${task.taskName}/${task.year}`);
             if (res.status === 200) {
+                console.log(res.data)
                 setIsEndDatePassed(hasTimePassed(res.data.endDate))
                 setTrueEndDate(res.data.endDate);
             }
@@ -194,6 +195,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </>
                     ) : (
                         <>
+                        {console.log(trueEndDate)}
+
                             submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />
                             at {convertTimestampToDate(trueEndDate).split('T')[1].slice(0, -3)}

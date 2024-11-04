@@ -62,9 +62,9 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
     }
 }
 
-async function getTasks() {
+async function getTasks(year) {
     try {
-        const taskList = await tasks.find({}, { projection: { submitList: 0 } }).toArray();
+        const taskList = await tasks.find({year: parseInt(year)}, { projection: { submitList: 0, questions: 0 } }).toArray();
         if (!taskList) {
             return { status: 404, tasks: 'No existing tasks' }
         }
@@ -113,7 +113,9 @@ async function getSubmissionStatus(taskName, year) {
             return { status: 404, submissionStatus: "No such task." };
         }
         task.submitList.forEach(submitData => {
-            submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+            if (submitData.feedback) {
+                submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+            }
         })
         return { status: 200, submissionStatus: task.submitList };
     } catch (error) {
