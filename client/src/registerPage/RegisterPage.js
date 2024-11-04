@@ -223,7 +223,7 @@ function RegisterPage() {
                         <button type="submit" className="sign-in-btn" style={{ marginBottom: '20px' }}>Register</button>
                         {error &&
                             <span className="alert alert-danger w-50" role="alert">
-                                <center>{error}</center>
+                                {error}
                             </span>}
                     </form>
                     <br />
