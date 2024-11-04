@@ -5,13 +5,9 @@ import json
 from sys import argv
 from os import linesep
 
-model_name = "Qwen/Qwen-72B-Chat"
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    device_map="auto",
-    trust_remote_code=True
-).eval()
+model_name = "onlplab/alephbert-base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModel.from_pretrained(model_name)
 
 def encodeText(text):
     inputs = tokenizer(text, return_tensors="pt")
@@ -47,10 +43,7 @@ def answer_question(user_input):
     best_question = current_questions[best_match_idx]
     return best_question["answer"]
 
-with open('csvFiles/tree.csv', 'r') as file:
-    data = json.load(file)
-
-# data = json.loads(argv[1])
+data = json.loads(argv[1])
 while True:
     prompt = input()
     chat_id = input()
