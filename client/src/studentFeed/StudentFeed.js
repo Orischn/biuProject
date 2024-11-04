@@ -19,7 +19,7 @@ function StudentFeed({ token, userId }) {
     const [isChanged, setIsChanged] = useState(false);
 
     const finishPractice = async () => {
-        await api.post('/api/finishPractice/', {
+        const res = await api.post('/api/finishPractice/', {
             'chatId': selectedPractice.chatId,
         });
         if (res.status === 200) {
