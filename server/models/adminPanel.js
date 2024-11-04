@@ -235,7 +235,6 @@ async function giveLateSubmit(taskName, userId, endDate, year) {
         if (result.status !== 200) {
             return result;
         }
-        console.log(parseInt(endDate), result.submitData.endDate)
         if (parseInt(endDate) < result.submitData.endDate) {
             return { status: 400, error: "Can't shorten assignment time." };
         }

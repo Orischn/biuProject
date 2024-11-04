@@ -134,7 +134,6 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
         return { status: 200, practice: practice };
     } catch (error) {
-        console.log(error.message)
         return { status: 500, practice: `${error.message}${os.EOL}Please inform an admin immediately` };
     } finally {
         await client.close();
@@ -214,7 +213,6 @@ async function getMessages(chatId, userId) {
         const chat = (await getPractice(chatId, userId)).practice;
         return { status: 200, messages: chat.messages };
     } catch (error) {
-        console.log(error.message)
         return { status: 500, messages: error.message };
     }
 }
@@ -255,7 +253,6 @@ async function addMessage(userId, chatId, content, isBot) {
 
         return { status: 200, error: "" };
     } catch (error) {
-        console.log(error.message)
         return { status: 500, error: error.message };
     } finally {
         await client.close();

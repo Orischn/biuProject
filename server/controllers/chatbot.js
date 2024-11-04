@@ -15,7 +15,6 @@ const decipherQuestion = async (req, res) => {
         setTimeout(resolve, 4000);
     });
     result = await getMessages(req.body.chatId, userId);
-    console.log(result);
     return res.status(result.status).json(result.messages[0]);
 }
 
