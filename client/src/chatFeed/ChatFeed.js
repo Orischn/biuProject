@@ -100,7 +100,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
 
     return (
         <>
-            <div id="chatFeed" className="col-9">
+            <div id="chatFeed" className="col-9" style={{ height: '100%', overflowY: "auto" }}>
                 <div id="me" className="d-flex align-items-center w-100">
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div className="d-flex align-items-center">
