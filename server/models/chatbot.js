@@ -104,7 +104,6 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
             encoding: 'utf-8'
         })
         botProcess.stdout.on('data', (data) => {
-            console.log(data.toString())
             messageData = data.toString().split('|');
             addMessage(messageData[1], messageData[0], messageData[2], true);
         })
