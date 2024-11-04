@@ -123,7 +123,7 @@ function AdminFeed({ token, userId }) {
                         <SearchStudent filter={filter} setFilter={setFilter} />
                         {studentList}
                     </div>
-                    <div id="gradesChatBlock" className="col-9">
+                    <div id="gradesChatBlock" className="col-9" style={{ height: '100%', overflowY: "auto" }}>
                         {selectedStudent ?
                             <>
                                 <StudentStats token={token} selectedStudent={selectedStudent}
