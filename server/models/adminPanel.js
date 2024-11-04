@@ -2,6 +2,7 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const mongoSanitize = require('mongo-sanitize');
+const { botProcesses } = require('./chatbot');
 
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -76,6 +77,9 @@ async function getTasks() {
 async function getTask(taskName, year) {
     try {
         const task = await tasks.findOne({ taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
+        task.submitList.forEach(submitData => {
+            submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+        })
         return { status: 200, task: task };
     } catch (error) {
         return { status: 500, task: error.message };
@@ -88,6 +92,11 @@ async function adminViewTasks(year) {
         if (!taskList) {
             return { status: 404, tasks: 'No existing tasks' }
         }
+        taskList.forEach(task => {
+            task.submitList.forEach(submitData => {
+                submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+            })
+        })
         return { status: 200, tasks: taskList };
     } catch (error) {
         return { status: 500, tasks: error.message };
@@ -103,6 +112,9 @@ async function getSubmissionStatus(taskName, year) {
         if (!task) {
             return { status: 404, submissionStatus: "No such task." };
         }
+        task.submitList.forEach(submitData => {
+            submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+        })
         return { status: 200, submissionStatus: task.submitList };
     } catch (error) {
         return { status: 500, submissionStatus: error.message };
@@ -219,14 +231,11 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
                 }
             ]
         );
-
-        const updatedPractice = await practices.findOne({
-            chatId: { $eq: mongoSanitize(newTaskName) },
-            year: { $eq: parseInt(year) }
-        });
-        
-        // console.log(updatedPractice.endDate);
-
+        // botProcesses.forEach((key, value) => {
+        //     let newKey = newTaskName + key.slice(key.indexOf(taskName) + 1);
+        //     botProcesses[newKey] = value;
+        //     delete botProcesses[key]
+        // })
         return { status: 200, error: '' };
     } catch (error) {
         console.log(error.message)
