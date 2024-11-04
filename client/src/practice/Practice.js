@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../handleTokenRefresh/HandleTokenRefresh";
 import { useNavigate } from "react-router";
+import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice, refreshData }) {
     const navigate = useNavigate();
@@ -96,6 +96,9 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
             if (res.status === 200) {
                 setIsEndDatePassed(hasTimePassed(res.data.endDate))
                 setTrueEndDate(res.data.endDate);
+            } else if (res.status === 403) {
+                navigate('/');
+                return
             }
         }
 

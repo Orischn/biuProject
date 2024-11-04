@@ -22,8 +22,13 @@ function StudentFeed({ token, userId }) {
         await api.post('/api/finishPractice/', {
             'chatId': selectedPractice.chatId,
         });
-        setSelectedTask(null);
-        setSelectedPractice(null);
+        if (res.status === 200) {
+            setSelectedTask(null);
+            setSelectedPractice(null);
+        } else if (res.status === 403) {
+            navigate('/');
+            return
+        }
     }
 
     const refreshData = () => {
