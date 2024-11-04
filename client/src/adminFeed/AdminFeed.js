@@ -83,6 +83,13 @@ function AdminFeed({ token, userId }) {
         fetchStudents();
     }, [selectedStudent, token, userId, isYearChanged, filter, isAddedOrDeleted])
 
+    const logout = () => {
+        api.post('/api/logout/');
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('userId')
+        navigate('/')
+    }
+
     return (
         <>
             <div id="window" className="container">
@@ -111,6 +118,9 @@ function AdminFeed({ token, userId }) {
 
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
+                            </button>
+                            <button type="button" className={`btn btn-danger`} onClick={logout}>
+                                Logout
                             </button>
 
                         </div>

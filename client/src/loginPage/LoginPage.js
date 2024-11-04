@@ -43,8 +43,7 @@ function LoginPage({ setToken }) {
         navigate('/studentFeed');
       }
     } else if (res.status === 403) {
-      navigate('/');
-      return
+      setToken(null);
     }
   }
 

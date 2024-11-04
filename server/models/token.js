@@ -37,7 +37,7 @@ const postToken = async (user) => {
             return { status: 404, token: "Password is incorrect." };
         }
         const token = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.SECRET_TOKEN, {expiresIn: '30m'});
-        const refreshToken = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '24h' });
+        const refreshToken = jwt.sign({ id: mongoSanitize(user.userId) }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '12h' });
         return { status: 200, token: token, refreshToken: refreshToken };
     } catch (error) {
         return { status: 500, token: error.message };
@@ -60,7 +60,6 @@ const refresh = async (req, res) => {
     if (!req.headers.cookie) return res.sendStatus(403)
     let refreshToken = req.headers.cookie;
     refreshToken = refreshToken.slice(refreshToken.indexOf('=') + 1)
-    console.log(refreshToken)
     if (!refreshToken) return res.sendStatus(403);
     
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -72,9 +71,15 @@ const refresh = async (req, res) => {
     return res.end();
 }
 
+const expireSessionTokens = async (userId) => {
+    jwt.sign({ id: userId }, process.env.SECRET_TOKEN, { expiresIn: '-10s' });
+    jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '-10s' });
+}
+
 module.exports = {
     postToken,
     checkToken,
     getId,
     refresh,
+    expireSessionTokens
 };

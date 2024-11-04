@@ -66,6 +66,12 @@ function StudentFeed({ token, userId }) {
         fetchTasks();
     }, [selectedTask, token, userId, year, isChanged])
 
+    const logout = () => {
+        api.post('/api/logout/');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userId');
+        navigate('/')
+    }
 
     return (
         <>
@@ -74,7 +80,9 @@ function StudentFeed({ token, userId }) {
                     <div id="practiceFeed" className="col-3" style={{ height: '100%', overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
-
+                            <button type="button" className={`btn btn-danger`} onClick={logout}>
+                                Logout
+                            </button>
                             <ChangePassword token={token} userId={userId} />
                         </div>
                         <div className="d-flex align-items-center">
