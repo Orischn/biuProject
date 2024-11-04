@@ -50,7 +50,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
                 })
             } else if (res.status === 403) {
                 navigate('/');
-                return
+                return;
             }
         }
         fetchMessages();

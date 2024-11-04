@@ -119,9 +119,10 @@ function AdminFeed({ token, userId }) {
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
                             </button>
-                            <button type="button" className={`btn btn-danger`} onClick={logout}>
-                                Logout
-                            </button>
+                            <a href="#" className="tooltip-test" title="logout">
+                                <i className="bi bi-box-arrow-left" onClick={logout} style={{ cursor: 'pointer', color: 'white' }} />
+                            </a>
+
 
                         </div>
                         <div className="d-flex align-items-center">

@@ -80,10 +80,10 @@ function StudentFeed({ token, userId }) {
                     <div id="practiceFeed" className="col-3" style={{ height: '100%', overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
-                            <button type="button" className={`btn btn-danger`} onClick={logout}>
-                                Logout
-                            </button>
                             <ChangePassword token={token} userId={userId} />
+                            <a href="#" className="tooltip-test" title="logout">
+                                <i className="bi bi-box-arrow-left" onClick={logout} style={{ cursor: 'pointer', color: 'white' }} />
+                            </a>
                         </div>
                         <div className="d-flex align-items-center">
                             <br />

@@ -4,8 +4,8 @@ import Countdown from "../countdown/Countdown";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 import SendMessage from "../sendMessage/SendMessage";
 import StudentMessage from "../studentMessage/StudentMessage";
+import React, { useState, useEffect, useRef } from "react";
 
-const { useState, useEffect, useRef, useCallback } = require("react");
 
 function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, latestMessage, setLatestMessage,
     isTimeUp, setIsTimeUp, isEndDatePassed, setIsEndDatePassed, setSelectedPractice, setSelectedTask }) {
@@ -146,7 +146,14 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                         </div>
                                                         <div className="modal-body text-black" style={{ fontWeight: 'normal' }}>
                                                             <div><b>grade:</b> {selectedPractice.grade}</div>
-                                                            <div><b>feedback:</b> {selectedPractice.feedback}</div>
+                                                            <div><b>feedback:</b><br />
+                                                                {selectedPractice.feedback.replace(/^"|"$/g, '').split('\n').map((line, index) => (
+                                                                    <React.Fragment key={index}>
+                                                                        {line}
+                                                                        <br />
+                                                                    </React.Fragment>
+                                                                ))}
+                                                            </div>
                                                         </div>
                                                         <div className="modal-footer">
                                                             <button type="button" className="btn btn-primary" data-bs-dismiss="modal">OK</button>

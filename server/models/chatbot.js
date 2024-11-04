@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 const { spawn } = require('child_process');
-const os  = require('os');
+const os = require('os');
 const { randomInt } = require('crypto');
 const mongoSanitize = require('mongo-sanitize');
 
@@ -21,7 +21,7 @@ async function getPractice(chatId, userId) {
         const practices = db.collection('practices');
         const practice = await practices.findOne({ chatId: { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) } });
         if (!practice) {
-            return { status: 404, practice: null}
+            return { status: 404, practice: null }
         }
         practice.botPic = Buffer.from(practice.botPic, 'base64').toString('utf-8');
         practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
@@ -45,7 +45,7 @@ async function getPractices(userId) {
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
         const res = await practices.find({ userId: { $eq: mongoSanitize(userId) } }).toArray();
-        
+
         res.forEach(practice => {
             if (typeof practice.botPic === 'string') {
                 practice.botPic = Buffer.from(practice.botPic, 'base64').toString('utf-8');
@@ -80,18 +80,20 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const practices = db.collection('practices');
-        
-        const existingTask = await tasks.findOne({ taskName:
-            { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) } });
+
+        const existingTask = await tasks.findOne({
+            taskName:
+                { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) }
+        });
         if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };
         }
-        
+
         const user = existingTask.submitList.find(user => user.userId === mongoSanitize(userId))
-        
+
         const time = Date.now()
         if (!(time < Math.max(user.endDate, existingTask.endDate))) {
-            return { status: 400, practice: "Submission date passed!"};
+            return { status: 400, practice: "Submission date passed!" };
         }
         const decodedQuestions = JSON.parse(Buffer.from(existingTask.questions, 'base64').toString('utf-8'));
         answers = decodedQuestions.answers
@@ -111,7 +113,7 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         await new Promise((resolve) => {
             setTimeout(resolve, 15000);
         });
-        
+
         const practice = {
             userId: mongoSanitize(userId),
             chatId: mongoSanitize(chatId),
@@ -174,12 +176,14 @@ async function submitPractice(userId, chatId) {
         }
         var time = Date.now();
         const submitData = task.submitList.find(user => user.userId === userId)
-        
+
         if (!(time < Math.max(submitData.endDate, task.endDate))) {
-            return { status: 400, practice: "Submission date passed."};
+            return { status: 400, practice: "Submission date passed." };
         }
-        botProcesses[chatId + userId].kill('SIGKILL');
-        delete botProcesses[chatId + userId];
+        if (botProcesses[chatId + userId]) {
+            botProcesses[chatId + userId].kill('SIGKILL');
+            delete botProcesses[chatId + userId];
+        }
         await practices.updateOne(
             { chatId: { $eq: chatId }, userId: { $eq: userId }, active: { $eq: true } },
             {
@@ -189,7 +193,7 @@ async function submitPractice(userId, chatId) {
                 },
             },
         );
-        
+
         await tasks.updateOne(
             { taskName: { $eq: mongoSanitize(chatId) }, 'submitList.userId': { $eq: mongoSanitize(userId) } },
             {
@@ -227,8 +231,10 @@ async function addMessage(userId, chatId, content, isBot) {
         await client.connect();
         const db = client.db('ChatBot');
         const practices = db.collection('practices');
-        const practice = await practices.findOne({ chatId: { $eq: mongoSanitize(chatId) },
-        userId: { $eq: mongoSanitize(userId) }, active: { $eq: true } });
+        const practice = await practices.findOne({
+            chatId: { $eq: mongoSanitize(chatId) },
+            userId: { $eq: mongoSanitize(userId) }, active: { $eq: true }
+        });
         if (!practice) {
             return { status: 404, error: "Couldn't find chat" };
         }
@@ -238,7 +244,7 @@ async function addMessage(userId, chatId, content, isBot) {
                 return { status: 400, error: "Submission timer ran out." }
             }
         }
-        
+
         await practices.updateOne(
             { chatId: { $eq: mongoSanitize(chatId) }, userId: { $eq: mongoSanitize(userId) }, active: { $eq: true } },
             {
@@ -250,7 +256,7 @@ async function addMessage(userId, chatId, content, isBot) {
                 },
             }
         );
-        
+
         return { status: 200, error: "" };
     } catch (error) {
         console.log(error.message)
@@ -275,7 +281,7 @@ async function updateGrade(userId, chatId, newGrade) {
                 },
             },
         );
-        
+
         await tasks.updateOne(
             { taskName: { $eq: mongoSanitize(chatId) }, "submitList.userId": { $eq: mongoSanitize(userId) } },
             {
