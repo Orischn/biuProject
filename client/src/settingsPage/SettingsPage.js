@@ -2,7 +2,7 @@ import { useState } from "react"
 import StudentSettingsPage from "../studentSettingsPage/StudentSettingsPage"
 import AssignmentsSettingsPage from "../assignmentsSettingsPage/AssignmentsSettingsPage";
 
-function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChanged }) {
+function SettingsPage({ token, yearOption, refreshDataInFeed, isYearChanged }) {
     const [selectedSettings, setSelectedSettings] = useState(0)
     const [expand, setExpand] = useState(false);
 
@@ -29,12 +29,7 @@ function SettingsPage({ token, userId, yearOption, refreshDataInFeed, isYearChan
                     <div className="modal-body">
                         <div className="row">
                             <div className="col-2">
-                                {/* trying something */}
                                 <ul className="list-group mt-3">
-                                    {/* <li className={`list-group-item settingType ${selectedSettings === 2 ? 'active' : ''}`}
-                                        onClick={() => setSelectedSettings(2)}>
-                                        <i className="bi bi-gear"></i> &nbsp; General
-                                    </li> */}
                                     <li className={`list-group-item settingType ${selectedSettings === 0 ? 'active' : ''}`}
                                         onClick={() => {
                                             setSelectedSettings(0)

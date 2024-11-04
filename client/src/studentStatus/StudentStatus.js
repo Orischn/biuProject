@@ -74,18 +74,7 @@ function StudentStatus({ token, selectedStudent, yearOption }) {
                     { }
                 </div>
             </ul>
-
-            {/* {studentList.length > 0 ? (
-            studentList
-            ) : (
-            <>
-            no student matching was found, try searching again
-            </>
-            )} */}
             {taskList}
-
-
-            {/* </div> */}
         </>
     );
 }

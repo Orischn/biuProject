@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 import Feedback from "../feedback/Feedback";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
-function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, chatId, grade, feedback,
-    setNewGrade, isActive, refreshData, year, isStarted }) {
+function Grade({ setSelectedGradeId, selectedStudent, chatId, grade, feedback,
+    setNewGrade, isActive, refreshData, year }) {
     const navigate = useNavigate();
     var input = useRef(null);
 
@@ -20,19 +20,11 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
         // maybe she would like to cancel the grade???
         else if (value === "") {
-            // Allow clearing the input field
             setInputGrade("");
         }
     };
 
     const [isEditing, setIsEditing] = useState(false);
-
-    // useEffect(() => {
-    //     // if (input.current) {
-    //     //     input.current.value = grade;
-    //     // }
-    //     setIsEditing(false);
-    // }, [grade, selectedStudent]);
 
     useEffect(() => {
         setIsEditing(false);
@@ -44,10 +36,6 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
 
     const changeGrade = async () => {
 
-        // if (input.current.value.trim() === '') {
-        //     alert('must enter a valid grade');
-        //     return;
-        // }
         let gradeValue;
         if (input.current.value.trim() !== '') {
             gradeValue = Number(input.current.value.trim());
@@ -80,21 +68,8 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
         setIsEditing(true);
     };
 
-
     return (
         <>
-            {/* <div className="grade-container">
-                <button className="grade-title" onClick={() => setSelectedGradeId(chatId)}>
-                Practice #{chatId}
-                </button>
-                <input
-                type="number"
-                ref={input}
-                className="grade-input"
-                onChange={changeGrade}
-                placeholder="Enter grade"
-                />
-                </div> */}
             <div className="grade-container">
                 {!isEditing ? (
                     <>
@@ -108,21 +83,11 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                             </>
                         ) : (
                             <>
-                                {/* {isStarted ? (
-                            <div style={{ color: 'red' }}>
-                            Hasn't been sumbitted yet
-                            </div>
-                            ) : (
-                            <div style={{ color: 'red' }}>
-                            Wasn't started by the student
-                            </div>
-                            )} */}
                                 <div style={{ color: 'red' }}>
                                     Hasn't been sumbitted yet
                                 </div>
                             </>
                         )}
-
                         <div className="grade-feedback">
                             <span className="grade-display">
                                 {grade !== null ?
@@ -133,21 +98,10 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                     ) :
                                     ('')}
                             </span>
-
                             <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick} style={{ cursor: 'pointer' }}></i>
-                            <Feedback token={token} chatId={chatId} feedback={feedback}
+                            <Feedback chatId={chatId} feedback={feedback}
                                 selectedStudent={selectedStudent} refreshData={refreshData}
                                 year={year} />
-
-                            {/* {!isStarted ? (<>Cannot grade assignment</>) : (
-                                <>
-                                <i className="bi bi-pencil" aria-hidden="true" onClick={handleEditClick}></i>
-                                <Feedback token={token} chatId={chatId} feedback={feedback}
-                                selectedStudent={selectedStudent} refreshData={refreshData}
-                                year={year} />
-                                </>
-                                )} */}
-
                         </div>
                     </>
                 ) : (
@@ -163,7 +117,6 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                                 min="0"
                                 max="100"
                                 ref={input}
-                                // value={inputGrade}
                                 onChange={handleChange} />
                             <i className="bi bi-x-lg" style={{ cursor: 'pointer' }} onClick={handleCancel} />
                             <button className="save-btn" onClick={changeGrade}>
@@ -174,7 +127,6 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                 )}
             </div >
         </>
-
     )
 }
 

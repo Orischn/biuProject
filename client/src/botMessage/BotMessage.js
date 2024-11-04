@@ -1,5 +1,3 @@
-
-
 function BotMessage({ message }) {
     return (
         <div dir="ltr" key={message._id}>

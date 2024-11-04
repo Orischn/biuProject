@@ -3,8 +3,7 @@ import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
-    taskName, refreshData, grade, year }) {
+function StudentAssignment({ fullname, userId, didSubmit, taskName, refreshData, grade, year }) {
     const navigate = useNavigate();
 
     const [expand, setExpand] = useState(false);
@@ -34,7 +33,6 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
             navigate('/');
             return
         } else {
-            // setExpand(false);
             setIsSuccessful(true);
             setError('Changed Successfully');
             refreshData();
@@ -45,24 +43,6 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
         setError('');
         setExpand(false);
     }
-
-    const cancelLateSubmit = async function (userId, taskName) {
-        const res = await api.post('/api/cancelLateSubmit', {
-            "taskName": taskName,
-            "userId": userId
-        })
-
-        if (res.status !== 200) {
-            setError(res.data)
-        } else if (res.status === 403) {
-            navigate('/');
-            return
-        } else {
-            setError('')
-            refreshData();
-        }
-    }
-
 
     return (
         <>
@@ -79,7 +59,6 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
                             {/* Submitted */}
                             <i className="bi bi-check-square" />
                         </div>
-
                     ) : (
                         <div className="col-1" style={{ color: 'red' }}>
                             {/* Didn't submit */}
@@ -96,18 +75,9 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
                         </div>
                     )}
 
-
-
                     <div className="col-4">
                         {didSubmit ? ('') : (
                             !expand ? (
-                                // !canSubmitLate ? (
-                                //     <button className="btn btn-success" disabled={didSubmit}
-                                //         onClick={() => setExpand(true)}>Allow late submit</button>
-                                // ) : (
-                                //     <button className="btn btn-danger" disabled={didSubmit}
-                                //         onClick={() => cancelLateSubmit(userId, taskName)}>cancel late submit</button>
-                                // )
                                 <button className="btn btn-success" disabled={didSubmit}
                                     onClick={() => setExpand(true)}>Allow late submit</button>
                             ) : (
@@ -130,7 +100,6 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
                             )
                         )}
                     </div>
-
                 </div>
             </ul>
         </>

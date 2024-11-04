@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
-function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year }) {
+function Feedback({ chatId, feedback, selectedStudent, refreshData, year }) {
     const navigate = useNavigate();
     const feedbackBar = useRef(null);
     const [showModal, setShowModal] = useState(false)
@@ -36,8 +36,6 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
     }
 
     const handleCancel = () => {
-        // feedbackBar.current.value = '';
-        // setError('');
         setShowModal(false); // Close the modal on cancel
     };
 
@@ -46,11 +44,6 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
         setShowModal(false)
     }
 
-    // const getNewlineCharacter = () => {
-    //     return navigator.userAgent.includes('Win') ? '\r\n' : '\n';
-    // };
-
-    // const newline = getNewlineCharacter();
     return (
 
         <>
@@ -73,7 +66,7 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                                         ref={feedbackBar}
                                         placeholder="Enter feedback"
                                         className="form-control feedback-textarea"
-                                        rows={3} // You can adjust this for height
+                                        rows={3} // adjust this for height
                                     />
                                     {feedback ?
                                         <><b><u>Feedback Given:</u></b> <br /> </> : <></>}
@@ -95,7 +88,6 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                 </div>
             )}
 
-
             {showConfirmationModal && (
                 <div className="modal show d-block" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-dialog-centered" role="document">
@@ -112,7 +104,6 @@ function Feedback({ token, chatId, feedback, selectedStudent, refreshData, year 
                     </div>
                 </div>
             )}
-
         </>
     )
 }

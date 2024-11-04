@@ -1,5 +1,4 @@
 
-
 function Student({ student, selectedStudent, setSelectedStudent }) {
     return (
         // practice-active is a class name for the design of active with brighter color

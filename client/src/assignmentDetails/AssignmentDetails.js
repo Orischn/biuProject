@@ -18,26 +18,15 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         setSelectedTask(taskName)
     }
 
-    const handleUnexpand = () => {
-        setExpand(false);
-    }
-
-    // const newTaskNameBar = useRef(null);
     const newEndDateBar = useRef(null)
 
     const handleCancel = () => {
         setError('')
         setIsEditing(false);
-        // newTaskNameBar.current.value = "";
         newEndDateBar.current.value = "";
     }
 
     const editAssignment = async (e) => {
-
-        // if (!newTaskNameBar.current.value.trim() || !newEndDateBar.current.value.trim()) {
-        //     setError('must fill both fields')
-        //     return;
-        // }
 
         if (!newEndDateBar.current.value.trim()) {
             setError('must choose a new date')
@@ -45,16 +34,13 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         }
 
         e.preventDefault();
-        // const newTaskName = newTaskNameBar.current.value.trim();
         const newEndDate = newEndDateBar.current.value.trim();
 
         const res = await api.post('/api/updateTask', {
             "taskName": taskName,
-            // "newTaskName": newTaskName,
             "newEndDate": new Date(newEndDate).getTime(),
             "year": yearOption.current.value
         })
-
 
         if (res.status !== 200) { //error
             setError(res.data);
@@ -67,9 +53,7 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         } else {
             setError("Changed Successfully");
             setIsSuccessful(true);
-            // newTaskNameBar.current.value = "";
             newEndDateBar.current.value = "";
-            // setIsEditing(false);
             refreshData()
 
         }
@@ -92,7 +76,6 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         return `${day}-${month}-${year}T${hours}:${minutes}:${seconds}`;
     };
 
-
     useEffect(() => {
         const fetchSubmissionStatus = async function (taskName, year) {
             const res = await api.get(`/api/getSubmissionStatus/${taskName}/${year}`);
@@ -112,7 +95,6 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
         <>
             {!isEditing ? (
                 <>
-
                     <ul>
                         <div className="row">
                             <div className="col-2">
@@ -122,16 +104,14 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                                 {numOfSubmits} / {numOfAssigned} submitted
                             </div>
                             <div className="col-4">
-                                {/* maybe remove the T for design */}
                                 {convertTimestampToDate(endDate).split('T')[0]}{' '}
                                 on {convertTimestampToDate(endDate).split('T')[1]}
                             </div>
-
                             <div className="col-1">
                                 <i className="bi bi-pencil" style={{ cursor: 'pointer' }} onClick={() => { setIsEditing(true) }} />
                             </div>
                             <div className="col-1">
-                                <DeleteAssignment token={token} taskName={taskName}
+                                <DeleteAssignment taskName={taskName}
                                     year={yearOption.current.value} refreshData={refreshData} />
                             </div>
                             <div className="col-1">
@@ -139,18 +119,10 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             </div>
                         </div>
                     </ul>
-
-
                 </>
-
-
             ) : (
                 <ul>
                     <div className="row">
-                        {/* <div className="col-2" style={{ alignItems: 'left' }}>
-                            <input className="editAssignmentInput" ref={newTaskNameBar} type="text"
-                                placeholder="new name" style={{ width: "100%", paddingLeft: '10%' }} />
-                        </div> */}
                         <div className="col-2">
                             {taskName}
                         </div>
@@ -158,7 +130,6 @@ function AssignmentDetails({ token, taskName, endDate, refreshData, setExpand, s
                             {numOfSubmits} / {numOfAssigned} submitted
                         </div>
                         <div className="col-3">
-                            {/* needs to be input so we could edit? like in grade? */}
                             <input className="editAssignmentInput" ref={newEndDateBar} type="datetime-local" placeholder="new date" style={{ width: "80%" }} />
                         </div>
 

@@ -9,8 +9,6 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
     const navigate = useNavigate();
     const [taskList, setTaskList] = useState([]);
     const [isChanged, setIsChanged] = useState(false);
-    const [error, setError] = useState('')
-    // const [expand, setExpand] = useState(false);
     const [selectedTask, setSelectedTask] = useState('');
 
     const handleUnexpand = () => {
@@ -25,7 +23,6 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
 
 
     useEffect(() => {
-
         const fetchTasks = async () => {
             const res = await api.get(`/api/adminGetTasks/${yearOption.current.value}`);
             if (res.status === 200) {
@@ -54,8 +51,7 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
             <div className="settings-container">
                 {!expand ? (
                     <>
-
-                        <AddAssignment token={token} refreshData={refreshData} yearOption={yearOption} />
+                        <AddAssignment refreshData={refreshData} yearOption={yearOption} />
                         <ul>
                             <div className="row">
                                 <div className="col-2">
@@ -78,13 +74,10 @@ function AssignmentsSettingsPage({ token, yearOption, expand, setExpand, refresh
                             &nbsp; go back
                         </div>
                         <AssignemntStatus token={token} taskName={selectedTask} yearOption={yearOption} />
-
                     </>
                 )}
 
             </div>
-
-
         </>
     )
 }

@@ -19,13 +19,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
 
     const chat = useRef(null);
 
-    const changeEndDateFormat = (endDate) => {
-        const [datePart, timePart] = endDate.split('T');
-        const [day, month, year] = datePart.split('-');
-        const formattedDateString = `${year}-${month}-${day}T${timePart}`;
-        return formattedDateString;
-    }
-
     useEffect(() => {
         const fetchMessages = async () => {
             if (!selectedPractice) {
@@ -57,11 +50,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
     }
 
     const addTimeToDateString = (timestamp, hoursToAdd = 0, minutesToAdd = 0, secondsToAdd = 0) => {
-        // const [datePart, timePart] = dateString.split(' ');
-        // const [hours, minutes, seconds] = timePart.split(':').map(part => part.padStart(2, '0'));
-        // const formattedTime = `${hours}:${minutes}:${seconds}`;
-        // const formattedString = `${datePart}T${formattedTime}`;
-        // const date = new Date(formattedString);
 
         const date = new Date(timestamp);
 
@@ -110,9 +98,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
         setSelectedTask(null)
     }
 
-
-
-
     return (
         <>
             <div id="chatFeed" className="col-9">
@@ -134,7 +119,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                             <span id="feedback-link" className="hyperlink">
                                                 click <span id="click-here" data-bs-toggle="modal" data-bs-target="#feedbackModal">here</span>
                                                 {' '}to see the grade and the lecturer's feedback</span>
-
                                             {/* Feedback Modal */}
                                             <div className="modal fade" id="feedbackModal" tabIndex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
                                                 <div className="modal-dialog">
@@ -173,7 +157,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                     purpose={'date'}
                                                     setShowModal={setShowEndDateModal}
                                                 />
-
                                                 <>
                                                     {showTimer ? (
                                                         <>
@@ -197,10 +180,8 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                                     ) : (
                                                                         <></>
                                                                     )}
-
                                                                 </>
                                                             ) : ('Time\'s up!')}
-
                                                         </>
                                                     ) : (
                                                         <button type="button"
@@ -233,7 +214,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                             'Submission date has passed!'
                                         )}
 
-
                                         {showTimesUpModal && (
                                             <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                                                 <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
@@ -242,7 +222,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                             <h5 className="modal-title text-white">Time's Up</h5>
                                                             <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseTimesUpModal}></button>
                                                         </div>
-
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
                                                             The time for this assignemnt has over. <br />
                                                             Please submit your progress before the last date of submission. <br />
@@ -250,17 +229,14 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                                 {' '}on {convertTimestampToDate(selectedPractice.endDate).split('T')[1]}. </b><br />
                                                             After this time you won't be allowed to submit your work. <br />
                                                             Good Luck!
-
                                                         </div>
                                                         <div className="modal-footer">
-
                                                             <button type="button" className="btn btn-primary" onClick={handleCloseTimesUpModal}>OK</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         )}
-
 
                                         {showEndDateModal && (
                                             <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
@@ -270,7 +246,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                             <h5 className="modal-title text-white">Missed Submission</h5>
                                                             <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCloseEndDateModal}></button>
                                                         </div>
-
                                                         <div className="modal-body" style={{ color: 'black', fontWeight: 'normal' }}>
                                                             The submission date of this assignemnt has passed, and submission is no longer allowed. <br />
                                                             If you are allowed to submit late, please open again this assignemnt,
@@ -279,7 +254,6 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                                             Good Luck!
                                                         </div>
                                                         <div className="modal-footer">
-
                                                             <button type="button" className="btn btn-primary" onClick={handleCloseEndDateModal}>OK</button>
                                                         </div>
                                                     </div>
@@ -291,7 +265,7 @@ function ChatFeed({ token, selectedPractice, selectedTask, finishPractice, lates
                                 ) : ('')}
                             </b>
                         </div>
-                        {/*  */}
+
                         <button type="button"
                             className={`btn btn-danger ${(!selectedPractice.active) ? 'custom-disabled' : ''}`}
                             disabled={!selectedPractice.active ||

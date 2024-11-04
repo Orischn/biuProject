@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
-function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice, refreshData }) {
+function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPractice }) {
+    
     const navigate = useNavigate();
     const hasTimePassed = function (targetDate) {
         const currentDate = new Date();
         return targetDate < currentDate;
     }
-
 
     const [isCreated, setIsCreated] = useState(null);
     const [isFinished, setIsFinished] = useState(false);
@@ -32,13 +32,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
 
     const handleConfirm = async () => {
         add();
-        // console.log(res)
-        // if (res === 400) {
-        //     setShowModal(false);
-        //     alert('pop a modal that says you are late and cant start')
-        //     return;
-        // }
-
         setIsLoading(true);
         await new Promise((resolve) => {
             setTimeout(resolve, 15000);
@@ -90,7 +83,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     };
 
     useEffect(() => {
-
         const fetchEndDate = async function () {
             const res = await api.get(`/api/getUserSubmitData/${task.taskName}/${task.year}`);
             if (res.status === 200) {
@@ -144,11 +136,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                     }
                 }}
             >
-
-                {/* <br /> */}
-                {/* isEndDatePassed ? {String(isEndDatePassed)} */}
-                {/* <br /> */}
-                {/* isLateSubmitAllowed ? {String(isLateSubmitAllowed)} */}
                 <div className="row">
                     <div>
                         <b className="text-black w-100">{task.taskName}</b>
@@ -197,7 +184,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </>
                     ) : (
                         <>
-
                             submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />
                             at {convertTimestampToDate(trueEndDate).split('T')[1].slice(0, -3)}
@@ -238,7 +224,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
 
                             {!isLoading &&
                                 <div className="modal-footer">
-
                                     <>
                                         <button type="button" className="btn btn-secondary" onClick={handleCancel}>No, Cancel</button>
                                         <button type="button" className="btn btn-danger" onClick={handleConfirm}>
@@ -258,7 +243,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </div>
                     </div>
                 </div>
-
             )}
 
             {showCantStartModal && (
@@ -274,7 +258,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                                 For further details, please contact your lecturer
                             </div>
                             <div className="modal-footer">
-
                                 <>
                                     <button type="button" className="btn btn-danger" onClick={() => setShowCantStartModal(false)}>
                                         OK
@@ -284,10 +267,8 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </div>
                     </div>
                 </div>
-
             )}
         </>
-
     );
 }
 

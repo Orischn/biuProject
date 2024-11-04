@@ -72,9 +72,6 @@ async function getPractices(userId) {
     }
 }
 
-
-
-
 async function postPractice(userId, chatId, durationHours, durationMinutes, endDate, year) {
     const client = new MongoClient("mongodb://127.0.0.1:27017");
     try {

@@ -121,6 +121,36 @@ async function postUser(user) {
 
     const cid = 'welcome@image';
 
+    //Hashing the user's password with salt
+    const hashedPassword = await hashPassword(user.password);
+
+    await users.insertOne({
+      userId: mongoSanitize(user.userId),
+      firstName: mongoSanitize(user.firstName),
+      lastName: mongoSanitize(user.lastName),
+      password: hashedPassword,
+      permissions: false,
+      year: parseInt(user.year)
+    });
+
+    const result = await getTasks(user.year);
+    if (result.status !== 200) {
+      return result;
+    }
+
+    result.tasks.forEach(async (task) => {
+      await tasks.updateOne({ taskName: task.taskName, year: task.year },
+        {
+          $push: {
+            submitList: {
+              userId: mongoSanitize(user.userId),
+              firstName: mongoSanitize(user.firstName), lastName: mongoSanitize(user.lastName),
+              didSubmit: false, canSubmitLate: false, grade: null, endDate: task.endDate
+            },
+          }
+        })
+    })
+
     if (user.isSelfRegistered) {
       sendEmail(`${user.email}`, 'Registration Completed Successfully',
         `Hello ${user.firstName} ${user.lastName}! <br />
@@ -145,40 +175,6 @@ async function postUser(user) {
         We hope you will enjoy using our system, Good Luck! <br /><br />
         <center><img src="cid:${cid}" /></center>`);
     }
-
-
-
-    //Hashing the user's password with salt
-    const hashedPassword = await hashPassword(user.password);
-
-    await users.insertOne({
-      userId: mongoSanitize(user.userId),
-      firstName: mongoSanitize(user.firstName),
-      lastName: mongoSanitize(user.lastName),
-      password: hashedPassword,
-      permissions: false,
-      year: parseInt(user.year)
-    });
-
-    const result = await getTasks(user.year);
-    if (result.status !== 200) {
-      return result;
-    }
-
-    console.log(result.tasks)
-
-    result.tasks.forEach(async (task) => {
-      await tasks.updateOne({taskName: task.taskName, year: task.year},
-        {
-          $push: {
-            submitList: {
-              userId: mongoSanitize(user.userId),
-              firstName: mongoSanitize(user.firstName), lastName: mongoSanitize(user.lastName),
-              didSubmit: false, canSubmitLate: false, grade: null, endDate: task.endDate
-            },
-          }
-        })
-    })
 
     return { status: 201, error: "" };
   } catch (error) {
@@ -261,10 +257,6 @@ async function changeUserPassword(user, oldPassword, newPassword) {
     if (!await bcrypt.compare(oldPassword, user.password)) {
       return { status: 400, error: "Old password isn't correct." };
     }
-
-    // if (oldPassword !== user.password) {
-    //   return { status: 400, error: "Old password isn't correct." };
-    // }
 
     const hashedNewPassword = await hashPassword(newPassword)
 

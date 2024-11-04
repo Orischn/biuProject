@@ -31,22 +31,15 @@ function StudentFeed({ token, userId }) {
         }
     }
 
-    const refreshData = () => {
-        setIsChanged(!isChanged);
-    }
-
     useEffect(() => {
         const fetchTasks = async (yearJson) => {
             const res = await api.get(`/api/getTasks/${yearJson.year}`);
             if (res.status === 200) {
                 setTaskList(res.data.reverse().map((task, key) => {
-                    // if (year === task.year) {
                     return <Practice task={task} key={key}
                         selectedTask={selectedTask}
                         setSelectedTask={setSelectedTask}
-                        setSelectedPractice={setSelectedPractice} token={token}
-                        refreshData={refreshData} />
-                    // }
+                        setSelectedPractice={setSelectedPractice} token={token} />
                 }));
             } else if (res.status === 403) {
                 navigate('/');
@@ -93,7 +86,7 @@ function StudentFeed({ token, userId }) {
                     <div id="practiceFeed" className="col-3" style={{ height: '100%', overflowY: "auto" }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
-                            <ChangePassword token={token} userId={userId} />
+                            <ChangePassword userId={userId} />
                             <a href="#" className="tooltip-test" title="logout">
                                 <i className="bi bi-box-arrow-left" onClick={logout} style={{ cursor: 'pointer', color: 'white' }} />
                             </a>
@@ -107,8 +100,6 @@ function StudentFeed({ token, userId }) {
                     </div>
                     {selectedPractice ? (
                         <>
-                            {/* <AddPractice token={token} selectedTask={selectedTask}
-                setSelectedTask={setSelectedTask} /> */}
                             <ChatFeed token={token} selectedPractice={selectedPractice}
                                 selectedTask={selectedTask} finishPractice={finishPractice} latestMessage={latestMessage}
                                 setLatestMessage={setLatestMessage} isTimeUp={isTimeUp}
@@ -118,11 +109,7 @@ function StudentFeed({ token, userId }) {
                             />
                         </>
                     ) : (
-
                         <>
-                            {/* placeholder */}
-
-                            {/* <img src={biulogo3} style={{width: "30%", height: "50vh"}}/> */}
                         </>
                     )}
 

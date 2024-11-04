@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
+function AdminDeleteStudent({ userId, fullName, refreshData }) {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
@@ -33,9 +33,7 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
             navigate('/');
             return
         } else {
-            // setError("Deleted Successfully");
             setIsSuccessful(true);
-            // setIsChanged(userId);
             refreshData();
             setShowModal(false);
         }
@@ -46,12 +44,10 @@ function AdminDeleteStudent({ token, userId, fullName, refreshData }) {
             {/* Button trigger modal */}
             <button type="button" className="btn" onClick={handleClick}>
                 <i id="deleteStudentIcon" className="bi bi-person-x" style={{ color: 'black' }}></i>
-
             </button>
 
             {/* Modal */}
             {showModal && (
-                // check first line for backdrop
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                     <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
                         <div className="modal-content">

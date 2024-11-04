@@ -27,9 +27,6 @@ function TaskDetails({ taskName, didSubmit, endDate, grade }) {
                     <div className="col-3">
                         {taskName}
                     </div>
-                    {/* <div className="col-2">
-                        {userId}
-                    </div> */}
                     {didSubmit ? (
                         <div className="col-2" style={{ color: 'green' }}>
                             {/* Submitted */}
@@ -42,24 +39,10 @@ function TaskDetails({ taskName, didSubmit, endDate, grade }) {
                             <i className="bi bi-x-square" />
                         </div>
                     )}
-
                     <div className="col-3">
                         {convertTimestampToDate(endDate).split('T')[0]}{' '}
                         on {convertTimestampToDate(endDate).split('T')[1]}
                     </div>
-
-                    {/* {canSubmitLate ? (
-                        <div className="col-2" style={{ color: 'green' }}>
-                            Can Submit late
-                            <i className="bi bi-check-square" />
-                        </div>
-
-                    ) : (
-                        <div className="col-2" style={{ color: 'red' }}>
-                            Can't submit late
-                            <i className="bi bi-x-square" />
-                        </div>
-                    )} */}
                     <div className="col-3">
                         {grade ? grade : 'no grade given'}
                     </div>

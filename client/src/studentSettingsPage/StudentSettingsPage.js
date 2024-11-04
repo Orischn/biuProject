@@ -12,10 +12,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
     const [studentList, setStudentList] = useState([]);
     const [filter, setFilter] = useState('');
     const [isChanged, setIsChanged] = useState(false);
-    // const [expand, setExpand] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState('');
-
-
 
     const handleUnexpand = () => {
         setExpand(false)
@@ -26,8 +23,6 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
         setIsChanged(!isChanged);
         refreshDataInFeed()
     }
-
-
 
     useEffect(() => {
         const fetchStudents = async (filter) => {
@@ -55,7 +50,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
 
                 setStudentList(sortedStudents.map((user, key) => {
                     if (user.year === parseInt(yearOption.current.value)) {
-                        return <StudentDetails key={key} token={token}
+                        return <StudentDetails key={key}
                             user={user} setSelectedStudent={setSelectedStudent}
                             refreshData={refreshData} setExpand={setExpand} />
                     }
@@ -79,9 +74,7 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                             <SearchStudent filter={filter} setFilter={setFilter} />
                             <UploadIdFile token={token} title={'Valid ID\'s numbers'} />
                             &emsp;&emsp;&emsp;
-                            {/* <label htmlFor="addStudent">Add Student</label> */}
-                            <AdminAddStudent token={token} studentList={studentList}
-                                setStudentList={setStudentList} refreshData={refreshData} />
+                            <AdminAddStudent refreshData={refreshData} />
 
                         </ul>
                         {studentList.length > 0 ? (
@@ -116,10 +109,6 @@ function StudentSettingsPage({ token, yearOption, refreshDataInFeed, expand, set
                         <StudentStatus token={token} selectedStudent={selectedStudent} yearOption={yearOption} />
                     </>
                 )}
-
-
-
-
             </div>
         </>
     )

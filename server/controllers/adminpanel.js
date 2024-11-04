@@ -71,8 +71,7 @@ const changeGrade = async (req, res) => {
 }
 
 const updateTask = async (req, res) => {
-    // const result = await changeTask(req.body.taskName, req.body.newTaskName, req.body.newEndDate, req.body.year)
-    const result = await changeTask(req.body.taskName, '', req.body.newEndDate, req.body.year)
+    const result = await changeTask(req.body.taskName, req.body.newEndDate, req.body.year)
     return res.status(result.status).end(result.error);
 }
 

@@ -1,4 +1,4 @@
-const { getTasks, getTask } = require("../models/adminPanel");
+const { getTasks } = require("../models/adminPanel");
 const { postPractice, getPractice, getPractices, addMessage, getMessages, submitPractice, botProcesses, getSubmissionData } = require("../models/chatbot");
 const { getId } = require("../models/token");
 const os = require('os');

@@ -163,44 +163,6 @@ function RegisterPage() {
             return;
         }
 
-
-        // how to check if that userID isn't already existed in the system?
-        // if (users.map((user) => { return user.username }).includes(username)) {
-        //     setUsernameError('Username already exists!');
-        //     return;
-        // }
-
-        //not necessary I think
-        // const passwordRegex = new RegExp('^[a-zA-Z1-9!*]+$')
-        // if (!passwordRegex.test(password)) {
-        //     setPasswordError('Password must contain only letters digits or !/*');
-        //     return;
-        // }
-
-        //their problem
-        // if (password.length < 8) {
-        //     setPasswordError('Password must be at least 8 characters long');
-        //     return;
-        // }
-
-        // const digitCheck = new RegExp('[1-9]');
-        // if (!digitCheck.test(password)) {
-        //     setPasswordError('Password must contain at least one digit');
-        //     return;
-        // }
-
-        // const upperCheck = new RegExp('[A-Z]');
-        // if (!upperCheck.test(password)) {
-        //     setPasswordError('Password must contain at least one uppercase letter');
-        //     return;
-        // }
-
-        // const lowerCheck = new RegExp('[a-z]');
-        // if (!lowerCheck.test(password)) {
-        //     setPasswordError('Password must contain at least one lowercase letter');
-        //     return;
-        // }
-
         if (verifyPassword !== password) {
             setVerifyPassword('');
             setVerifyPasswordError('Passwords do not match!');
@@ -218,8 +180,6 @@ function RegisterPage() {
             setEmailError('Invalid email address');
             return;
         }
-
-        // need to check validity of the email!!!
 
         const res = await api.post('/api/Users', {
             "user": {
@@ -259,9 +219,7 @@ function RegisterPage() {
                     <h2 className="login-title">REGISTER</h2>
                     <p className="description">Medical history questioning practice <br /> School of Optometry and Vision Science</p>
                     <form noValidate className="container-fluid" onSubmit={handleSubmit}>
-
                         {infoInputList}
-
                         <button type="submit" className="sign-in-btn" style={{ marginBottom: '20px' }}>Register</button>
                         {error &&
                             <span className="alert alert-danger w-50" role="alert">

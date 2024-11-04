@@ -23,7 +23,6 @@ function SendMessage({ token, selectedPractice, messages, setMessages, setLatest
             'year': selectedPractice.year,
             "msg": content,
         })
-        console.log(res.data)
         if (res.status === 500) {
             setMessages(messages.slice(0, -1));
         } else if (res.status === 403) {
@@ -33,7 +32,6 @@ function SendMessage({ token, selectedPractice, messages, setMessages, setLatest
             setMessages(messages => [...messages, <BotMessage message={res.data} />]);
         }
         setLatestMessage(message);
-
     }
 
 

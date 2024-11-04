@@ -50,12 +50,11 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     });
 
                 setStudentList(sortedUsers.map((student, key) => (
-                    <StudentAssignment key={key} token={token}
-                        fullname={student.firstName + ' ' + student.lastName}
+                    <StudentAssignment key={key} 
+                    fullname={student.firstName + ' ' + student.lastName}
                         userId={student.userId} didSubmit={student.didSubmit}
-                        canSubmitLate={student.canSubmitLate} taskName={taskName}
-                        refreshData={refreshData} grade={student.grade} 
-                        year={year}/>
+                         taskName={taskName} refreshData={refreshData} 
+                         grade={student.grade} year={year}/>
                 )));
 
                 const gradeList = sortedUsers
@@ -68,7 +67,6 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                 return
             }
             return [];
-
         }
 
         const loadAverage = async () => {
@@ -79,8 +77,6 @@ function AssignemntStatus({ token, taskName, yearOption }) {
     }, [token, filter, isChanged])
 
     return (
-
-
         <>
             <h2 className="settings-title">{taskName} details</h2>
             {/* <div className="settings-container"> */}
@@ -103,10 +99,8 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     <div className="col-2">
                         <b><u>Grade</u></b>
                     </div>
-
                 </div>
             </ul>
-
             {studentList.length > 0 ? (
                 studentList
             ) : (
@@ -114,18 +108,7 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                     no student matching was found, try searching again
                 </>
             )}
-
-
-            {/* </div> */}
         </>
-
-
-
-
-
-
-
-
     );
 }
 

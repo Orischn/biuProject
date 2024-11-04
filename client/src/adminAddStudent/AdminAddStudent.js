@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
+function AdminAddStudent({ refreshData }) {
     const navigate = useNavigate();
     const [isSuccessful, setIsSuccessful] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -27,17 +27,7 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
     const handleClick = () => {
         setShowModal(true)
-        // if (!isCreated) {
-        //     setShowModal(true);
-        // } else {
-        //     setSelectedTask(task);
-        //     add();
-        // }
     };
-
-    // const handleSubmit = async (e) => {
-    //     await add(e);
-    // };
 
     const handleCancel = () => {
         userIdBar.current.value = '';
@@ -66,7 +56,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
             setIsSuccessful(false);
             return;
         }
-
 
         const userIdRegex = new RegExp('^[0-9]+$')
         if (!userIdRegex.test(userId)) {
@@ -102,8 +91,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
             return;
         }
 
-
-
         const res = await api.post('/api/createUser', {
             "user": {
                 "password": password,
@@ -138,7 +125,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
     return (
         <>
-
             &emsp;&emsp;&emsp;
             <label>Add Student</label>
             {/* Button trigger modal */}
@@ -148,7 +134,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
 
             {/* Modal */}
             {showModal && (
-                // check first line for backdrop
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                     <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
                         <div className="modal-content">
@@ -157,7 +142,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                                 <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleCancel}></button>
                             </div>
 
-
                             <form onSubmit={add}>
                                 <div className="modal-body">
                                     <input type="text" ref={userIdBar} className="form-control" placeholder="Student's id" />
@@ -165,7 +149,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                                     <input type="text" ref={lastNameBar} className="form-control" placeholder="Student's last name" />
                                     <input type="text" ref={yearBar} className="form-control" placeholder="year" />
                                     <input type="text" ref={emailBar} className="form-control" placeholder="Student's email address" />
-
                                 </div>
                                 <div className="modal-footer">
                                     {error &&
@@ -180,8 +163,6 @@ function AdminAddStudent({ token, studentList, setStudentList, refreshData }) {
                     </div>
                 </div>
             )}
-
-
         </>
     );
 }

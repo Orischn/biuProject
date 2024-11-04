@@ -24,10 +24,6 @@ function AdminFeed({ token, userId }) {
         setIsAddedOrDeleted(!isAddedOrDeleted);
     }
 
-    // const [showModal, setShowModal] = useState(false);
-    // const handleShowModal = () => setShowModal(true);
-    // const handleCloseModal = () => setShowModal(false);
-
     useEffect(() => {
         const fetchStudents = async () => {
 
@@ -93,18 +89,14 @@ function AdminFeed({ token, userId }) {
     return (
         <>
             <div id="window" className="container">
-                {/* {showModal && <SettingsPage token={token} closeModal={handleCloseModal} />} */}
-                <SettingsPage token={token} userId={userId} yearOption={yearOption}
+                <SettingsPage token={token} yearOption={yearOption}
                     refreshDataInFeed={refreshDataInFeed}
                     isYearChanged={isYearChanged} />
                 <div className="row">
                     <div id="adminFeed" className="col-3" style={{ height: '100%', overflowY: 'auto' }}>
                         <div id="me" className="d-flex align-items-center w-100">
                             <b className="ms-2 w-100">{fullName}</b>
-                            {/* <button onClick={handleShowModal} 
-            style={{ border: 'none', backgroundColor: '#e6e6e6'}}>
-            <i id="openSettings" className="bi bi-gear"></i>
-            </button> */}
+
                             <select id="year" ref={yearOption} onChange={(e) => {
                                 setIsYearChanged(e.target.value);
                                 setSelectedStudent(null);
@@ -114,7 +106,7 @@ function AdminFeed({ token, userId }) {
                                 <option value="2022">2022</option>
                                 <option value="2021">2021</option>
                             </select>
-                            <ChangePassword token={token} user={userId} />
+                            <ChangePassword user={userId} />
 
                             <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                 <i id="openSettings" className="bi bi-gear" />
@@ -122,7 +114,6 @@ function AdminFeed({ token, userId }) {
                             <a href="#" className="tooltip-test" title="logout">
                                 <i className="bi bi-box-arrow-left" onClick={logout} style={{ cursor: 'pointer', color: 'white' }} />
                             </a>
-
 
                         </div>
                         <div className="d-flex align-items-center">
@@ -140,8 +131,6 @@ function AdminFeed({ token, userId }) {
                                     isYearChanged={isYearChanged} />
                             </> :
                             <>
-                                {/* <StudentSettingsPage token={token} isChanged={isChanged} setIsChanged={setIsChanged} yearOption={yearOption}/> */}
-                                {/* <AssignmentsSettingsPage token={token} yearOption={yearOption}/> */}
                             </>
                         }
                     </div>

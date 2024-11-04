@@ -4,7 +4,7 @@ import api from "../handleTokenRefresh/HandleTokenRefresh";
 import InputFile from "../inputFile/InputFile";
 
 
-function AddAssignment({ token, refreshData, yearOption }) {
+function AddAssignment({ refreshData, yearOption }) {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false)
@@ -58,7 +58,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
         const endDate = endDateBar.current.value.trim();
         const durationHours = noTimeLimit ? null : durationHoursBar.current.value.trim();
         const durationMinutes = noTimeLimit ? null : durationMinutesBar.current.value.trim();
-        // const format = formatBar.current.value.trim();
 
 
         if (name === '' || startDate === '' || endDate === '' || !questions || !image
@@ -126,7 +125,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
             setImage('')
             setNoTimeLimit(false)
         }
-
     }
 
 
@@ -160,7 +158,6 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <label htmlFor="assDuration">Assignemnt's duration: </label>
                                     <input id="assDuration" type="text" ref={durationHoursBar} className="form-control" placeholder="hours" style={{ width: '70%', margin: '0 auto' }} disabled={noTimeLimit} />
                                     <input type="text" ref={durationMinutesBar} className="form-control" placeholder="minutes" style={{ width: '70%', margin: '0 auto' }} disabled={noTimeLimit} />
-                                    {/* <center><label htmlFor="noDuration">No Time Limit</label></center> */}
                                     <center><span>No Time Limit: </span></center>
                                     <input type="checkbox" checked={noTimeLimit} onClick={() => setNoTimeLimit(!noTimeLimit)} />
 

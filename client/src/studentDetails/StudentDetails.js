@@ -1,7 +1,7 @@
 import AdminDeleteStudent from "../adminDeleteStudent/AdminDeleteStudent";
 
 
-function StudentDetails({ token, user, setSelectedStudent, refreshData, setExpand }) {
+function StudentDetails({ user, setSelectedStudent, refreshData, setExpand }) {
 
     const handleExpand = () => {
         setExpand(true);
@@ -12,7 +12,6 @@ function StudentDetails({ token, user, setSelectedStudent, refreshData, setExpan
         <ul>
             <div className="row">
                 <div className="col-2">
-                    {/* <i className="bi bi-pen"></i> */}
                     {user.year}
                 </div>
                 <div className="col-2">
@@ -27,7 +26,7 @@ function StudentDetails({ token, user, setSelectedStudent, refreshData, setExpan
                 </div>
                 <div className="col-3">
                     Delete Student
-                    <AdminDeleteStudent token={token} userId={user.userId} fullName={user.firstName + ' ' + user.lastName}
+                    <AdminDeleteStudent userId={user.userId} fullName={user.firstName + ' ' + user.lastName}
                         refreshData={refreshData} />
                 </div>
             </div>

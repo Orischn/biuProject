@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
-function DeleteAssignment({ token, taskName, year, refreshData }) {
+function DeleteAssignment({ taskName, year, refreshData }) {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isSuccessful, setIsSuccessful] = useState(false);
@@ -40,16 +40,12 @@ function DeleteAssignment({ token, taskName, year, refreshData }) {
 
     return (
         <>
-            {/* Button trigger modal */}
-            {/* <button type="button" className="btn"  */}
             <i id="deleteAssignmentIcon" className="bi bi-trash"
-                style={{ color: 'black', cursor: 'pointer' }} onClick={handleClick}></i>
-
-            {/* </button> */}
+                style={{ color: 'black', cursor: 'pointer' }} onClick={handleClick}>
+            </i>
 
             {/* Modal */}
             {showModal && (
-                // check first line for backdrop
                 <div className="modal show d-block modal-overlay" tabIndex="-1" role="dialog">
                     <div className="modal-dialog-custom" role="document" style={{ margin: '0 auto' }}>
                         <div className="modal-content">

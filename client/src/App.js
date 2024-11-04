@@ -20,7 +20,6 @@ function App() {
                     <Route path='/adminFeed' element={localStorage.getItem('accessToken') ?
                         <AdminFeed token={localStorage.getItem('accessToken')} userId={localStorage.getItem('userId')} /> :
                         <LoginPage setToken={setToken} />} />
-
                 </Routes>
             </BrowserRouter>
         </main>

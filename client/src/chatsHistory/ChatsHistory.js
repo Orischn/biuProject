@@ -14,27 +14,7 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
             if (!selectedGradeId) {
                 return;
             }
-            // const res = await fetch(`http://localhost:5000/api/getPractice/${selectedGradeId}`, {
-            //     'method': 'get',
-            //     'headers': {
-            //         'accept': 'application/json',
-            //         'Authorization': `Bearer ${token}`,
-            //     }
-            // });
-
             const res = await api.get(`/api/studentPractices/${selectedStudent.userId}`)
-
-            // if (res.status === 200) {
-            //     res.then((practice) => {
-            //         setMessages(JSON.parse(practice).messages.reverse().map((message, key) => {
-            //             if (message.isBot) {
-            //                 return <BotMessage message={message}/>
-            //             } else {
-            //                 return <StudentMessage message={message}/>
-            //             }
-            //         }));
-            //     });
-            // }
 
             if (res.status === 200) {
                 res.data.map((practice, key) => {
@@ -64,7 +44,6 @@ function ChatsHistory({ token, selectedGradeId, selectedStudent }) {
                     {messages}
                 </> :
                 <></>}
-
         </>
     )
 }

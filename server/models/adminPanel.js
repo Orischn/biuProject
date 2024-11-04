@@ -6,8 +6,6 @@ const { botProcesses, getSubmissionData } = require('./chatbot');
 
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
-// const client = new MongoClient("mongodb://appUser:}]zpT3r^b|z@127.0.0.1:27017/ChatBot");
-
 const dbName = 'ChatBot';
 const db = client.db(dbName);
 const tasks = db.collection('tasks');
@@ -162,16 +160,8 @@ async function postFeedback(userId, chatId, feedback, year) {
     }
 }
 
-async function changeTask(taskName, newTaskName, newEndDate, year) {
+async function changeTask(taskName, newEndDate, year) {
     try {
-        // const existingTask = await tasks.findOne({
-        //     taskName: { $eq: mongoSanitize(newTaskName) },
-        //     year: { $eq: parseInt(year) }
-        // });
-
-        // if (existingTask && mongoSanitize(taskName) !== mongoSanitize(newTaskName)) {
-        //     return { status: 400, error: 'A task with this name already exists this year' }
-        // }
 
         const currentTask = await tasks.findOne({
             taskName: { $eq: mongoSanitize(taskName) },
@@ -195,38 +185,10 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
                 $set: {
-                    // taskName: mongoSanitize(newTaskName),
                     endDate: parseInt(newEndDate),
                 },
             },
         );
-
-
-        // await practices.updateMany(
-        //     { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
-        //     {
-        //         $set: {
-        //             chatId: mongoSanitize(newTaskName),
-        //             endDate: {
-        //                 $cond: {
-        //                     if: { $eq: [currentTask.endDate, "$endDate"] },
-        //                     then: parseInt(newEndDate),
-        //                     else: "$endDate",
-        //                 },
-        //             },
-        //         },
-        //     });
-
-        // await practices.updateMany(
-        //     { chatId: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
-        //     {
-        //         $set: {
-        //             chatId: mongoSanitize(newTaskName),
-        //             endDate: {
-        //                 $max: ["$endDate", parseInt(newEndDate)]
-        //             },
-        //         },
-        //     });
 
         await practices.updateMany(
             {
@@ -236,7 +198,6 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             [
                 {
                     $set: {
-                        // chatId: mongoSanitize(newTaskName),
                         endDate: {
                             $max: ["$endDate", parseInt(newEndDate)]
                         }
@@ -244,11 +205,7 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
                 }
             ]
         );
-        // botProcesses.forEach((key, value) => {
-        //     let newKey = newTaskName + key.slice(key.indexOf(taskName) + 1);
-        //     botProcesses[newKey] = value;
-        //     delete botProcesses[key]
-        // })
+
         return { status: 200, error: '' };
     } catch (error) {
         console.log(error.message)
