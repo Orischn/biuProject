@@ -1,9 +1,9 @@
 {
     "questions": [
-     {"question": "בן כמה אתה", "answer": "18"},
-     {"question": "מאיפה אתה", "answer": "from your mom"},
-     {"question": "העין כואבת", "answer": "yes it does"},
-     {"question": "לכמה זמן העין כואבת", "answer": "two days"},
-     {"question": "לך תזדיין", "answer": "fuck you too"}
+     {"question": "Whats your age?", "answer": "18"},
+     {"question": "Where are you from", "answer": "from your mom"},
+     {"question": "Does your eye", "answer": "yes it does"},
+     {"question": "How long does your eye hurt?", "answer": "two days"},
+     {"question": "fuck you", "answer": "fuck you too"}
     ]
  }

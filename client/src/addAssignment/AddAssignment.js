@@ -20,7 +20,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
     const endDateBar = useRef(null);
     const durationHoursBar = useRef(null);
     const durationMinutesBar = useRef(null);
-    const formatBar = useRef(null)
+    const inputQuestionsBar = useRef(null)
+    const inputImageBar = useRef(null)
 
     const cleanInput = () => {
         nameBar.current.value = '';
@@ -28,6 +29,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
         endDateBar.current.value = '';
         durationHoursBar.current.value = '';
         durationMinutesBar.current.value = '';
+        inputQuestionsBar.current.value = '';
+        inputImageBar.current.value = '';
         setQuestions({})
         setImage("")
         setNoTimeLimit(false)
@@ -117,6 +120,8 @@ function AddAssignment({ token, refreshData, yearOption }) {
             endDateBar.current.value = '';
             durationHoursBar.current.value = '';
             durationMinutesBar.current.value = '';
+            inputQuestionsBar.current.value = '';
+            inputImageBar.current.value = '';
             setQuestions({})
             setImage('')
             setNoTimeLimit(false)
@@ -160,9 +165,9 @@ function AddAssignment({ token, refreshData, yearOption }) {
                                     <input type="checkbox" checked={noTimeLimit} onClick={() => setNoTimeLimit(!noTimeLimit)} />
 
                                     <label htmlFor="DecisionTree">Upload CSV File:</label>
-                                    <InputFile title={"DecisionTree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} />
+                                    <InputFile title={"DecisionTree"} setFileContent={setQuestions} isBase64={false} setDataType={setQuestionsDataType} input={inputQuestionsBar} />
                                     <label htmlFor="BotProfilePicture">Upload Bot Picture:</label>
-                                    <InputFile title={"BotProfilePicture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} />
+                                    <InputFile title={"BotProfilePicture"} setFileContent={setImage} isBase64={true} setDataType={setImageDataType} input={inputImageBar}/>
                                 </div>
                                 <div className="modal-footer">
                                     {error &&

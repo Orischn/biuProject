@@ -32,7 +32,6 @@ function StudentFeed({ token, userId }) {
 
     useEffect(() => {
         const fetchTasks = async (yearJson) => {
-            console.log(yearJson.year)
             const res = await api.get(`/api/getTasks/${yearJson.year}`);
             if (res.status === 200) {
                 setTaskList(res.data.reverse().map((task, key) => {

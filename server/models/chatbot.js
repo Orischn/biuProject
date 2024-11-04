@@ -27,7 +27,9 @@ async function getPractice(chatId, userId) {
         practice.feedback = Buffer.from(practice.feedback, 'base64').toString('utf-8');
         if (practice.messages) {
             practice.messages.forEach((encMessage) => {
-                encMessage.content = Buffer.from(encMessage.content, 'base64').toString('utf-8');
+                if (encMessage.content) {
+                    encMessage.content = Buffer.from(encMessage.content, 'base64').toString('utf-8');
+                }
             })
         }
         return { status: 200, practice: practice };
@@ -213,9 +215,6 @@ async function submitPractice(userId, chatId) {
 async function getMessages(chatId, userId) {
     try {
         const chat = (await getPractice(chatId, userId)).practice;
-        chat.messages.forEach((encMessage) => {
-            encMessage.content = Buffer.from(encMessage.content, 'base64').toString('utf-8');
-        })
         return { status: 200, messages: chat.messages };
     } catch (error) {
         console.log(error.message)

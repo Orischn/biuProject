@@ -12,9 +12,10 @@ const decipherQuestion = async (req, res) => {
 
     botProcesses[req.body.chatId + userId].stdin.write(`${req.body.msg}\n${req.body.chatId}\n${userId}\n`);
     await new Promise((resolve) => {
-        setTimeout(resolve, 2000);
+        setTimeout(resolve, 4000);
     });
     result = await getMessages(req.body.chatId, userId);
+    console.log(result);
     return res.status(result.status).json(result.messages[0]);
 }
 

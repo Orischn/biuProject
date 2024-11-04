@@ -21,10 +21,8 @@ function StudentStats({ token, selectedStudent, isAddedOrDeleted, yearOption }) 
     useEffect(() => {
         const fetchPractices = async () => {
             const res = await api.get(`/api/studentPractices/${selectedStudent.userId}`)
-            console.log(res)
             if (res.status === 200) {
                 const practices = await res.data;
-                console.log(practices)
                 setPracticeList(practices);  // Update the practice list state
                 return practices;  // Return the practices for immediate use
             } else if (res.status === 403) {

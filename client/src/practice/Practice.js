@@ -10,7 +10,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
     }
 
 
-    const [isCreated, setIsCreated] = useState(false);
+    const [isCreated, setIsCreated] = useState(null);
     const [isFinished, setIsFinished] = useState(false);
     const [isFeedbackAvailable, setIsFeedbackAvailable] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -94,7 +94,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
         const fetchEndDate = async function () {
             const res = await api.get(`/api/getUserSubmitData/${task.taskName}/${task.year}`);
             if (res.status === 200) {
-                console.log(res.data)
                 setIsEndDatePassed(hasTimePassed(res.data.endDate))
                 setTrueEndDate(res.data.endDate);
             }
@@ -106,7 +105,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
             if (res.status === 200) {
                 const practice = res.data; // parse the response as JSON
                 if (practice && practice.chatId === task.taskName) { // check if practice exists for the task
-                    setIsCreated(true);
+                    setIsCreated(practice);
                     setIsFinished(!practice.active);
                     setIsFeedbackAvailable((practice.grade !== null && practice.feedback !== ''));
                     setIsLateSubmitAllowed(practice.lateSubmit);
@@ -114,7 +113,7 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         + practice.durationMinutes * 60000));
                     setIsEndDatePassed(hasTimePassed(practice.endDate));
                 } else {
-                    setIsCreated(false); // make sure it's false when no matching practice is found
+                    setIsCreated(null); // make sure it's false when no matching practice is found
                 }
             } else if (res.status === 403) {
                 navigate('/');
@@ -195,7 +194,6 @@ function Practice({ task, selectedTask, setSelectedTask, token, setSelectedPract
                         </>
                     ) : (
                         <>
-                        {console.log(trueEndDate)}
 
                             submission until {convertTimestampToDate(trueEndDate).split('T')[0]}
                             <br />

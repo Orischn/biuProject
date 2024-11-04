@@ -99,7 +99,6 @@ function Grade({ selectedGradeId, setSelectedGradeId, token, selectedStudent, ch
                 {!isEditing ? (
                     <>
                         <div className="grade-title">{chatId}</div>
-                        {/* {console.log(isActive)} */}
                         {!isActive ? (
                             <>
                                 <span style={{ color: 'green' }}>Submitted!&nbsp;</span>

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 
-function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedSuccessfully }) {
-    const input = useRef(null);
+function InputFile({ title, setFileContent, isBase64, setDataType, fileUploadedSuccessfully, input }) {
     const [error, setError] = useState(null);
 
     function handleChange(e) {
