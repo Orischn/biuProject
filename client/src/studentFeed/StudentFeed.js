@@ -16,7 +16,6 @@ function StudentFeed({ token, userId }) {
     const [year, setYear] = useState(0);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const [isEndDatePassed, setIsEndDatePassed] = useState(false);
-    const [isChanged, setIsChanged] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const finishPractice = async () => {
@@ -71,7 +70,7 @@ function StudentFeed({ token, userId }) {
 
         loadData();
 
-    }, [selectedTask, token, userId, year, isChanged])
+    }, [selectedTask, token, userId, year])
 
     const logout = () => {
         api.post('/api/logout/');

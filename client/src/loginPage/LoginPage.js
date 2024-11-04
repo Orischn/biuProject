@@ -73,6 +73,7 @@ function LoginPage({ setToken }) {
       return;
     }
 
+    // const userIdRegex = new RegExp('^[0-9]{9}$');
     const userIdRegex = new RegExp('^[0-9]+$')
     if (!userIdRegex.test(userId)) {
       setUserIdError('User ID number must contain only digits');
