@@ -169,6 +169,10 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             year: { $eq: parseInt(year) }
         });
 
+        if (parseInt(newEndDate) > currentTask.endDate) {
+            return { status: 400, error: "Can't shorten assignment time."};
+        }
+
         await tasks.updateMany(
             { taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } },
             {
@@ -261,6 +265,10 @@ async function removeTask(taskName, year) {
 
 async function giveLateSubmit(taskName, userId, endDate) {
     try {
+        const practice = await practices.findOne({ chatId: mongoSanitize(taskName), userId: mongoSanitize(userId) })
+        if (parseInt(endDate) < practice.endDate) {
+            return { status: 400, error: "Can't shorten assignment time."};
+        }
         await tasks.updateOne(
             {
                 taskName:
