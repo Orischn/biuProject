@@ -4,11 +4,12 @@ import api from "../handleTokenRefresh/HandleTokenRefresh";
 
 
 function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
-    taskName, refreshData, grade }) {
+    taskName, refreshData, grade, year }) {
     const navigate = useNavigate();
 
     const [expand, setExpand] = useState(false);
     const [error, setError] = useState('');
+    const [isSuccessful, setIsSuccessful] = useState(false);
     const newDateBar = useRef(null);
 
     const allowLateSubmit = async function (userId, taskName) {
@@ -22,17 +23,20 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
         const res = await api.post('/api/allowLateSubmit', {
             "taskName": taskName,
             "userId": userId,
-            "endDate": new Date(newDate).getTime()
+            "endDate": new Date(newDate).getTime(),
+            "year": year
         })
 
         if (res.status !== 200) { //error
-            alert(res.data)
+            setIsSuccessful(false);
+            setError(res.data)
         } else if (res.status === 403) {
             navigate('/');
             return
         } else {
-            setExpand(false);
-            setError('ok')
+            // setExpand(false);
+            setIsSuccessful(true);
+            setError('Changed Successfully');
             refreshData();
         }
     }
@@ -118,7 +122,7 @@ function StudentAssignment({ token, fullname, userId, didSubmit, canSubmitLate,
                                             style={{ cursor: 'pointer', color: 'green' }} />
                                     </div>
                                     {error &&
-                                        <span className="alert alert-danger w-50" role="alert"
+                                        <span className={`alert ${isSuccessful ? "alert-success" : "alert-danger"} w-50`} role="alert"
                                             style={{ padding: '5px 10px', lineHeight: '1.2', fontSize: '14px' }}>
                                             {error}
                                         </span>}

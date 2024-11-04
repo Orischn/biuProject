@@ -305,6 +305,9 @@ async function getSubmissionData(chatId, userId, year) {
         const db = client.db('ChatBot');
         const tasks = db.collection('tasks');
         const task = await tasks.findOne({ taskName: { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) } });
+        if (!task) {
+            return { status: 404, submitData: 'Task does not exist' }
+        }
         return { status: 200, submitData: task.submitList.find(user => user.userId === userId) }
     } catch (error) {
         return { status: 500, submitData: error.message };

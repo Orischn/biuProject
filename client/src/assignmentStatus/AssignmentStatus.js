@@ -54,7 +54,8 @@ function AssignemntStatus({ token, taskName, yearOption }) {
                         fullname={student.firstName + ' ' + student.lastName}
                         userId={student.userId} didSubmit={student.didSubmit}
                         canSubmitLate={student.canSubmitLate} taskName={taskName}
-                        refreshData={refreshData} grade={student.grade} />
+                        refreshData={refreshData} grade={student.grade} 
+                        year={year}/>
                 )));
 
                 const gradeList = sortedUsers

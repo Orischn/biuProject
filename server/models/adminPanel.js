@@ -2,7 +2,7 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const mongoSanitize = require('mongo-sanitize');
-const { botProcesses } = require('./chatbot');
+const { botProcesses, getSubmissionData } = require('./chatbot');
 
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
@@ -169,8 +169,8 @@ async function changeTask(taskName, newTaskName, newEndDate, year) {
             year: { $eq: parseInt(year) }
         });
 
-        if (parseInt(newEndDate) > currentTask.endDate) {
-            return { status: 400, error: "Can't shorten assignment time."};
+        if (parseInt(newEndDate) < currentTask.endDate) {
+            return { status: 400, error: "Can't shorten assignment time." };
         }
 
         await tasks.updateMany(
@@ -263,12 +263,17 @@ async function removeTask(taskName, year) {
     }
 }
 
-async function giveLateSubmit(taskName, userId, endDate) {
+async function giveLateSubmit(taskName, userId, endDate, year) {
     try {
-        const practice = await practices.findOne({ chatId: mongoSanitize(taskName), userId: mongoSanitize(userId) })
-        if (parseInt(endDate) < practice.endDate) {
-            return { status: 400, error: "Can't shorten assignment time."};
+        const result = await getSubmissionData(taskName, userId, parseInt(year));
+        if (result.status !== 200) {
+            return result;
         }
+        console.log(parseInt(endDate), result.submitData.endDate)
+        if (parseInt(endDate) < result.submitData.endDate) {
+            return { status: 400, error: "Can't shorten assignment time." };
+        }
+
         await tasks.updateOne(
             {
                 taskName:
