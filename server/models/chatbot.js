@@ -84,8 +84,8 @@ async function postPractice(userId, chatId, durationHours, durationMinutes, endD
         const practices = db.collection('practices');
 
         const existingTask = await tasks.findOne({
-            taskName:
-                { $eq: mongoSanitize(chatId) }, year: { $eq: parseInt(year) }
+            taskName: { $eq: mongoSanitize(chatId) },
+            year: { $eq: parseInt(year) }, startDate: { $lt: Date.now() }
         });
         if (!existingTask) {
             return { status: 404, practice: "Cannot create practice since task doesn't exist." };

@@ -33,6 +33,9 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
         if (existingTask) {
             return { status: 409, error: `This task already exists this year` }
         }
+        if (endingDate <= startingDate) {
+            return { status: 400, error: 'Task end date preceeds starting date!'}
+        }
         const submitList = users
             .filter(user => user.year === parseInt(year))
             .map(user => ({
@@ -64,7 +67,7 @@ async function makeTask(taskName, startingDate, endingDate, durationHours, durat
 
 async function getTasks(year) {
     try {
-        const taskList = await tasks.find({year: parseInt(year)}, { projection: { submitList: 0, questions: 0 } }).toArray();
+        const taskList = await tasks.find({year: parseInt(year), startDate: { $lt: Date.now() } }, { projection: { submitList: 0, questions: 0 } }).toArray();
         if (!taskList) {
             return { status: 404, tasks: 'No existing tasks' }
         }
@@ -78,7 +81,9 @@ async function getTask(taskName, year) {
     try {
         const task = await tasks.findOne({ taskName: { $eq: mongoSanitize(taskName) }, year: { $eq: parseInt(year) } });
         task.submitList.forEach(submitData => {
-            submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+            if (submitData.feedback) {
+                submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+            }
         })
         return { status: 200, task: task };
     } catch (error) {
@@ -94,7 +99,9 @@ async function adminViewTasks(year) {
         }
         taskList.forEach(task => {
             task.submitList.forEach(submitData => {
-                submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+                if (submitData.feedback) {
+                    submitData.feedback = Buffer.from(submitData.feedback, 'base64').toString('utf-8')
+                }
             })
         })
         return { status: 200, tasks: taskList };
